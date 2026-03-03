@@ -9,10 +9,17 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "vitest run",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts"
   },
-  "keywords": ["mcp", "gate", "gateio", "crypto", "trading"],
+  "keywords": [
+    "mcp",
+    "gate",
+    "gateio",
+    "crypto",
+    "trading"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -22,7 +29,9 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "dotenv": "^17.3.1",
     "tsx": "latest",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.18"
   }
 }
