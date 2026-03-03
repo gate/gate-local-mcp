@@ -1,0 +1,28 @@
+{
+  "name": "gate-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing Gate.com API v4 to any MCP-compatible client",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "gate-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": ["mcp", "gate", "gateio", "crypto", "trading"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "latest",
+    "gate-api": "latest",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "latest",
+    "typescript": "^5"
+  }
+}
