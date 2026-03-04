@@ -48,9 +48,9 @@ export function registerFlashSwapTools(server: McpServer): void {
     {
       preview_id: z.string().describe('Preview ID from preview_flash_swap_order'),
       sell_currency: z.string().describe('Currency to sell'),
-      sell_amount: z.string().optional().describe('Amount to sell'),
+      sell_amount: z.string().describe('Amount to sell'),
       buy_currency: z.string().describe('Currency to buy'),
-      buy_amount: z.string().optional().describe('Amount to buy'),
+      buy_amount: z.string().describe('Amount to buy'),
     },
     async ({ preview_id, sell_currency, sell_amount, buy_currency, buy_amount }) => {
       try {
@@ -58,10 +58,10 @@ export function registerFlashSwapTools(server: McpServer): void {
         const order: Record<string, unknown> = {
           previewId: preview_id,
           sellCurrency: sell_currency,
+          sellAmount: sell_amount,
           buyCurrency: buy_currency,
+          buyAmount: buy_amount,
         };
-        if (sell_amount) order.sellAmount = sell_amount;
-        if (buy_amount) order.buyAmount = buy_amount;
         const { body } = await new FlashSwapApi(createClient()).createFlashSwapOrder(order as never);
         return textContent(body);
       } catch (e) { return errorContent(e); }
