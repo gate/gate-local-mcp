@@ -321,7 +321,7 @@ export function registerSpotTools(server: McpServer): void {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
-        if (currency_pair) opts.currencyPair = currency_pair;
+        if (currency_pair) opts.market = currency_pair;
         if (limit !== undefined) opts.limit = limit;
         const { body } = await new SpotApi(createClient()).listSpotPriceTriggeredOrders(status, opts);
         return textContent(body);
