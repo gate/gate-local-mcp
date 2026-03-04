@@ -1,6 +1,6 @@
 # gate-mcp
 
-An MCP (Model Context Protocol) server that exposes the full [Gate.com](https://www.gate.io) API v4 to any MCP-compatible client (Claude Desktop, etc.).
+An MCP (Model Context Protocol) server that exposes the full [Gate.com](https://www.gate.com) API v4 to any MCP-compatible client (Claude Desktop, etc.).
 
 ## Features
 
