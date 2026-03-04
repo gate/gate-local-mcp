@@ -149,7 +149,7 @@ export function registerDeliveryTools(server: McpServer): void {
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
-      size: z.string().describe('Order size (negative = short)'),
+      size: z.number().int().describe('Order size (negative = short)'),
       price: z.string().describe('Order price'),
       tif: z.enum(['gtc', 'ioc', 'poc', 'fok']).optional(),
       reduce_only: z.boolean().optional(),
