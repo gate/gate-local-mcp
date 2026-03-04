@@ -5,14 +5,14 @@ import type { Client } from '@modelcontextprotocol/sdk/client/index.js';
 const hasCredentials = Boolean(process.env.GATE_API_KEY && process.env.GATE_API_SECRET);
 
 describe('spot tools', () => {
-  let client: Client;
+  let client: Client | null = null;
 
   beforeAll(async () => {
     client = await createTestClient();
   });
 
   afterAll(async () => {
-    await client.close();
+    await client?.close();
   });
 
   test('list_tickers returns data for BTC_USDT', async () => {
