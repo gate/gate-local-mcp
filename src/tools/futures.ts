@@ -254,7 +254,7 @@ export function registerFuturesTools(server: McpServer): void {
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
-      size: z.number().int().optional().describe('New order size'),
+      size: z.string().optional().describe('New order size'),
       price: z.string().optional().describe('New order price'),
     },
     async ({ settle, order_id, size, price }) => {
