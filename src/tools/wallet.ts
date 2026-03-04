@@ -82,8 +82,8 @@ export function registerWalletTools(server: McpServer): void {
     'Transfer funds between accounts (requires authentication)',
     {
       currency: z.string().describe('Currency to transfer'),
-      from: z.enum(['spot', 'margin', 'futures', 'cross_margin', 'unified']).describe('Source account'),
-      to: z.enum(['spot', 'margin', 'futures', 'cross_margin', 'unified']).describe('Destination account'),
+      from: z.enum(['spot', 'margin', 'futures', 'delivery', 'options']).describe('Source account'),
+      to: z.enum(['spot', 'margin', 'futures', 'delivery', 'options']).describe('Destination account'),
       amount: z.string().describe('Transfer amount'),
       currency_pair: z.string().optional().describe('Required for margin account transfers'),
       settle: z.string().optional().describe('Required for futures account transfers'),
