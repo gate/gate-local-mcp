@@ -145,7 +145,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'create_delivery_order',
-    'Create a delivery order (requires authentication)',
+    'Create a delivery order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -170,7 +170,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cancel_delivery_order',
-    'Cancel a delivery order (requires authentication)',
+    'Cancel a delivery order (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),

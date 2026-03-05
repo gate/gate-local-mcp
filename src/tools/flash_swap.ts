@@ -44,7 +44,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'create_flash_swap_order',
-    'Execute a flash swap order (requires authentication)',
+    'Execute a flash swap order (requires authentication) — always confirm the swap details with the user before calling this tool',
     {
       preview_id: z.string().describe('Preview ID from preview_flash_swap_order'),
       sell_currency: z.string().describe('Currency to sell'),

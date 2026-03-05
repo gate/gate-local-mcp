@@ -79,7 +79,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'transfer',
-    'Transfer funds between accounts (requires authentication)',
+    'Transfer funds between accounts (requires authentication) — always confirm the amount, source, and destination with the user before calling this tool',
     {
       currency: z.string().describe('Currency to transfer'),
       from: z.enum(['spot', 'margin', 'futures', 'delivery', 'options']).describe('Source account'),

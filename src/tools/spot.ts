@@ -177,7 +177,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'create_order',
-    'Create a spot order (requires authentication)',
+    'Create a spot order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       side: z.enum(['buy', 'sell']),
@@ -219,7 +219,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cancel_order',
-    'Cancel a single spot order (requires authentication)',
+    'Cancel a single spot order (requires authentication) — always confirm with the user before calling this tool',
     {
       order_id: z.string().describe('Order ID'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
@@ -235,7 +235,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'amend_order',
-    'Amend (modify) an open spot order (requires authentication)',
+    'Amend (modify) an open spot order (requires authentication) — always confirm the new values with the user before calling this tool',
     {
       order_id: z.string().describe('Order ID'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
@@ -256,7 +256,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cancel_orders',
-    'Cancel all open orders for a currency pair (requires authentication)',
+    'Cancel all open orders for a currency pair (requires authentication) — always confirm with the user before calling this tool',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       side: z.enum(['buy', 'sell']).optional().describe('Cancel only buy or sell orders'),

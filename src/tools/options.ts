@@ -152,7 +152,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'create_options_order',
-    'Create an options order (requires authentication)',
+    'Create an options order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       contract: z.string().describe('Options contract name'),
       size: z.number().int().describe('Order size (negative = short)'),
@@ -177,7 +177,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cancel_options_order',
-    'Cancel an options order (requires authentication)',
+    'Cancel an options order (requires authentication) — always confirm with the user before calling this tool',
     { order_id: z.number().int().describe('Order ID') },
     async ({ order_id }) => {
       try {

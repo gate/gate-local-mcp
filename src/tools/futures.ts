@@ -191,7 +191,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'create_futures_order',
-    'Create a futures order (requires authentication)',
+    'Create a futures order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -234,7 +234,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cancel_futures_order',
-    'Cancel a futures order (requires authentication)',
+    'Cancel a futures order (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -250,7 +250,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'amend_futures_order',
-    'Amend an open futures order (requires authentication)',
+    'Amend an open futures order (requires authentication) — always confirm the new values with the user before calling this tool',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),

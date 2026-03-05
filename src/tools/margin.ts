@@ -60,7 +60,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'set_auto_repay',
-    'Enable or disable auto-repay for margin loans (requires authentication)',
+    'Enable or disable auto-repay for margin loans (requires authentication) — always confirm with the user before calling this tool',
     {
       status: z.enum(['on', 'off']).describe('Auto-repay status'),
     },
