@@ -302,6 +302,20 @@ Tools marked with `*` require authentication.
 
 ---
 
+## Warning: Write Operations
+
+Tools that place orders, cancel orders, transfer funds, or change account settings execute **immediately and irreversibly** against your live Gate.com account. Mistakes — such as wrong size, price, or direction — cannot be undone once submitted.
+
+Before using any write tool, always:
+- Double-check the currency pair, side (buy/sell), amount, and price before confirming
+- Use the testnet (`GATE_BASE_URL=https://api-testnet.gateapi.io`) to test workflows before going live
+- Grant your API key only the permissions you actually need — if you don't intend to trade, use a read-only key
+- Never run write operations in an automated loop without a human review step
+
+**The authors of this software take no responsibility for financial losses caused by unintended or erroneous use of write tools.**
+
+---
+
 ## Security Notes
 
 - Never hardcode API keys in source files or commit them to git. Use environment variables.

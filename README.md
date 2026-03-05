@@ -2,6 +2,8 @@
 
 An MCP (Model Context Protocol) server that exposes the full [Gate.com](https://www.gate.com) API v4 to any MCP-compatible client (Claude Desktop, etc.).
 
+**Quickstart guides:** [English](quickstart.md) · [中文](quickstart_zh.md)
+
 ## Features
 
 - **86 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, and Flash Swap APIs
