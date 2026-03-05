@@ -2,7 +2,7 @@
  * Convert a JavaScript value to a compact JSON string for MCP tool responses.
  */
 export function toText(value: unknown): string {
-  return JSON.stringify(value, null, 2);
+  return JSON.stringify(value, (_, v) => typeof v === 'bigint' ? v.toString() : v, 2);
 }
 
 /**
