@@ -8,7 +8,7 @@ A local (stdio) MCP server that exposes the full [Gate.com](https://www.gate.com
 
 ## Features
 
-- **86 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, and Flash Swap APIs
+- **148 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, and Sub-Account APIs
 - **Zero config for public endpoints** — market data, tickers, order books work without any credentials
 - **Authenticated endpoints** — trading, wallet, and account tools activate automatically when `GATE_API_KEY` + `GATE_API_SECRET` env vars are set
 - **Testnet support** — set `GATE_BASE_URL` to use the testnet endpoint
@@ -73,11 +73,11 @@ A local (stdio) MCP server that exposes the full [Gate.com](https://www.gate.com
 
 ## Available Tools
 
-### Spot (19 tools)
-`list_currencies`, `get_currency`, `list_currency_pairs`, `get_currency_pair`, `list_tickers`, `list_order_book`, `list_trades`, `list_candlesticks`, `get_fee`*, `list_spot_accounts`*, `list_orders`*, `create_order`*, `get_order`*, `cancel_order`*, `amend_order`*, `cancel_orders`*, `list_my_trades`*, `list_all_open_orders`*, `list_spot_price_triggered_orders`*
+### Spot (28 tools)
+`list_currencies`, `get_currency`, `list_currency_pairs`, `get_currency_pair`, `list_tickers`, `list_order_book`, `list_trades`, `list_candlesticks`, `get_fee`*, `list_spot_accounts`*, `list_spot_account_book`*, `list_orders`*, `create_order`*, `get_order`*, `cancel_order`*, `amend_order`*, `cancel_orders`*, `create_batch_orders`*, `cancel_batch_orders`*, `get_batch_spot_fee`*, `list_my_trades`*, `list_all_open_orders`*, `list_spot_price_triggered_orders`*, `create_spot_price_triggered_order`*, `get_spot_price_triggered_order`*, `cancel_spot_price_triggered_order`*, `cancel_spot_price_triggered_order_list`*, `countdown_cancel_all_spot`*
 
-### Futures (16 tools)
-`list_futures_contracts`, `get_futures_contract`, `list_futures_order_book`, `list_futures_candlesticks`, `list_futures_tickers`, `list_futures_funding_rate_history`, `list_futures_accounts`*, `list_positions`*, `get_position`*, `list_futures_orders`*, `create_futures_order`*, `get_futures_order`*, `cancel_futures_order`*, `amend_futures_order`*, `get_my_futures_trades`*, `list_position_close`*, `list_price_triggered_orders`*
+### Futures (37 tools)
+`list_futures_contracts`, `get_futures_contract`, `list_futures_order_book`, `list_futures_candlesticks`, `list_futures_tickers`, `list_futures_funding_rate_history`, `list_futures_trades`, `list_contract_stats`, `list_futures_premium_index`, `list_futures_accounts`*, `list_futures_account_book`*, `get_futures_fee`*, `list_positions`*, `get_position`*, `get_leverage`*, `update_position_leverage`*, `update_position_margin`*, `update_position_risk_limit`*, `list_futures_orders`*, `create_futures_order`*, `get_futures_order`*, `cancel_futures_order`*, `cancel_futures_orders`*, `amend_futures_order`*, `create_batch_futures_orders`*, `cancel_batch_futures_orders`*, `get_futures_orders_with_time_range`*, `get_my_futures_trades`*, `get_my_futures_trades_with_time_range`*, `list_position_close`*, `list_liquidates`*, `list_price_triggered_orders`*, `create_futures_price_triggered_order`*, `get_futures_price_triggered_order`*, `cancel_futures_price_triggered_order`*, `cancel_futures_price_triggered_order_list`*, `countdown_cancel_all_futures`*
 
 ### Delivery (11 tools)
 `list_delivery_contracts`, `get_delivery_contract`, `list_delivery_order_book`, `list_delivery_candlesticks`, `list_delivery_tickers`, `list_delivery_accounts`*, `list_delivery_positions`*, `list_delivery_orders`*, `create_delivery_order`*, `cancel_delivery_order`*, `get_my_delivery_trades`*
@@ -88,17 +88,23 @@ A local (stdio) MCP server that exposes the full [Gate.com](https://www.gate.com
 ### Wallet (9 tools)
 `get_total_balance`*, `list_withdrawals`*, `list_deposits`*, `get_deposit_address`*, `transfer`*, `list_sub_account_balances`*, `get_trade_fee`*, `list_currency_chains`, `list_withdraw_status`*
 
-### Account (3 tools)
-`get_account_detail`*, `get_account_rate_limit`*, `get_debit_fee`*
+### Account (10 tools)
+`get_account_detail`*, `get_account_rate_limit`*, `get_debit_fee`*, `set_debit_fee`*, `get_account_main_keys`*, `list_stp_groups`*, `create_stp_group`*, `list_stp_group_users`*, `add_stp_group_users`*, `delete_stp_group_user`*
 
 ### Options (13 tools)
-`list_options_underlyings`, `list_options_expirations`, `list_options_contracts`, `list_options_order_book`, `list_options_tickers`, `list_options_candlesticks`, `list_options_account`*, `list_options_positions`*, `list_options_orders`*, `create_options_order`*, `cancel_options_order`*, `list_my_options_trades`*
+`list_options_underlyings`, `list_options_expirations`, `list_options_contracts`, `get_options_contract`, `list_options_order_book`, `list_options_tickers`, `list_options_candlesticks`, `list_options_account`*, `list_options_positions`*, `list_options_orders`*, `create_options_order`*, `cancel_options_order`*, `list_my_options_trades`*
 
 ### Earn (5 tools)
 `list_dual_investment_plans`, `list_dual_orders`*, `list_dual_balance`*, `list_structured_products`, `list_structured_orders`*
 
 ### Flash Swap (5 tools)
 `list_flash_swap_currency_pairs`, `preview_flash_swap_order`*, `create_flash_swap_order`*, `list_flash_swap_orders`*, `get_flash_swap_order`*
+
+### Unified Account (16 tools)
+`list_unified_accounts`*, `list_unified_currencies`*, `get_unified_mode`*, `set_unified_mode`*, `get_unified_risk_units`*, `get_unified_borrowable`*, `get_unified_transferable`*, `get_unified_estimate_rate`*, `list_unified_loans`*, `create_unified_loan`*, `list_unified_loan_records`*, `list_unified_loan_interest_records`*, `list_currency_discount_tiers`, `get_user_leverage_currency_setting`*, `set_user_leverage_currency_setting`*, `set_unified_collateral`*
+
+### Sub-Account (9 tools)
+`list_sub_accounts`*, `create_sub_account`*, `get_sub_account`*, `lock_sub_account`*, `unlock_sub_account`*, `list_sub_account_keys`*, `get_sub_account_key`*, `create_sub_account_keys`*, `delete_sub_account_key`*
 
 *\* Requires authentication (`GATE_API_KEY` + `GATE_API_SECRET`)*
 
