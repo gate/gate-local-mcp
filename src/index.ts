@@ -11,6 +11,7 @@ import { registerOptionsTools } from './tools/options.js';
 import { registerEarnTools } from './tools/earn.js';
 import { registerFlashSwapTools } from './tools/flash_swap.js';
 import { registerUnifiedTools } from './tools/unified.js';
+import { registerSubAccountTools } from './tools/sub_account.js';
 
 const server = new McpServer({
   name: 'gate',
@@ -27,6 +28,7 @@ registerOptionsTools(server);
 registerEarnTools(server);
 registerFlashSwapTools(server);
 registerUnifiedTools(server);
+registerSubAccountTools(server);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
