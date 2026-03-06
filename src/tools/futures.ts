@@ -547,7 +547,7 @@ export function registerFuturesTools(server: McpServer): void {
       settle: settleSchema,
       orders: z.array(z.object({
         contract: z.string(),
-        size: z.number().describe('Order size (negative = short)'),
+        size: z.string().describe('Order size in contracts (negative = short)'),
         price: z.string().describe('Order price; "0" for market'),
         tif: z.enum(['gtc', 'ioc', 'poc', 'fok']).optional(),
         reduce_only: z.boolean().optional(),
