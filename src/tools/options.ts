@@ -49,6 +49,18 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
+    'get_options_contract',
+    'Get details of a single options contract',
+    { contract: z.string().describe('Options contract name e.g. BTC_USDT-20241227-50000-C') },
+    async ({ contract }) => {
+      try {
+        const { body } = await new OptionsApi(createClient()).getOptionsContract(contract);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
     'list_options_order_book',
     'Get options order book',
     {
