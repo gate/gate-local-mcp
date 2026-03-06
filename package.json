@@ -1,6 +1,6 @@
 {
   "name": "gate-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Local (stdio) MCP server exposing Gate.com API v4 to any MCP-compatible client",
   "type": "module",
   "main": "dist/index.js",
