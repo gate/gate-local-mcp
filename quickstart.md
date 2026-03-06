@@ -4,7 +4,7 @@ An MCP (Model Context Protocol) server that exposes the full [Gate.com](https://
 
 ## Features
 
-- **86 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, and Flash Swap APIs
+- **148 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, and Sub-Account APIs
 - **Zero config for public endpoints** — market data, tickers, order books work without any credentials
 - **Authenticated endpoints** — trading, wallet, and account tools activate automatically when `GATE_API_KEY` + `GATE_API_SECRET` env vars are set
 - **Testnet support** — set `GATE_BASE_URL` to use the testnet endpoint

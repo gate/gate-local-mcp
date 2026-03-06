@@ -23,20 +23,22 @@ src/
   client.ts        Gate SDK client factory — reads env vars, configures ApiClient
   utils.ts         textContent/errorContent helpers
   tools/
-    spot.ts        SpotApi (19 tools)
-    futures.ts     FuturesApi (17 tools)
-    delivery.ts    DeliveryApi (11 tools)
-    margin.ts      MarginApi (5 tools)
-    wallet.ts      WalletApi (9 tools)
-    account.ts     AccountApi (3 tools)
-    options.ts     OptionsApi (13 tools)
-    earn.ts        EarnApi (5 tools)
-    flash_swap.ts  FlashSwapApi (5 tools)
+    spot.ts          SpotApi (28 tools)
+    futures.ts       FuturesApi (37 tools)
+    delivery.ts      DeliveryApi (11 tools)
+    margin.ts        MarginApi (5 tools)
+    wallet.ts        WalletApi (9 tools)
+    account.ts       AccountApi (10 tools)
+    options.ts       OptionsApi (13 tools)
+    earn.ts          EarnApi (5 tools)
+    flash_swap.ts    FlashSwapApi (5 tools)
+    unified.ts       UnifiedApi (16 tools)
+    sub_account.ts   SubAccountApi (9 tools)
 ```
 
 ## Verification Results
 
 - Build: clean (no TypeScript errors)
-- Tool count: 86 tools registered
+- Tool count: 148 tools registered
 - Public tool test: `list_tickers` for BTC_USDT returns live data
 - Auth guard: returns clear error message when credentials not set
