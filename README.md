@@ -1,8 +1,10 @@
-# gate-mcp
+# gate-local-mcp
 
-An MCP (Model Context Protocol) server that exposes the full [Gate.com](https://www.gate.com) API v4 to any MCP-compatible client (Claude Desktop, etc.).
+A local (stdio) MCP server that exposes the full [Gate.com](https://www.gate.com) API v4 to any MCP-compatible client (Claude Desktop, etc.).
 
 **Quickstart guides:** [English](quickstart.md) · [中文](quickstart_zh.md)
+
+> **Looking for the remote MCP server?** If you need HTTP/SSE-based remote access instead of local stdio, see [gate/gate-mcp](https://github.com/gate/gate-mcp).
 
 ## Features
 
