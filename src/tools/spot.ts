@@ -328,4 +328,193 @@ export function registerSpotTools(server: McpServer): void {
       } catch (e) { return errorContent(e); }
     }
   );
+
+  server.tool(
+    'list_spot_account_book',
+    'Query spot account transaction history (requires authentication)',
+    {
+      currency: z.string().optional().describe('Filter by currency'),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+      page: z.number().int().min(1).optional(),
+      limit: z.number().int().min(1).max(1000).optional(),
+    },
+    async ({ currency, from, to, page, limit }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency) opts.currency = currency;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
+        const { body } = await new SpotApi(createClient()).listSpotAccountBook(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'get_batch_spot_fee',
+    'Get fee rates for multiple currency pairs at once (requires authentication)',
+    { currency_pairs: z.string().describe('Comma-separated currency pairs e.g. BTC_USDT,ETH_USDT') },
+    async ({ currency_pairs }) => {
+      try {
+        requireAuth();
+        const { body } = await new SpotApi(createClient()).getBatchSpotFee(currency_pairs);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'create_batch_orders',
+    'Create multiple spot orders in a single request (requires authentication) — always confirm the details with the user before calling this tool',
+    {
+      orders: z.array(z.object({
+        currency_pair: z.string(),
+        side: z.enum(['buy', 'sell']),
+        amount: z.string(),
+        price: z.string().optional(),
+        type: z.enum(['limit', 'market']).optional(),
+        account: z.enum(['spot', 'margin', 'unified']).optional(),
+        text: z.string().optional(),
+      })).describe('Array of orders to create'),
+    },
+    async ({ orders }) => {
+      try {
+        requireAuth();
+        const mapped = orders.map(o => {
+          const order: Record<string, unknown> = { currencyPair: o.currency_pair, side: o.side, amount: o.amount };
+          if (o.price) order.price = o.price;
+          if (o.type) order.type = o.type;
+          if (o.account) order.account = o.account;
+          if (o.text) order.text = o.text;
+          return order;
+        });
+        const { body } = await new SpotApi(createClient()).createBatchOrders(mapped as never, {});
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cancel_batch_orders',
+    'Cancel multiple spot orders in a single request (requires authentication) — always confirm with the user before calling this tool',
+    {
+      orders: z.array(z.object({
+        currency_pair: z.string(),
+        id: z.string().describe('Order ID'),
+        account: z.string().optional(),
+      })).describe('Array of orders to cancel'),
+    },
+    async ({ orders }) => {
+      try {
+        requireAuth();
+        const mapped = orders.map(o => {
+          const item: Record<string, unknown> = { currencyPair: o.currency_pair, id: o.id };
+          if (o.account) item.account = o.account;
+          return item;
+        });
+        const { body } = await new SpotApi(createClient()).cancelBatchOrders(mapped as never, {});
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'create_spot_price_triggered_order',
+    'Create a price-triggered (stop) spot order (requires authentication) — always confirm the details with the user before calling this tool',
+    {
+      currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
+      trigger_price: z.string().describe('Price that activates the order'),
+      trigger_rule: z.enum(['>=', '<=']).describe('>= fires when price rises to trigger_price; <= fires when price drops'),
+      trigger_expiration: z.number().int().optional().describe('Trigger expiration in seconds'),
+      order_side: z.enum(['buy', 'sell']),
+      order_amount: z.string(),
+      order_price: z.string().describe('Order execution price'),
+      order_type: z.enum(['limit', 'market']).optional(),
+      order_account: z.enum(['normal', 'margin', 'unified']).optional(),
+      order_tif: z.enum(['gtc', 'ioc']).optional(),
+      order_text: z.string().optional(),
+    },
+    async ({ currency_pair, trigger_price, trigger_rule, trigger_expiration,
+             order_side, order_amount, order_price, order_type, order_account, order_tif, order_text }) => {
+      try {
+        requireAuth();
+        const trigger: Record<string, unknown> = { price: trigger_price, rule: trigger_rule === '>=' ? 1 : 2 };
+        if (trigger_expiration !== undefined) trigger.expiration = trigger_expiration;
+        const put: Record<string, unknown> = { side: order_side, price: order_price, amount: order_amount, account: order_account ?? 'normal' };
+        if (order_type) put.type = order_type;
+        if (order_tif) put.timeInForce = order_tif;
+        if (order_text) put.text = order_text;
+        const payload = { market: currency_pair, trigger, put };
+        const { body } = await new SpotApi(createClient()).createSpotPriceTriggeredOrder(payload as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'get_spot_price_triggered_order',
+    'Get details of a price-triggered spot order (requires authentication)',
+    { order_id: z.string().describe('Order ID') },
+    async ({ order_id }) => {
+      try {
+        requireAuth();
+        const { body } = await new SpotApi(createClient()).getSpotPriceTriggeredOrder(order_id);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cancel_spot_price_triggered_order',
+    'Cancel a single price-triggered spot order (requires authentication) — always confirm with the user before calling this tool',
+    { order_id: z.string().describe('Order ID') },
+    async ({ order_id }) => {
+      try {
+        requireAuth();
+        const { body } = await new SpotApi(createClient()).cancelSpotPriceTriggeredOrder(order_id);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cancel_spot_price_triggered_order_list',
+    'Cancel all price-triggered spot orders (requires authentication) — always confirm with the user before calling this tool',
+    {
+      currency_pair: z.string().optional().describe('Only cancel orders for this pair'),
+      account: z.enum(['normal', 'margin', 'unified']).optional(),
+    },
+    async ({ currency_pair, account }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency_pair) opts.market = currency_pair;
+        if (account) opts.account = account;
+        const { body } = await new SpotApi(createClient()).cancelSpotPriceTriggeredOrderList(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'countdown_cancel_all_spot',
+    'Set a countdown timer to cancel all spot orders (safety kill-switch, requires authentication)',
+    {
+      timeout: z.number().int().describe('Countdown in seconds; 0 disables the timer'),
+      currency_pair: z.string().optional().describe('Limit cancellation to this pair'),
+    },
+    async ({ timeout, currency_pair }) => {
+      try {
+        requireAuth();
+        const task: Record<string, unknown> = { timeout };
+        if (currency_pair) task.currencyPair = currency_pair;
+        const { body } = await new SpotApi(createClient()).countdownCancelAllSpot(task as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
 }
