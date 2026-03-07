@@ -1,5 +1,6 @@
 {
   "name": "gate-mcp",
+  "mcpName": "io.github.gateio-dev/gate-mcp",
   "version": "0.2.2",
   "description": "Local (stdio) MCP server exposing Gate.com API v4 to any MCP-compatible client",
   "type": "module",
@@ -29,6 +30,10 @@
     "crypto",
     "trading"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gate/gate-local-mcp.git"
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
