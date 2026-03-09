@@ -24,6 +24,22 @@ This is an MCP (Model Context Protocol) server that exposes the Gate.com REST AP
 
 **Tool modules** (`src/tools/*.ts`): each file exports a single `register*Tools(server: McpServer): void` function. Inside, tools are registered with `server.tool(name, description, zodSchema, handler)`. Modules: `spot`, `futures`, `delivery`, `margin`, `wallet`, `account`, `options`, `earn`, `flash_swap`.
 
+## Publishing
+
+Release flow (must follow this order):
+1. Commit all changes
+2. `npm version patch` — bumps version, creates git tag (requires clean working dir)
+3. `git push && git push --tags`
+4. `npm publish` — requires `npm login` as `gateio` account
+5. Update `server.json` version to match, commit & push
+6. `mcp-publisher login github` — token expires quickly, re-login if 401
+7. `mcp-publisher publish` — publishes to MCP registry as `io.github.gateio-dev/gate-mcp`
+
+**Gotchas:**
+- `server.json` description must be ≤100 characters
+- `server.json` version must match the npm published version exactly
+- `npm version patch` fails if working directory is not clean
+
 ## Conventions when adding tools
 
 - MCP parameter names use **snake_case**; gate-api option/object keys use **camelCase** — translate at the call site.
