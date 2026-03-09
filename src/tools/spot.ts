@@ -193,6 +193,7 @@ export function registerSpotTools(server: McpServer): void {
         const order: Record<string, unknown> = { currencyPair: currency_pair, side, amount };
         if (price) order.price = price;
         if (type) order.type = type;
+        if (type === 'market') order.timeInForce = 'ioc';
         if (account) order.account = account;
         if (text) order.text = text;
         const { body } = await new SpotApi(createClient()).createOrder(order as never, {});
@@ -388,6 +389,7 @@ export function registerSpotTools(server: McpServer): void {
           const order: Record<string, unknown> = { currencyPair: o.currency_pair, side: o.side, amount: o.amount };
           if (o.price) order.price = o.price;
           if (o.type) order.type = o.type;
+          if (o.type === 'market') order.timeInForce = 'ioc';
           if (o.account) order.account = o.account;
           if (o.text) order.text = o.text;
           return order;

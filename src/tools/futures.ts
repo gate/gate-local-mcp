@@ -206,7 +206,7 @@ export function registerFuturesTools(server: McpServer): void {
       try {
         requireAuth();
         const order: Record<string, unknown> = { contract, size, price };
-        if (tif) order.tif = tif;
+        order.tif = tif ?? (price === '0' ? 'ioc' : 'gtc');
         if (reduce_only !== undefined) order.reduceOnly = reduce_only;
         if (close !== undefined) order.close = close;
         if (text) order.text = text;
@@ -560,7 +560,7 @@ export function registerFuturesTools(server: McpServer): void {
         requireAuth();
         const mapped = orders.map(o => {
           const order: Record<string, unknown> = { contract: o.contract, size: o.size, price: o.price };
-          if (o.tif) order.tif = o.tif;
+          order.tif = o.tif ?? (o.price === '0' ? 'ioc' : 'gtc');
           if (o.reduce_only !== undefined) order.reduceOnly = o.reduce_only;
           if (o.close !== undefined) order.close = o.close;
           if (o.text) order.text = o.text;
