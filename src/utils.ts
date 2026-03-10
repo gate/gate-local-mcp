@@ -43,3 +43,17 @@ export function errorContent(err: unknown) {
   const message = err instanceof Error ? err.message : String(err);
   return { content: [{ type: 'text' as const, text: `Error: ${message}` }], isError: true };
 }
+
+const WRITE_PREFIXES = [
+  'create_', 'cancel_', 'amend_', 'update_', 'set_',
+  'delete_', 'lock_', 'unlock_', 'add_', 'countdown_',
+];
+
+/**
+ * Returns true if the tool name refers to a state-mutating (write) operation.
+ * Checks the last dot-separated segment of the sanitized tool name.
+ */
+export function isWriteTool(name: string): boolean {
+  const segment = name.split('.').pop() ?? name;
+  return WRITE_PREFIXES.some(p => segment.startsWith(p));
+}

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { sanitizeToolName } from './utils.js';
+import { sanitizeToolName, isWriteTool } from './utils.js';
+import { parseConfig, ModuleName } from './config.js';
 import { registerSpotTools } from './tools/spot.js';
 import { registerFuturesTools } from './tools/futures.js';
 import { registerDeliveryTools } from './tools/delivery.js';
@@ -14,27 +15,45 @@ import { registerFlashSwapTools } from './tools/flash_swap.js';
 import { registerUnifiedTools } from './tools/unified.js';
 import { registerSubAccountTools } from './tools/sub_account.js';
 
+const config = parseConfig();
+
 const server = new McpServer({
   name: 'gate',
   version: '0.1.0',
 });
 
-// Apply NAME_ABBREVIATIONS to every tool name at registration time.
+// Monkey-patch server.tool: apply name sanitization + readonly filter
 const _registerTool = server.tool.bind(server);
-(server as any).tool = (name: string, ...args: unknown[]) =>
-  (_registerTool as (name: string, ...rest: unknown[]) => void)(sanitizeToolName(name), ...args);
+(server as any).tool = (name: string, ...args: unknown[]) => {
+  const sanitized = sanitizeToolName(name);
+  if (config.readonly && isWriteTool(sanitized)) return;
+  (_registerTool as (name: string, ...rest: unknown[]) => void)(sanitized, ...args);
+};
 
-registerSpotTools(server);
-registerFuturesTools(server);
-registerDeliveryTools(server);
-registerMarginTools(server);
-registerWalletTools(server);
-registerAccountTools(server);
-registerOptionsTools(server);
-registerEarnTools(server);
-registerFlashSwapTools(server);
-registerUnifiedTools(server);
-registerSubAccountTools(server);
+const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
+  spot:        registerSpotTools,
+  futures:     registerFuturesTools,
+  delivery:    registerDeliveryTools,
+  margin:      registerMarginTools,
+  wallet:      registerWalletTools,
+  account:     registerAccountTools,
+  options:     registerOptionsTools,
+  earn:        registerEarnTools,
+  flash_swap:  registerFlashSwapTools,
+  unified:     registerUnifiedTools,
+  sub_account: registerSubAccountTools,
+};
+
+const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);
+
+for (const name of modulesToLoad) {
+  MODULE_REGISTRY[name](server);
+}
+
+if (config.modules || config.readonly) {
+  const moduleList = config.modules ? [...config.modules].join(', ') : 'all';
+  console.error(`[gate-mcp] Modules: ${moduleList} | Readonly: ${config.readonly}`);
+}
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
