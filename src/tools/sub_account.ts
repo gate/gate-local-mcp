@@ -159,6 +159,19 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
+    'cex.sub_account.get_sub_account_unified_mode',
+    'Get the unified account mode for all sub-accounts (requires authentication)',
+    {},
+    async () => {
+      try {
+        requireAuth();
+        const { body } = await new SubAccountApi(createClient()).listUnifiedMode();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
     'cex.sub_account.delete_sub_account_key',
     'Delete an API key from a sub-account (requires authentication) — always confirm with the user before calling this tool',
     {

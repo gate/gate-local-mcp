@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { WalletApi } from 'gate-api';
+import { WalletApi, SubAccountTransfer, SubAccountToSubAccount } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -129,6 +129,79 @@ export function registerWalletTools(server: McpServer): void {
         if (currency_pair) opts.currencyPair = currency_pair;
         if (settle) opts.settle = settle;
         const { body } = await new WalletApi(createClient()).getTradeFee(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.wallet.create_sub_account_transfer',
+    'Transfer between main account and sub-account (requires authentication) — always confirm the amount with the user before calling this tool',
+    {
+      sub_account: z.string().describe('Sub-account user ID'),
+      currency: z.string().describe('Currency name e.g. USDT'),
+      amount: z.string().describe('Transfer amount'),
+      direction: z.enum(['to', 'from']).describe('to: transfer to sub-account; from: transfer from sub-account'),
+      sub_account_type: z.string().optional().describe('Sub-account trading account type: spot/futures/delivery/options'),
+      client_order_id: z.string().optional().describe('Custom client order ID to prevent duplicate transfers'),
+    },
+    async ({ sub_account, currency, amount, direction, sub_account_type, client_order_id }) => {
+      try {
+        requireAuth();
+        const transfer = new SubAccountTransfer();
+        transfer.subAccount = sub_account;
+        transfer.currency = currency;
+        transfer.amount = amount;
+        transfer.direction = direction;
+        if (sub_account_type) transfer.subAccountType = sub_account_type;
+        if (client_order_id) transfer.clientOrderId = client_order_id;
+        const { body } = await new WalletApi(createClient()).transferWithSubAccount(transfer);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.wallet.create_sub_account_to_sub_account_transfer',
+    'Transfer between two sub-accounts under the same main account (requires authentication) — always confirm the amount with the user before calling this tool',
+    {
+      currency: z.string().describe('Currency name e.g. USDT'),
+      sub_account_from: z.string().describe('Source sub-account user ID'),
+      sub_account_from_type: z.string().describe('Source sub-account type: spot/futures/delivery'),
+      sub_account_to: z.string().describe('Target sub-account user ID'),
+      sub_account_to_type: z.string().describe('Target sub-account type: spot/futures/delivery'),
+      amount: z.string().describe('Transfer amount'),
+    },
+    async ({ currency, sub_account_from, sub_account_from_type, sub_account_to, sub_account_to_type, amount }) => {
+      try {
+        requireAuth();
+        const transfer = new SubAccountToSubAccount();
+        transfer.currency = currency;
+        transfer.subAccountFrom = sub_account_from;
+        transfer.subAccountFromType = sub_account_from_type;
+        transfer.subAccountTo = sub_account_to;
+        transfer.subAccountToType = sub_account_to_type;
+        transfer.amount = amount;
+        const { body } = await new WalletApi(createClient()).subAccountToSubAccount(transfer);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.wallet.get_transfer_order_status',
+    'Query main-sub account transfer status (requires authentication)',
+    {
+      client_order_id: z.string().optional().describe('Client specified custom ID'),
+      tx_id: z.string().optional().describe('Transaction ID returned by the transfer API'),
+    },
+    async ({ client_order_id, tx_id }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (client_order_id) opts.clientOrderId = client_order_id;
+        if (tx_id) opts.txId = tx_id;
+        const { body } = await new WalletApi(createClient()).getTransferOrderStatus(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
