@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { sanitizeToolName } from './utils.js';
 import { registerSpotTools } from './tools/spot.js';
 import { registerFuturesTools } from './tools/futures.js';
 import { registerDeliveryTools } from './tools/delivery.js';
@@ -17,6 +18,11 @@ const server = new McpServer({
   name: 'gate',
   version: '0.1.0',
 });
+
+// Apply NAME_ABBREVIATIONS to every tool name at registration time.
+const _registerTool = server.tool.bind(server);
+(server as any).tool = (name: string, ...args: unknown[]) =>
+  (_registerTool as (name: string, ...rest: unknown[]) => void)(sanitizeToolName(name), ...args);
 
 registerSpotTools(server);
 registerFuturesTools(server);
