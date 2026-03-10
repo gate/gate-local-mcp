@@ -15,9 +15,9 @@ describe('futures tools', () => {
     await client?.close();
   });
 
-  test('list_futures_contracts returns a non-empty array for usdt', async () => {
+  test('cex.fx.list_fx_contracts returns a non-empty array for usdt', async () => {
     const result = await client.callTool({
-      name: 'list_futures_contracts',
+      name: 'cex.fx.list_fx_contracts',
       arguments: { settle: 'usdt' },
     });
     expect(result.isError).toBeFalsy();
@@ -27,9 +27,9 @@ describe('futures tools', () => {
     expect(contracts.length).toBeGreaterThan(0);
   });
 
-  test('list_futures_tickers returns ticker data for BTC_USDT', async () => {
+  test('cex.fx.get_fx_tickers returns ticker data for BTC_USDT', async () => {
     const result = await client.callTool({
-      name: 'list_futures_tickers',
+      name: 'cex.fx.get_fx_tickers',
       arguments: { settle: 'usdt', contract: 'BTC_USDT' },
     });
     expect(result.isError).toBeFalsy();
@@ -37,14 +37,14 @@ describe('futures tools', () => {
     expect(text).toContain('BTC_USDT');
   });
 
-  test('list_futures_accounts returns auth error without credentials', async () => {
+  test('cex.fx.get_fx_accounts returns auth error without credentials', async () => {
     const noAuthClient = await createTestClient({
       GATE_API_KEY: undefined,
       GATE_API_SECRET: undefined,
     });
     try {
       const result = await noAuthClient.callTool({
-        name: 'list_futures_accounts',
+        name: 'cex.fx.get_fx_accounts',
         arguments: { settle: 'usdt' },
       });
       expect(result.isError).toBe(true);
@@ -55,9 +55,9 @@ describe('futures tools', () => {
     }
   });
 
-  test.skipIf(!hasCredentials)('list_futures_accounts returns data with credentials', async () => {
+  test.skipIf(!hasCredentials)('cex.fx.get_fx_accounts returns data with credentials', async () => {
     const result = await client.callTool({
-      name: 'list_futures_accounts',
+      name: 'cex.fx.get_fx_accounts',
       arguments: { settle: 'usdt' },
     });
     expect(result.isError).toBeFalsy();

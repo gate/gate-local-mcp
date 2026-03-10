@@ -27,6 +27,8 @@ export function parseConfig(): ServerConfig {
       modulesRaw = arg.split('=')[1];
     } else if (process.argv[flagIndex + 1] && !process.argv[flagIndex + 1].startsWith('--')) {
       modulesRaw = process.argv[flagIndex + 1];
+    } else {
+      console.error(`[gate-mcp] --modules flag requires a value (e.g. --modules=spot,futures). Loading all modules.`);
     }
   }
 

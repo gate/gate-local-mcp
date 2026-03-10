@@ -18,8 +18,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "vitest run",
-    "test:e2e": "node tests/e2e.cjs",
+    "test": "npm run build && vitest run",
+    "test:e2e": "npm run build && node tests/e2e.cjs",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
     "prepublishOnly": "npm run build"
