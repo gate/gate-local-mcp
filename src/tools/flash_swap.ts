@@ -6,7 +6,7 @@ import { textContent, errorContent } from '../utils.js';
 
 export function registerFlashSwapTools(server: McpServer): void {
   server.tool(
-    'list_flash_swap_currency_pairs',
+    'cex.flash_swap.list_flash_swap_currency_pairs',
     'List all supported flash swap currency pairs',
     {
       currency: z.string().optional().describe('Filter by currency symbol'),
@@ -22,7 +22,7 @@ export function registerFlashSwapTools(server: McpServer): void {
   );
 
   server.tool(
-    'preview_flash_swap_order',
+    'cex.flash_swap.preview_flash_swap_order',
     'Preview a flash swap order to get a quote (requires authentication)',
     {
       sell_currency: z.string().describe('Currency to sell e.g. USDT'),
@@ -43,7 +43,7 @@ export function registerFlashSwapTools(server: McpServer): void {
   );
 
   server.tool(
-    'create_flash_swap_order',
+    'cex.flash_swap.create_flash_swap_order',
     'Execute a flash swap order (requires authentication) — always confirm the swap details with the user before calling this tool',
     {
       preview_id: z.string().describe('Preview ID from preview_flash_swap_order'),
@@ -69,7 +69,7 @@ export function registerFlashSwapTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_flash_swap_orders',
+    'cex.flash_swap.list_flash_swap_orders',
     'List flash swap order history (requires authentication)',
     {
       status: z.number().int().optional().describe('Order status: 1=success, 2=failed'),
@@ -94,7 +94,7 @@ export function registerFlashSwapTools(server: McpServer): void {
   );
 
   server.tool(
-    'get_flash_swap_order',
+    'cex.flash_swap.get_flash_swap_order',
     'Get details of a flash swap order (requires authentication)',
     { order_id: z.number().int().describe('Order ID') },
     async ({ order_id }) => {
