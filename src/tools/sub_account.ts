@@ -132,6 +132,33 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
+    'cex.sub_account.update_sub_account_key',
+    'Update an API key for a sub-account (requires authentication) — always confirm changes with the user before calling this tool',
+    {
+      user_id: z.number().int().describe('Sub-account user ID'),
+      key: z.string().describe('API key to update'),
+      name: z.string().optional().describe('New API key name'),
+      perms: z.string().optional().describe('Permissions as JSON array, e.g. [{"name":"spot","read_only":false}]'),
+      ip_whitelist: z.string().optional().describe('Comma-separated IP whitelist; omit to clear'),
+    },
+    async ({ user_id, key, name, perms, ip_whitelist }) => {
+      try {
+        requireAuth();
+        const keyUpdate: Record<string, unknown> = {};
+        if (name) keyUpdate.name = name;
+        if (perms) {
+          try { keyUpdate.perms = JSON.parse(perms); } catch { /* ignore invalid JSON */ }
+        }
+        if (ip_whitelist) {
+          keyUpdate.ipWhitelist = ip_whitelist.split(',').map((s: string) => s.trim()).filter(Boolean);
+        }
+        const { body } = await new SubAccountApi(createClient()).updateSubAccountKeys(user_id, key, keyUpdate as never);
+        return textContent(body ?? { success: true });
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
     'cex.sub_account.delete_sub_account_key',
     'Delete an API key from a sub-account (requires authentication) — always confirm with the user before calling this tool',
     {

@@ -116,7 +116,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.wallet.get_trade_fee',
+    'cex.wallet.get_wallet_fee',
     'Get trading fee rates (requires authentication)',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),

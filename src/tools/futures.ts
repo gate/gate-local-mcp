@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { FuturesApi } from 'gate-api';
+import { FuturesApi, FuturesPositionCrossMode, InlineObject } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -746,6 +746,155 @@ export function registerFuturesTools(server: McpServer): void {
         const opts: Record<string, unknown> = {};
         if (contract) opts.contract = contract;
         const { body } = await new FuturesApi(createClient()).cancelPriceTriggeredOrderList(settle, opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.list_futures_risk_limit_tiers',
+    'Get risk limit tiers for a futures contract (requires authentication)',
+    {
+      settle: settleSchema,
+      contract: z.string().optional().describe('Contract name e.g. BTC_USDT'),
+      limit: z.number().int().optional(),
+      offset: z.number().int().optional(),
+    },
+    async ({ settle, contract, limit, offset }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (contract) opts.contract = contract;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        const { body } = await new FuturesApi(createClient()).listFuturesRiskLimitTiers(settle, opts as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.set_futures_dual_mode',
+    'Enable or disable dual-mode (hedge mode) for a futures account (requires authentication)',
+    {
+      settle: settleSchema,
+      dual_mode: z.boolean().describe('true to enable dual/hedge mode, false to disable'),
+    },
+    async ({ settle, dual_mode }) => {
+      try {
+        requireAuth();
+        const { body } = await new FuturesApi(createClient()).setDualMode(settle, dual_mode);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.get_futures_dual_mode_position',
+    'Get dual-mode positions for a contract (requires authentication)',
+    {
+      settle: settleSchema,
+      contract: z.string().describe('Contract name e.g. BTC_USDT'),
+    },
+    async ({ settle, contract }) => {
+      try {
+        requireAuth();
+        const { body } = await new FuturesApi(createClient()).getDualModePosition(settle, contract);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.update_futures_dual_mode_position_margin',
+    'Add or reduce margin for a dual-mode position (requires authentication) — always confirm the amount with the user before calling this tool',
+    {
+      settle: settleSchema,
+      contract: z.string().describe('Contract name e.g. BTC_USDT'),
+      change: z.string().describe('Margin change amount; positive to add, negative to reduce'),
+      dual_side: z.enum(['long', 'short']).describe('Which side of the dual-mode position to adjust'),
+    },
+    async ({ settle, contract, change, dual_side }) => {
+      try {
+        requireAuth();
+        const { body } = await new FuturesApi(createClient()).updateDualModePositionMargin(settle, contract, change, dual_side);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.update_futures_dual_mode_position_leverage',
+    'Update leverage for a dual-mode position (requires authentication) — always confirm the new leverage with the user before calling this tool',
+    {
+      settle: settleSchema,
+      contract: z.string().describe('Contract name e.g. BTC_USDT'),
+      leverage: z.string().describe('New leverage value; 0 for cross-margin mode'),
+      cross_leverage_limit: z.string().optional().describe('Cross-margin leverage limit (only when leverage=0)'),
+    },
+    async ({ settle, contract, leverage, cross_leverage_limit }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (cross_leverage_limit) opts.crossLeverageLimit = cross_leverage_limit;
+        const { body } = await new FuturesApi(createClient()).updateDualModePositionLeverage(settle, contract, leverage, opts as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.update_futures_dual_mode_position_risk_limit',
+    'Update the risk limit for a dual-mode position (requires authentication)',
+    {
+      settle: settleSchema,
+      contract: z.string().describe('Contract name e.g. BTC_USDT'),
+      risk_limit: z.string().describe('New risk limit value'),
+    },
+    async ({ settle, contract, risk_limit }) => {
+      try {
+        requireAuth();
+        const { body } = await new FuturesApi(createClient()).updateDualModePositionRiskLimit(settle, contract, risk_limit);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.update_futures_position_cross_mode',
+    'Switch a single-mode position between isolated and cross margin (requires authentication)',
+    {
+      settle: settleSchema,
+      contract: z.string().describe('Contract name e.g. BTC_USDT'),
+      mode: z.enum(['cross', 'isolated']).describe('Margin mode to set'),
+    },
+    async ({ settle, contract, mode }) => {
+      try {
+        requireAuth();
+        const crossMode = new FuturesPositionCrossMode();
+        crossMode.contract = contract;
+        crossMode.mode = mode;
+        const { body } = await new FuturesApi(createClient()).updatePositionCrossMode(settle, crossMode);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex.futures.update_futures_dual_comp_position_cross_mode',
+    'Switch a dual-mode position between isolated and cross margin (requires authentication)',
+    {
+      settle: settleSchema,
+      contract: z.string().describe('Contract name e.g. BTC_USDT'),
+      mode: z.enum(['cross', 'isolated']).describe('Margin mode to set'),
+    },
+    async ({ settle, contract, mode }) => {
+      try {
+        requireAuth();
+        const inlineObj = new InlineObject();
+        inlineObj.contract = contract;
+        inlineObj.mode = mode;
+        const { body } = await new FuturesApi(createClient()).updateDualCompPositionCrossMode(settle, inlineObj);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
