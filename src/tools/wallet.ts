@@ -6,7 +6,7 @@ import { textContent, errorContent } from '../utils.js';
 
 export function registerWalletTools(server: McpServer): void {
   server.tool(
-    'get_total_balance',
+    'cex.wallet.get_total_balance',
     'Get total account balance across all wallets (requires authentication)',
     {
       currency: z.string().optional().describe('Quote currency for conversion (default: USDT)'),
@@ -23,7 +23,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_withdrawals',
+    'cex.wallet.list_withdrawals',
     'List withdrawal history (requires authentication)',
     {
       currency: z.string().optional().describe('Filter by currency'),
@@ -44,7 +44,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_deposits',
+    'cex.wallet.list_deposits',
     'List deposit history (requires authentication)',
     {
       currency: z.string().optional().describe('Filter by currency'),
@@ -65,7 +65,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'get_deposit_address',
+    'cex.wallet.get_deposit_address',
     'Get deposit address for a currency (requires authentication)',
     { currency: z.string().describe('Currency symbol e.g. USDT') },
     async ({ currency }) => {
@@ -78,7 +78,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'transfer',
+    'cex.wallet.create_transfer',
     'Transfer funds between accounts (requires authentication) — always confirm the amount, source, and destination with the user before calling this tool',
     {
       currency: z.string().describe('Currency to transfer'),
@@ -101,7 +101,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_sub_account_balances',
+    'cex.wallet.list_sub_account_balances',
     'List sub-account balances (requires authentication)',
     { sub_uid: z.string().optional().describe('Filter by sub-account UID') },
     async ({ sub_uid }) => {
@@ -116,7 +116,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'get_trade_fee',
+    'cex.wallet.get_trade_fee',
     'Get trading fee rates (requires authentication)',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
@@ -135,7 +135,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_currency_chains',
+    'cex.wallet.list_currency_chains',
     'List chains supported for a currency',
     { currency: z.string().describe('Currency symbol e.g. USDT') },
     async ({ currency }) => {
@@ -147,7 +147,7 @@ export function registerWalletTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_withdraw_status',
+    'cex.wallet.list_withdraw_status',
     'Get withdrawal status for all currencies (requires authentication)',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {

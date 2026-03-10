@@ -11,7 +11,7 @@ export function registerDeliveryTools(server: McpServer): void {
   // ── Public tools ──────────────────────────────────────────────────────────
 
   server.tool(
-    'list_delivery_contracts',
+    'cex.delivery.list_delivery_contracts',
     'List all delivery (expiring futures) contracts',
     { settle: settleSchema },
     async ({ settle }) => {
@@ -23,7 +23,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'get_delivery_contract',
+    'cex.delivery.get_delivery_contract',
     'Get a single delivery contract',
     {
       settle: settleSchema,
@@ -38,7 +38,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_delivery_order_book',
+    'cex.delivery.list_delivery_order_book',
     'Get delivery contract order book',
     {
       settle: settleSchema,
@@ -56,7 +56,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_delivery_candlesticks',
+    'cex.delivery.list_delivery_candlesticks',
     'Get delivery contract candlestick data',
     {
       settle: settleSchema,
@@ -76,7 +76,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_delivery_tickers',
+    'cex.delivery.list_delivery_tickers',
     'Get delivery contract tickers',
     {
       settle: settleSchema,
@@ -95,7 +95,7 @@ export function registerDeliveryTools(server: McpServer): void {
   // ── Private tools ─────────────────────────────────────────────────────────
 
   server.tool(
-    'list_delivery_accounts',
+    'cex.delivery.list_delivery_accounts',
     'Get delivery account balance (requires authentication)',
     { settle: settleSchema },
     async ({ settle }) => {
@@ -108,7 +108,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_delivery_positions',
+    'cex.delivery.list_delivery_positions',
     'List delivery positions (requires authentication)',
     { settle: settleSchema },
     async ({ settle }) => {
@@ -121,7 +121,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'list_delivery_orders',
+    'cex.delivery.list_delivery_orders',
     'List delivery orders (requires authentication)',
     {
       settle: settleSchema,
@@ -144,7 +144,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'create_delivery_order',
+    'cex.delivery.create_delivery_order',
     'Create a delivery order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       settle: settleSchema,
@@ -169,7 +169,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'cancel_delivery_order',
+    'cex.delivery.cancel_delivery_order',
     'Cancel a delivery order (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
@@ -185,7 +185,7 @@ export function registerDeliveryTools(server: McpServer): void {
   );
 
   server.tool(
-    'get_my_delivery_trades',
+    'cex.delivery.get_my_delivery_trades',
     'Get personal delivery trading history (requires authentication)',
     {
       settle: settleSchema,
