@@ -22,6 +22,7 @@ const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
   'swap', 'place', 'change', 'stop', 'repay', 'operate',
+  'confirm', 'send', 'upload',
 ]);
 
 function isWrite(toolName) {
@@ -78,20 +79,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 213 tools by default', t.count, 213);
-  expect('has 12 modules', t.modules.length, 12);
-  expect('has 71 write tools', t.writeCount, 71);
-  expect('has 142 read tools', t.readCount, 142);
+  expect('loads all 230 tools by default', t.count, 230);
+  expect('has 13 modules', t.modules.length, 13);
+  expect('has 78 write tools', t.writeCount, 78);
+  expect('has 152 read tools', t.readCount, 152);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 142 tools', cli.count, 142);
+  expect('--readonly: 152 tools', cli.count, 152);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 142 tools', env.count, 142);
+  expect('GATE_READONLY=true: 152 tools', env.count, 152);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -109,6 +110,7 @@ const MODULE_COUNTS = {
   unified:     { total: 16, readonly: 12, write:  4 },
   sub_account:           { total: 11, readonly:  5, write:  6 },
   multi_collateral_loan: { total: 12, readonly:  9, write:  3 },
+  p2p:                   { total: 17, readonly: 10, write:  7 },
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)
