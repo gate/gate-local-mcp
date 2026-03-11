@@ -8,7 +8,7 @@ export function registerEarnTools(server: McpServer): void {
   // ── Dual Investment ───────────────────────────────────────────────────────
 
   server.tool(
-    'cex.earn.list_dual_investment_plans',
+    'cex_earn_list_dual_investment_plans',
     'List dual investment plans',
     {
       limit: z.number().int().optional(),
@@ -26,7 +26,7 @@ export function registerEarnTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.earn.list_dual_orders',
+    'cex_earn_list_dual_orders',
     'List dual investment orders (requires authentication)',
     {
       limit: z.number().int().optional(),
@@ -45,7 +45,7 @@ export function registerEarnTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.earn.list_dual_balance',
+    'cex_earn_list_dual_balance',
     'Get dual investment balance (requires authentication)',
     {},
     async () => {
@@ -60,7 +60,7 @@ export function registerEarnTools(server: McpServer): void {
   // ── Structured Products ───────────────────────────────────────────────────
 
   server.tool(
-    'cex.earn.list_structured_products',
+    'cex_earn_list_structured_products',
     'List structured products',
     {
       status: z.enum(['in_progress', 'will_begin', 'waiting', 'done']).describe('Product status'),
@@ -81,7 +81,7 @@ export function registerEarnTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.earn.list_structured_orders',
+    'cex_earn_list_structured_orders',
     'List structured product orders (requires authentication)',
     {
       from: z.number().optional().describe('Start time (Unix timestamp)'),

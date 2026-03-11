@@ -10,7 +10,7 @@ export function registerFuturesTools(server: McpServer): void {
   // ── Public tools ──────────────────────────────────────────────────────────
 
   server.tool(
-    'cex.futures.list_futures_contracts',
+    'cex_futures_list_futures_contracts',
     'List all perpetual futures contracts',
     { settle: settleSchema },
     async ({ settle }) => {
@@ -22,7 +22,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_contract',
+    'cex_futures_get_futures_contract',
     'Get details of a single futures contract',
     {
       settle: settleSchema,
@@ -37,7 +37,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_order_book',
+    'cex_futures_get_futures_order_book',
     'Get futures order book',
     {
       settle: settleSchema,
@@ -55,7 +55,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_candlesticks',
+    'cex_futures_get_futures_candlesticks',
     'Get futures candlestick/OHLCV data',
     {
       settle: settleSchema,
@@ -79,7 +79,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_tickers',
+    'cex_futures_get_futures_tickers',
     'Get ticker information for futures contracts',
     {
       settle: settleSchema,
@@ -96,7 +96,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_funding_rate',
+    'cex_futures_get_futures_funding_rate',
     'Get funding rate history for a futures contract',
     {
       settle: settleSchema,
@@ -116,7 +116,7 @@ export function registerFuturesTools(server: McpServer): void {
   // ── Private tools ─────────────────────────────────────────────────────────
 
   server.tool(
-    'cex.futures.get_futures_accounts',
+    'cex_futures_get_futures_accounts',
     'Get futures account balances (requires authentication)',
     { settle: settleSchema },
     async ({ settle }) => {
@@ -129,7 +129,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_futures_positions',
+    'cex_futures_list_futures_positions',
     'List all open futures positions (requires authentication)',
     {
       settle: settleSchema,
@@ -151,7 +151,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_position',
+    'cex_futures_get_futures_position',
     'Get a single futures position (requires authentication)',
     {
       settle: settleSchema,
@@ -167,7 +167,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_futures_orders',
+    'cex_futures_list_futures_orders',
     'List futures orders (requires authentication)',
     {
       settle: settleSchema,
@@ -190,7 +190,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.create_futures_order',
+    'cex_futures_create_futures_order',
     'Create a futures order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       settle: settleSchema,
@@ -217,7 +217,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_order',
+    'cex_futures_get_futures_order',
     'Get a futures order by ID (requires authentication)',
     {
       settle: settleSchema,
@@ -233,7 +233,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.cancel_futures_order',
+    'cex_futures_cancel_futures_order',
     'Cancel a futures order (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
@@ -249,7 +249,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.amend_futures_order',
+    'cex_futures_amend_futures_order',
     'Amend an open futures order (requires authentication) — always confirm the new values with the user before calling this tool',
     {
       settle: settleSchema,
@@ -270,7 +270,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_futures_my_trades',
+    'cex_futures_list_futures_my_trades',
     'Get personal futures trading history (requires authentication)',
     {
       settle: settleSchema,
@@ -292,7 +292,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_position_close',
+    'cex_futures_list_position_close',
     'List position close history (requires authentication)',
     {
       settle: settleSchema,
@@ -312,7 +312,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_price_triggered_orders',
+    'cex_futures_list_price_triggered_orders',
     'List futures price-triggered orders (requires authentication)',
     {
       settle: settleSchema,
@@ -335,7 +335,7 @@ export function registerFuturesTools(server: McpServer): void {
   // ── Additional public tools ────────────────────────────────────────────────
 
   server.tool(
-    'cex.futures.get_futures_trades',
+    'cex_futures_get_futures_trades',
     'Get recent public trades for a futures contract',
     {
       settle: settleSchema,
@@ -357,7 +357,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_contract_stats',
+    'cex_futures_list_contract_stats',
     'Get contract statistics (open interest, long/short ratio, etc.)',
     {
       settle: settleSchema,
@@ -379,7 +379,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_premium_index',
+    'cex_futures_get_futures_premium_index',
     'Get premium index (mark price minus index price) history for a contract',
     {
       settle: settleSchema,
@@ -405,7 +405,7 @@ export function registerFuturesTools(server: McpServer): void {
   // ── Additional private tools ───────────────────────────────────────────────
 
   server.tool(
-    'cex.futures.list_futures_account_book',
+    'cex_futures_list_futures_account_book',
     'Get futures account transaction/ledger history (requires authentication)',
     {
       settle: settleSchema,
@@ -433,7 +433,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_fee',
+    'cex_futures_get_futures_fee',
     'Get futures trading fee rates (requires authentication)',
     {
       settle: settleSchema,
@@ -451,7 +451,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_leverage',
+    'cex_futures_get_leverage',
     'Get current leverage for a futures position (requires authentication)',
     {
       settle: settleSchema,
@@ -467,7 +467,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_position_leverage',
+    'cex_futures_update_futures_position_leverage',
     'Update leverage for a futures position (requires authentication) — always confirm the new leverage with the user before calling this tool',
     {
       settle: settleSchema,
@@ -487,7 +487,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_position_margin',
+    'cex_futures_update_futures_position_margin',
     'Add or reduce margin for a futures position (requires authentication) — always confirm the amount with the user before calling this tool',
     {
       settle: settleSchema,
@@ -504,7 +504,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_position_risk_limit',
+    'cex_futures_update_futures_position_risk_limit',
     'Update the risk limit for a futures position (requires authentication)',
     {
       settle: settleSchema,
@@ -521,7 +521,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.cancel_all_futures_orders',
+    'cex_futures_cancel_all_futures_orders',
     'Cancel all open futures orders (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
@@ -541,7 +541,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.create_futures_batch_orders',
+    'cex_futures_create_futures_batch_orders',
     'Create multiple futures orders in a single request (requires authentication) — always confirm the details with the user before calling this tool',
     {
       settle: settleSchema,
@@ -573,7 +573,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.cancel_futures_batch_orders',
+    'cex_futures_cancel_futures_batch_orders',
     'Cancel multiple futures orders by ID in a single request (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
@@ -589,7 +589,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_orders_with_time_range',
+    'cex_futures_get_futures_orders_with_time_range',
     'Get futures orders filtered by time range (requires authentication)',
     {
       settle: settleSchema,
@@ -615,7 +615,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_my_trades_timerange',
+    'cex_futures_get_futures_my_trades_timerange',
     'Get personal futures trade history filtered by time range (requires authentication)',
     {
       settle: settleSchema,
@@ -643,7 +643,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_futures_liq_orders',
+    'cex_futures_list_futures_liq_orders',
     'Get personal futures liquidation history (requires authentication)',
     {
       settle: settleSchema,
@@ -669,7 +669,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_price_triggered_order',
+    'cex_futures_get_futures_price_triggered_order',
     'Get details of a futures price-triggered order (requires authentication)',
     {
       settle: settleSchema,
@@ -685,7 +685,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.create_futures_price_triggered_order',
+    'cex_futures_create_futures_price_triggered_order',
     'Create a futures price-triggered order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       settle: settleSchema,
@@ -718,7 +718,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.cancel_futures_price_triggered_order',
+    'cex_futures_cancel_futures_price_triggered_order',
     'Cancel a single futures price-triggered order (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
@@ -734,7 +734,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.cancel_futures_price_triggered_order_list',
+    'cex_futures_cancel_futures_price_triggered_order_list',
     'Cancel all futures price-triggered orders (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
@@ -752,7 +752,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.list_futures_risk_limit_tiers',
+    'cex_futures_list_futures_risk_limit_tiers',
     'Get risk limit tiers for a futures contract (requires authentication)',
     {
       settle: settleSchema,
@@ -774,7 +774,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.set_futures_dual_mode',
+    'cex_futures_set_futures_dual_mode',
     'Enable or disable dual-mode (hedge mode) for a futures account (requires authentication)',
     {
       settle: settleSchema,
@@ -790,7 +790,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.get_futures_dual_mode_position',
+    'cex_futures_get_futures_dual_mode_position',
     'Get dual-mode positions for a contract (requires authentication)',
     {
       settle: settleSchema,
@@ -806,7 +806,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_dual_mode_position_margin',
+    'cex_futures_update_futures_dual_mode_position_margin',
     'Add or reduce margin for a dual-mode position (requires authentication) — always confirm the amount with the user before calling this tool',
     {
       settle: settleSchema,
@@ -824,7 +824,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_dual_mode_position_leverage',
+    'cex_futures_update_futures_dual_mode_position_leverage',
     'Update leverage for a dual-mode position (requires authentication) — always confirm the new leverage with the user before calling this tool',
     {
       settle: settleSchema,
@@ -844,7 +844,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_dual_mode_position_risk_limit',
+    'cex_futures_update_futures_dual_mode_position_risk_limit',
     'Update the risk limit for a dual-mode position (requires authentication)',
     {
       settle: settleSchema,
@@ -861,7 +861,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_position_cross_mode',
+    'cex_futures_update_futures_position_cross_mode',
     'Switch a single-mode position between isolated and cross margin (requires authentication)',
     {
       settle: settleSchema,
@@ -881,7 +881,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.update_futures_dual_comp_position_cross_mode',
+    'cex_futures_update_futures_dual_comp_position_cross_mode',
     'Switch a dual-mode position between isolated and cross margin (requires authentication)',
     {
       settle: settleSchema,
@@ -901,7 +901,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.futures.countdown_cancel_all_futures',
+    'cex_futures_countdown_cancel_all_futures',
     'Set a countdown timer to cancel all futures orders (safety kill-switch, requires authentication)',
     {
       settle: settleSchema,

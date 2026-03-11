@@ -44,16 +44,16 @@ export function errorContent(err: unknown) {
   return { content: [{ type: 'text' as const, text: `Error: ${message}` }], isError: true };
 }
 
-const WRITE_PREFIXES = [
-  'create_', 'cancel_', 'amend_', 'update_', 'set_',
-  'delete_', 'lock_', 'unlock_', 'add_', 'countdown_',
-];
+const WRITE_VERBS = new Set([
+  'create', 'cancel', 'amend', 'update', 'set',
+  'delete', 'lock', 'unlock', 'add', 'countdown',
+]);
 
 /**
  * Returns true if the tool name refers to a state-mutating (write) operation.
- * Checks the last dot-separated segment of the sanitized tool name.
+ * Tool names follow the pattern cex_{module}_{verb}_{rest}, so the verb is always
+ * the third underscore-separated segment (index 2).
  */
 export function isWriteTool(name: string): boolean {
-  const segment = name.split('.').pop() ?? name;
-  return WRITE_PREFIXES.some(p => segment.startsWith(p));
+  return WRITE_VERBS.has(name.split('_')[2] ?? '');
 }

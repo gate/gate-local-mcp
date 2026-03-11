@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
-    'cex.sub_account.list_sub_accounts',
+    'cex_sub_account_list_sub_accounts',
     'List all sub-accounts (requires authentication)',
     { type: z.string().optional().describe('Filter by type: 0=normal, 1=pool') },
     async ({ type }) => {
@@ -22,7 +22,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.create_sub_account',
+    'cex_sub_account_create_sub_account',
     'Create a new sub-account (requires authentication) — always confirm the details with the user before calling this tool',
     {
       login_name: z.string().describe('Sub-account login name'),
@@ -44,7 +44,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.get_sub_account',
+    'cex_sub_account_get_sub_account',
     'Get details of a sub-account (requires authentication)',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
@@ -57,7 +57,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.lock_sub_account',
+    'cex_sub_account_lock_sub_account',
     'Lock a sub-account to disable login and trading (requires authentication) — always confirm with the user before calling this tool',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
@@ -70,7 +70,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.unlock_sub_account',
+    'cex_sub_account_unlock_sub_account',
     'Unlock a previously locked sub-account (requires authentication) — always confirm with the user before calling this tool',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
@@ -83,7 +83,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.list_sub_account_keys',
+    'cex_sub_account_list_sub_account_keys',
     'List API keys for a sub-account (requires authentication)',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
@@ -96,7 +96,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.get_sub_account_key',
+    'cex_sub_account_get_sub_account_key',
     'Get details of a specific API key for a sub-account (requires authentication)',
     {
       user_id: z.number().int().describe('Sub-account user ID'),
@@ -112,7 +112,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.create_sub_account_key',
+    'cex_sub_account_create_sub_account_key',
     'Create API keys for a sub-account (requires authentication) — always confirm the permissions with the user before calling this tool',
     {
       user_id: z.number().int().describe('Sub-account user ID'),
@@ -132,7 +132,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.update_sub_account_key',
+    'cex_sub_account_update_sub_account_key',
     'Update an API key for a sub-account (requires authentication) — always confirm changes with the user before calling this tool',
     {
       user_id: z.number().int().describe('Sub-account user ID'),
@@ -159,7 +159,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.get_sub_account_unified_mode',
+    'cex_sub_account_get_sub_account_unified_mode',
     'Get the unified account mode for all sub-accounts (requires authentication)',
     {},
     async () => {
@@ -172,7 +172,7 @@ export function registerSubAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.sub_account.delete_sub_account_key',
+    'cex_sub_account_delete_sub_account_key',
     'Delete an API key from a sub-account (requires authentication) — always confirm with the user before calling this tool',
     {
       user_id: z.number().int().describe('Sub-account user ID'),

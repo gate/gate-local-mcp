@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
-    'cex.unified.get_unified_accounts',
+    'cex_unified_get_unified_accounts',
     'Get unified account balances and info (requires authentication)',
     {
       currency: z.string().optional().describe('Filter by currency'),
@@ -26,7 +26,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.list_unified_currencies',
+    'cex_unified_list_unified_currencies',
     'List currencies supported in unified account (requires authentication)',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {
@@ -41,7 +41,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.get_unified_mode',
+    'cex_unified_get_unified_mode',
     'Get current unified account mode (requires authentication)',
     {},
     async () => {
@@ -54,7 +54,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.set_unified_mode',
+    'cex_unified_set_unified_mode',
     'Switch unified account mode (requires authentication) — always confirm with the user before calling this tool',
     {
       mode: z.string().describe('Mode: classic, multi_currency, or portfolio'),
@@ -69,7 +69,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.get_unified_risk_units',
+    'cex_unified_get_unified_risk_units',
     'Get risk unit details for portfolio margin mode (requires authentication)',
     {},
     async () => {
@@ -82,7 +82,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.get_unified_borrowable',
+    'cex_unified_get_unified_borrowable',
     'Get maximum borrowable amount for a currency in unified account (requires authentication)',
     { currency: z.string().describe('Currency symbol e.g. USDT') },
     async ({ currency }) => {
@@ -95,7 +95,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.get_unified_transferable',
+    'cex_unified_get_unified_transferable',
     'Get maximum transferable amount for a currency in unified account (requires authentication)',
     { currency: z.string().describe('Currency symbol e.g. USDT') },
     async ({ currency }) => {
@@ -108,7 +108,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.get_unified_estimate_rate',
+    'cex_unified_get_unified_estimate_rate',
     'Get estimated borrow interest rates for currencies (requires authentication)',
     { currencies: z.array(z.string()).describe('List of currency symbols e.g. ["BTC","USDT"]') },
     async ({ currencies }) => {
@@ -121,7 +121,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.list_unified_loans',
+    'cex_unified_list_unified_loans',
     'List active loans in unified account (requires authentication)',
     {
       currency: z.string().optional().describe('Filter by currency'),
@@ -144,7 +144,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.create_unified_loan',
+    'cex_unified_create_unified_loan',
     'Borrow or repay in unified account (requires authentication) — always confirm the details with the user before calling this tool',
     {
       currency: z.string().describe('Currency to borrow/repay'),
@@ -166,7 +166,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.list_unified_loan_records',
+    'cex_unified_list_unified_loan_records',
     'Get borrow/repay history in unified account (requires authentication)',
     {
       currency: z.string().optional(),
@@ -189,7 +189,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.list_unified_loan_interest_records',
+    'cex_unified_list_unified_loan_interest_records',
     'Get interest charge history in unified account (requires authentication)',
     {
       currency: z.string().optional(),
@@ -216,7 +216,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.list_currency_discount_tiers',
+    'cex_unified_list_currency_discount_tiers',
     'List currency discount tiers for unified account collateral',
     {},
     async () => {
@@ -228,7 +228,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.get_user_leverage_currency_setting',
+    'cex_unified_get_user_leverage_currency_setting',
     'Get leverage settings for currencies in unified account (requires authentication)',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {
@@ -243,7 +243,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.set_user_leverage_currency_setting',
+    'cex_unified_set_user_leverage_currency_setting',
     'Set leverage for a currency in unified account (requires authentication) — always confirm with the user before calling this tool',
     {
       currency: z.string().describe('Currency symbol e.g. BTC'),
@@ -259,7 +259,7 @@ export function registerUnifiedTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.unified.set_unified_collateral',
+    'cex_unified_set_unified_collateral',
     'Enable or disable currencies as collateral in unified account (requires authentication)',
     {
       enable_list: z.array(z.string()).optional().describe('Currencies to enable as collateral'),

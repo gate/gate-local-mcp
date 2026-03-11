@@ -8,7 +8,7 @@ export function registerOptionsTools(server: McpServer): void {
   // ── Public tools ──────────────────────────────────────────────────────────
 
   server.tool(
-    'cex.options.list_options_underlyings',
+    'cex_options_list_options_underlyings',
     'List all options underlying assets',
     {},
     async () => {
@@ -20,7 +20,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_options_expirations',
+    'cex_options_list_options_expirations',
     'List option expiration dates for an underlying',
     { underlying: z.string().describe('Underlying asset e.g. BTC_USDT') },
     async ({ underlying }) => {
@@ -32,7 +32,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_options_contracts',
+    'cex_options_list_options_contracts',
     'List all options contracts for an underlying',
     {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),
@@ -49,7 +49,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.get_options_contract',
+    'cex_options_get_options_contract',
     'Get details of a single options contract',
     { contract: z.string().describe('Options contract name e.g. BTC_USDT-20241227-50000-C') },
     async ({ contract }) => {
@@ -61,7 +61,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_options_order_book',
+    'cex_options_list_options_order_book',
     'Get options order book',
     {
       contract: z.string().describe('Options contract name'),
@@ -78,7 +78,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_options_tickers',
+    'cex_options_list_options_tickers',
     'Get options tickers for an underlying',
     { underlying: z.string().describe('Underlying asset e.g. BTC_USDT') },
     async ({ underlying }) => {
@@ -90,7 +90,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_options_candlesticks',
+    'cex_options_list_options_candlesticks',
     'Get options candlestick data',
     {
       contract: z.string().describe('Options contract name'),
@@ -111,7 +111,7 @@ export function registerOptionsTools(server: McpServer): void {
   // ── Private tools ─────────────────────────────────────────────────────────
 
   server.tool(
-    'cex.options.list_options_account',
+    'cex_options_list_options_account',
     'Get options account balance (requires authentication)',
     {},
     async () => {
@@ -124,7 +124,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_options_positions',
+    'cex_options_list_options_positions',
     'List options positions (requires authentication)',
     { underlying: z.string().optional().describe('Filter by underlying') },
     async ({ underlying }) => {
@@ -139,7 +139,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_options_orders',
+    'cex_options_list_options_orders',
     'List options orders (requires authentication)',
     {
       status: z.enum(['open', 'finished']),
@@ -163,7 +163,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.create_options_order',
+    'cex_options_create_options_order',
     'Create an options order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       contract: z.string().describe('Options contract name'),
@@ -188,7 +188,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.cancel_options_order',
+    'cex_options_cancel_options_order',
     'Cancel an options order (requires authentication) — always confirm with the user before calling this tool',
     { order_id: z.number().int().describe('Order ID') },
     async ({ order_id }) => {
@@ -201,7 +201,7 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex.options.list_my_options_trades',
+    'cex_options_list_my_options_trades',
     'List personal options trading history (requires authentication)',
     {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),

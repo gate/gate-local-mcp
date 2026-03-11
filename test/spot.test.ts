@@ -15,9 +15,9 @@ describe('spot tools', () => {
     await client?.close();
   });
 
-  test('cex.spot.get_spot_tickers returns data for BTC_USDT', async () => {
+  test('cex_spot_get_spot_tickers returns data for BTC_USDT', async () => {
     const result = await client.callTool({
-      name: 'cex.spot.get_spot_tickers',
+      name: 'cex_spot_get_spot_tickers',
       arguments: { currency_pair: 'BTC_USDT' },
     });
     expect(result.content).toBeDefined();
@@ -27,9 +27,9 @@ describe('spot tools', () => {
     expect(text).toContain('BTC_USDT');
   });
 
-  test('cex.spot.list_currency_pairs returns a non-empty array', async () => {
+  test('cex_spot_list_currency_pairs returns a non-empty array', async () => {
     const result = await client.callTool({
-      name: 'cex.spot.list_currency_pairs',
+      name: 'cex_spot_list_currency_pairs',
       arguments: {},
     });
     expect(result.isError).toBeFalsy();
@@ -39,9 +39,9 @@ describe('spot tools', () => {
     expect(pairs.length).toBeGreaterThan(0);
   });
 
-  test('cex.spot.get_spot_order_book returns asks and bids for BTC_USDT', async () => {
+  test('cex_spot_get_spot_order_book returns asks and bids for BTC_USDT', async () => {
     const result = await client.callTool({
-      name: 'cex.spot.get_spot_order_book',
+      name: 'cex_spot_get_spot_order_book',
       arguments: { currency_pair: 'BTC_USDT' },
     });
     expect(result.isError).toBeFalsy();
@@ -50,14 +50,14 @@ describe('spot tools', () => {
     expect(text).toContain('bids');
   });
 
-  test('cex.spot.get_spot_accounts returns auth error without credentials', async () => {
+  test('cex_spot_get_spot_accounts returns auth error without credentials', async () => {
     const noAuthClient = await createTestClient({
       GATE_API_KEY: undefined,
       GATE_API_SECRET: undefined,
     });
     try {
       const result = await noAuthClient.callTool({
-        name: 'cex.spot.get_spot_accounts',
+        name: 'cex_spot_get_spot_accounts',
         arguments: {},
       });
       expect(result.isError).toBe(true);
@@ -68,9 +68,9 @@ describe('spot tools', () => {
     }
   });
 
-  test.skipIf(!hasCredentials)('cex.spot.get_spot_accounts returns data with credentials', async () => {
+  test.skipIf(!hasCredentials)('cex_spot_get_spot_accounts returns data with credentials', async () => {
     const result = await client.callTool({
-      name: 'cex.spot.get_spot_accounts',
+      name: 'cex_spot_get_spot_accounts',
       arguments: {},
     });
     expect(result.isError).toBeFalsy();

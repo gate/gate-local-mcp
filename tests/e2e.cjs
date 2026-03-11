@@ -17,14 +17,14 @@ const MCP_INIT = JSON.stringify({
 const MCP_LIST = JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} });
 const PAYLOAD = `${MCP_INIT}\n${MCP_LIST}\n`;
 
-const WRITE_PREFIXES = [
-  'create_', 'cancel_', 'amend_', 'update_', 'set_',
-  'delete_', 'lock_', 'unlock_', 'add_', 'countdown_',
-];
+// Tool names follow cex_{module}_{verb}_{rest}; verb is always at index 2.
+const WRITE_VERBS = new Set([
+  'create', 'cancel', 'amend', 'update', 'set',
+  'delete', 'lock', 'unlock', 'add', 'countdown',
+]);
 
 function isWrite(toolName) {
-  const seg = toolName.split('.').pop();
-  return WRITE_PREFIXES.some(p => seg.startsWith(p));
+  return WRITE_VERBS.has(toolName.split('_')[2]);
 }
 
 function runServer(args = '', env = {}) {
@@ -40,7 +40,7 @@ function getTools(args, env) {
   return {
     count: tools.length,
     names: tools.map(t => t.name),
-    modules: [...new Set(tools.map(t => t.name.split('.')[1]))],
+    modules: [...new Set(tools.map(t => t.name.split('_')[1]))],
     writeCount: tools.filter(t => isWrite(t.name)).length,
     readCount: tools.filter(t => !isWrite(t.name)).length,
   };
@@ -113,7 +113,7 @@ const MODULE_COUNTS = {
 const ABBREV = { futures: 'fx', sub_account: 'sa', dual_mode: 'dual', dual_comp: 'dual', flash_swap: 'fc' };
 function modulePrefix(mod) {
   const abbr = Object.entries(ABBREV).reduce((s, [l, r]) => s.replaceAll(l, r), mod);
-  return `cex.${abbr}.`;
+  return `cex_${abbr}_`;
 }
 
 for (const [mod, counts] of Object.entries(MODULE_COUNTS)) {
@@ -134,7 +134,7 @@ console.log('\n── Per-module filtering (GATE_MODULES env var) ────�
 {
   const t = getTools('', { GATE_MODULES: 'spot' });
   expect('GATE_MODULES=spot: 28 tools', t.count, 28);
-  expectAllMatch('all tools prefixed cex.spot.', t.names, 'cex.spot.');
+  expectAllMatch('all tools prefixed cex_spot_', t.names, 'cex_spot_');
 
   const t2 = getTools('', { GATE_MODULES: 'spot,futures' });
   expect('GATE_MODULES=spot,futures: 73 tools', t2.count, 73);
