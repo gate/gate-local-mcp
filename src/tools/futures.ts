@@ -1339,7 +1339,7 @@ export function registerFuturesTools(server: McpServer): void {
     'Get details of a futures price-triggered order (requires authentication)',
     {
       settle: settleSchema,
-      order_id: z.string().describe('Order ID'),
+      order_id: z.number().int().describe('Order ID'),
     },
     async ({ settle, order_id }) => {
       try {
@@ -1355,7 +1355,7 @@ export function registerFuturesTools(server: McpServer): void {
     'Update an existing futures price-triggered order (requires authentication) — always confirm the new values with the user before calling this tool',
     {
       settle: settleSchema,
-      order_id: z.string().describe('Order ID'),
+      order_id: z.number().int().describe('Order ID'),
       size: z.number().int().optional().describe('New order size'),
       price: z.string().optional().describe('New execution price'),
       trigger_price: z.string().optional().describe('New trigger price'),
@@ -1385,7 +1385,7 @@ export function registerFuturesTools(server: McpServer): void {
     'Cancel a single futures price-triggered order (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
-      order_id: z.string().describe('Order ID'),
+      order_id: z.number().int().describe('Order ID'),
     },
     async ({ settle, order_id }) => {
       try {

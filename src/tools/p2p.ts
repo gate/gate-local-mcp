@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { P2PApi } from 'gate-api';
+import { P2pApi } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -14,7 +14,7 @@ export function registerP2PTools(server: McpServer): void {
     async () => {
       try {
         requireAuth();
-        const { body } = await new P2PApi(createClient()).p2pMerchantAccountGetUserInfo();
+        const { body } = await new P2pApi(createClient()).p2pMerchantAccountGetUserInfo();
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -29,7 +29,10 @@ export function registerP2PTools(server: McpServer): void {
     async ({ biz_uid }) => {
       try {
         requireAuth();
-        const { body } = await new P2PApi(createClient()).p2pMerchantAccountGetCounterpartyUserInfo(biz_uid);
+        const { GetCounterpartyUserInfoRequest } = await import('gate-api');
+        const req = new GetCounterpartyUserInfoRequest();
+        req.bizUid = biz_uid;
+        const { body } = await new P2pApi(createClient()).p2pMerchantAccountGetCounterpartyUserInfo(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -45,8 +48,13 @@ export function registerP2PTools(server: McpServer): void {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
-        if (fiat !== undefined) opts.fiat = fiat;
-        const { body } = await new P2PApi(createClient()).p2pMerchantAccountGetMyselfPayment(opts);
+        if (fiat !== undefined) {
+          const { GetMyselfPaymentRequest } = await import('gate-api');
+          const req = new GetMyselfPaymentRequest();
+          req.fiat = fiat;
+          opts.getMyselfPaymentRequest = req;
+        }
+        const { body } = await new P2pApi(createClient()).p2pMerchantAccountGetMyselfPayment(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -70,14 +78,17 @@ export function registerP2PTools(server: McpServer): void {
     async ({ crypto_currency, fiat_currency, order_tab, select_type, status, txid, start_time, end_time }) => {
       try {
         requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (order_tab !== undefined) opts.orderTab = order_tab;
-        if (select_type !== undefined) opts.selectType = select_type;
-        if (status !== undefined) opts.status = status;
-        if (txid !== undefined) opts.txid = txid;
-        if (start_time !== undefined) opts.startTime = start_time;
-        if (end_time !== undefined) opts.endTime = end_time;
-        const { body } = await new P2PApi(createClient()).p2pMerchantTransactionGetPendingTransactionList(crypto_currency, fiat_currency, opts);
+        const { GetPendingTransactionListRequest } = await import('gate-api');
+        const req = new GetPendingTransactionListRequest();
+        req.cryptoCurrency = crypto_currency;
+        req.fiatCurrency = fiat_currency;
+        if (order_tab !== undefined) req.orderTab = order_tab;
+        if (select_type !== undefined) req.selectType = select_type;
+        if (status !== undefined) req.status = status;
+        if (txid !== undefined) req.txid = txid;
+        if (start_time !== undefined) req.startTime = start_time;
+        if (end_time !== undefined) req.endTime = end_time;
+        const { body } = await new P2pApi(createClient()).p2pMerchantTransactionGetPendingTransactionList(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -101,16 +112,19 @@ export function registerP2PTools(server: McpServer): void {
     async ({ crypto_currency, fiat_currency, select_type, status, txid, start_time, end_time, query_dispute, page, per_page }) => {
       try {
         requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (select_type !== undefined) opts.selectType = select_type;
-        if (status !== undefined) opts.status = status;
-        if (txid !== undefined) opts.txid = txid;
-        if (start_time !== undefined) opts.startTime = start_time;
-        if (end_time !== undefined) opts.endTime = end_time;
-        if (query_dispute !== undefined) opts.queryDispute = query_dispute;
-        if (page !== undefined) opts.page = page;
-        if (per_page !== undefined) opts.perPage = per_page;
-        const { body } = await new P2PApi(createClient()).p2pMerchantTransactionGetCompletedTransactionList(crypto_currency, fiat_currency, opts);
+        const { GetCompletedTransactionListRequest } = await import('gate-api');
+        const req = new GetCompletedTransactionListRequest();
+        req.cryptoCurrency = crypto_currency;
+        req.fiatCurrency = fiat_currency;
+        if (select_type !== undefined) req.selectType = select_type;
+        if (status !== undefined) req.status = status;
+        if (txid !== undefined) req.txid = txid;
+        if (start_time !== undefined) req.startTime = start_time;
+        if (end_time !== undefined) req.endTime = end_time;
+        if (query_dispute !== undefined) req.queryDispute = query_dispute;
+        if (page !== undefined) req.page = page;
+        if (per_page !== undefined) req.perPage = per_page;
+        const { body } = await new P2pApi(createClient()).p2pMerchantTransactionGetCompletedTransactionList(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -126,9 +140,11 @@ export function registerP2PTools(server: McpServer): void {
     async ({ txid, channel }) => {
       try {
         requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (channel !== undefined) opts.channel = channel;
-        const { body } = await new P2PApi(createClient()).p2pMerchantTransactionGetTransactionDetails(txid, opts);
+        const { GetTransactionDetailsRequest } = await import('gate-api');
+        const req = new GetTransactionDetailsRequest();
+        req.txid = txid;
+        if (channel !== undefined) req.channel = channel;
+        const { body } = await new P2pApi(createClient()).p2pMerchantTransactionGetTransactionDetails(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -144,11 +160,11 @@ export function registerP2PTools(server: McpServer): void {
     async ({ trade_id, payment_method }) => {
       try {
         requireAuth();
-        const { InlineObject10 } = await import('gate-api');
-        const payload = new InlineObject10();
-        payload.tradeId = trade_id;
-        payload.paymentMethod = payment_method;
-        const { body } = await new P2PApi(createClient()).p2pMerchantTransactionConfirmPayment({ inlineObject10: payload });
+        const { ConfirmPayment } = await import('gate-api');
+        const req = new ConfirmPayment();
+        req.tradeId = trade_id;
+        req.paymentMethod = payment_method;
+        const { body } = await new P2pApi(createClient()).p2pMerchantTransactionConfirmPayment(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -163,10 +179,10 @@ export function registerP2PTools(server: McpServer): void {
     async ({ trade_id }) => {
       try {
         requireAuth();
-        const { InlineObject11 } = await import('gate-api');
-        const payload = new InlineObject11();
-        payload.tradeId = trade_id;
-        const { body } = await new P2PApi(createClient()).p2pMerchantTransactionConfirmReceipt({ inlineObject11: payload });
+        const { ConfirmReceipt } = await import('gate-api');
+        const req = new ConfirmReceipt();
+        req.tradeId = trade_id;
+        const { body } = await new P2pApi(createClient()).p2pMerchantTransactionConfirmReceipt(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -177,18 +193,18 @@ export function registerP2PTools(server: McpServer): void {
     'Cancel a P2P transaction (requires authentication) — always confirm with the user before calling this tool',
     {
       trade_id: z.string().describe('Trade ID'),
-      reason_id: z.string().describe('Cancellation reason ID'),
-      reason_memo: z.string().describe('Cancellation reason memo'),
+      reason_id: z.string().optional().describe('Cancellation reason ID'),
+      reason_memo: z.string().optional().describe('Cancellation reason memo'),
     },
     async ({ trade_id, reason_id, reason_memo }) => {
       try {
         requireAuth();
-        const { InlineObject12 } = await import('gate-api');
-        const payload = new InlineObject12();
-        payload.tradeId = trade_id;
-        payload.reasonId = reason_id;
-        payload.reasonMemo = reason_memo;
-        const { body } = await new P2PApi(createClient()).p2pMerchantTransactionCancel({ inlineObject12: payload });
+        const { CancelOrder } = await import('gate-api');
+        const req = new CancelOrder();
+        req.tradeId = trade_id;
+        if (reason_id !== undefined) req.reasonId = reason_id;
+        if (reason_memo !== undefined) req.reasonMemo = reason_memo;
+        const { body } = await new P2pApi(createClient()).p2pMerchantTransactionCancel(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -205,60 +221,66 @@ export function registerP2PTools(server: McpServer): void {
       type: z.string().describe('Trade type: buy or sell'),
       unit_price: z.string().describe('Price per unit'),
       number: z.string().describe('Total quantity to trade'),
+      pay_type: z.string().describe('Payment type'),
       min_amount: z.string().describe('Minimum order amount'),
       max_amount: z.string().describe('Maximum order amount'),
-      pay_type: z.string().optional().describe('Payment type'),
       pay_type_json: z.string().optional().describe('Payment type JSON'),
       rate_fixed: z.string().optional().describe('Fixed rate flag'),
       oid: z.string().optional().describe('External order ID'),
       tier_limit: z.string().optional().describe('Tier limit'),
       verified_limit: z.string().optional().describe('KYC verification requirement'),
       reg_time_limit: z.string().optional().describe('Account age requirement'),
-      advertisers_limit: z.string().optional().describe('Advertisers limit'),
-      hide_payment: z.string().optional().describe('Hide payment method flag'),
+      advertisers_limit: z.string().optional(),
+      hide_payment: z.string().optional(),
       expire_min: z.string().optional().describe('Payment window in minutes'),
-      trade_tips: z.string().optional().describe('Trading tips message'),
-      auto_reply: z.string().optional().describe('Auto-reply message'),
+      trade_tips: z.string().optional(),
+      auto_reply: z.string().optional(),
       min_completed_limit: z.string().optional(),
       max_completed_limit: z.string().optional(),
-      completed_rate_limit: z.string().optional().describe('Minimum completion rate'),
+      completed_rate_limit: z.string().optional(),
       user_country_limit: z.string().optional(),
       user_order_limit: z.string().optional(),
       rate_reference_id: z.string().optional(),
       rate_offset: z.string().optional(),
       float_trend: z.string().optional(),
     },
-    async ({ currency_type, exchange_type, type, unit_price, number, min_amount, max_amount,
-             pay_type, pay_type_json, rate_fixed, oid, tier_limit, verified_limit, reg_time_limit,
+    async ({ currency_type, exchange_type, type, unit_price, number, pay_type, min_amount, max_amount,
+             pay_type_json, rate_fixed, oid, tier_limit, verified_limit, reg_time_limit,
              advertisers_limit, hide_payment, expire_min, trade_tips, auto_reply,
              min_completed_limit, max_completed_limit, completed_rate_limit,
              user_country_limit, user_order_limit, rate_reference_id, rate_offset, float_trend }) => {
       try {
         requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (pay_type !== undefined) opts.payType = pay_type;
-        if (pay_type_json !== undefined) opts.payTypeJson = pay_type_json;
-        if (rate_fixed !== undefined) opts.rateFixed = rate_fixed;
-        if (oid !== undefined) opts.oid = oid;
-        if (tier_limit !== undefined) opts.tierLimit = tier_limit;
-        if (verified_limit !== undefined) opts.verifiedLimit = verified_limit;
-        if (reg_time_limit !== undefined) opts.regTimeLimit = reg_time_limit;
-        if (advertisers_limit !== undefined) opts.advertisersLimit = advertisers_limit;
-        if (hide_payment !== undefined) opts.hidePayment = hide_payment;
-        if (expire_min !== undefined) opts.expireMin = expire_min;
-        if (trade_tips !== undefined) opts.tradeTips = trade_tips;
-        if (auto_reply !== undefined) opts.autoReply = auto_reply;
-        if (min_completed_limit !== undefined) opts.minCompletedLimit = min_completed_limit;
-        if (max_completed_limit !== undefined) opts.maxCompletedLimit = max_completed_limit;
-        if (completed_rate_limit !== undefined) opts.completedRateLimit = completed_rate_limit;
-        if (user_country_limit !== undefined) opts.userCountryLimit = user_country_limit;
-        if (user_order_limit !== undefined) opts.userOrderLimit = user_order_limit;
-        if (rate_reference_id !== undefined) opts.rateReferenceId = rate_reference_id;
-        if (rate_offset !== undefined) opts.rateOffset = rate_offset;
-        if (float_trend !== undefined) opts.floatTrend = float_trend;
-        const { body } = await new P2PApi(createClient()).p2pMerchantBooksPlaceBizPushOrder(
-          currency_type, exchange_type, type, unit_price, number, min_amount, max_amount, opts
-        );
+        const { PlaceBizPushOrder } = await import('gate-api');
+        const req = new PlaceBizPushOrder();
+        req.currencyType = currency_type;
+        req.exchangeType = exchange_type;
+        req.type = type;
+        req.unitPrice = unit_price;
+        req.number = number;
+        req.payType = pay_type;
+        req.minAmount = min_amount;
+        req.maxAmount = max_amount;
+        if (pay_type_json !== undefined) req.payTypeJson = pay_type_json;
+        if (rate_fixed !== undefined) req.rateFixed = rate_fixed;
+        if (oid !== undefined) req.oid = oid;
+        if (tier_limit !== undefined) req.tierLimit = tier_limit;
+        if (verified_limit !== undefined) req.verifiedLimit = verified_limit;
+        if (reg_time_limit !== undefined) req.regTimeLimit = reg_time_limit;
+        if (advertisers_limit !== undefined) req.advertisersLimit = advertisers_limit;
+        if (hide_payment !== undefined) req.hidePayment = hide_payment;
+        if (expire_min !== undefined) req.expireMin = expire_min;
+        if (trade_tips !== undefined) req.tradeTips = trade_tips;
+        if (auto_reply !== undefined) req.autoReply = auto_reply;
+        if (min_completed_limit !== undefined) req.minCompletedLimit = min_completed_limit;
+        if (max_completed_limit !== undefined) req.maxCompletedLimit = max_completed_limit;
+        if (completed_rate_limit !== undefined) req.completedRateLimit = completed_rate_limit;
+        if (user_country_limit !== undefined) req.userCountryLimit = user_country_limit;
+        if (user_order_limit !== undefined) req.userOrderLimit = user_order_limit;
+        if (rate_reference_id !== undefined) req.rateReferenceId = rate_reference_id;
+        if (rate_offset !== undefined) req.rateOffset = rate_offset;
+        if (float_trend !== undefined) req.floatTrend = float_trend;
+        const { body } = await new P2pApi(createClient()).p2pMerchantBooksPlaceBizPushOrder(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -275,9 +297,13 @@ export function registerP2PTools(server: McpServer): void {
     async ({ adv_no, adv_status, trade_type }) => {
       try {
         requireAuth();
+        const { AdsUpdateStatus } = await import('gate-api');
+        const req = new AdsUpdateStatus();
+        req.advNo = adv_no;
+        req.advStatus = adv_status;
         const opts: Record<string, unknown> = {};
         if (trade_type !== undefined) opts.tradeType = trade_type;
-        const { body } = await new P2PApi(createClient()).p2pMerchantBooksAdsUpdateStatus(adv_no, adv_status, opts);
+        const { body } = await new P2pApi(createClient()).p2pMerchantBooksAdsUpdateStatus(req, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -292,7 +318,10 @@ export function registerP2PTools(server: McpServer): void {
     async ({ adv_no }) => {
       try {
         requireAuth();
-        const { body } = await new P2PApi(createClient()).p2pMerchantBooksAdsDetail(adv_no);
+        const { AdsDetailRequest } = await import('gate-api');
+        const req = new AdsDetailRequest();
+        req.advNo = adv_no;
+        const { body } = await new P2pApi(createClient()).p2pMerchantBooksAdsDetail(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -310,10 +339,15 @@ export function registerP2PTools(server: McpServer): void {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
-        if (asset !== undefined) opts.asset = asset;
-        if (fiat_unit !== undefined) opts.fiatUnit = fiat_unit;
-        if (trade_type !== undefined) opts.tradeType = trade_type;
-        const { body } = await new P2PApi(createClient()).p2pMerchantBooksMyAdsList(opts);
+        if (asset !== undefined || fiat_unit !== undefined || trade_type !== undefined) {
+          const { MyAdsListRequest } = await import('gate-api');
+          const req = new MyAdsListRequest();
+          if (asset !== undefined) req.asset = asset;
+          if (fiat_unit !== undefined) req.fiatUnit = fiat_unit;
+          if (trade_type !== undefined) req.tradeType = trade_type;
+          opts.myAdsListRequest = req;
+        }
+        const { body } = await new P2pApi(createClient()).p2pMerchantBooksMyAdsList(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -330,7 +364,12 @@ export function registerP2PTools(server: McpServer): void {
     async ({ asset, fiat_unit, trade_type }) => {
       try {
         requireAuth();
-        const { body } = await new P2PApi(createClient()).p2pMerchantBooksAdsList(asset, fiat_unit, trade_type);
+        const { AdsListRequest } = await import('gate-api');
+        const req = new AdsListRequest();
+        req.asset = asset;
+        req.fiatUnit = fiat_unit;
+        req.tradeType = trade_type;
+        const { body } = await new P2pApi(createClient()).p2pMerchantBooksAdsList(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -349,10 +388,12 @@ export function registerP2PTools(server: McpServer): void {
     async ({ txid, last_received, first_received }) => {
       try {
         requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (last_received !== undefined) opts.lastreceived = last_received;
-        if (first_received !== undefined) opts.firstreceived = first_received;
-        const { body } = await new P2PApi(createClient()).p2pMerchantChatGetChatsList(txid, opts);
+        const { GetChatsListRequest } = await import('gate-api');
+        const req = new GetChatsListRequest();
+        req.txid = txid;
+        if (last_received !== undefined) req.lastreceived = last_received;
+        if (first_received !== undefined) req.firstreceived = first_received;
+        const { body } = await new P2pApi(createClient()).p2pMerchantChatGetChatsList(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -369,9 +410,12 @@ export function registerP2PTools(server: McpServer): void {
     async ({ txid, message, type }) => {
       try {
         requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (type !== undefined) opts.type = type;
-        const { body } = await new P2PApi(createClient()).p2pMerchantChatSendChatMessage(txid, message, opts);
+        const { SendChatMessageRequest } = await import('gate-api');
+        const req = new SendChatMessageRequest();
+        req.txid = txid;
+        req.message = message;
+        if (type !== undefined) req.type = type;
+        const { body } = await new P2pApi(createClient()).p2pMerchantChatSendChatMessage(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -387,7 +431,11 @@ export function registerP2PTools(server: McpServer): void {
     async ({ image_content_type, base64_img }) => {
       try {
         requireAuth();
-        const { body } = await new P2PApi(createClient()).p2pMerchantChatUploadChatFile(image_content_type, base64_img);
+        const { UploadChatFile } = await import('gate-api');
+        const req = new UploadChatFile();
+        req.imageContentType = image_content_type;
+        req.base64Img = base64_img;
+        const { body } = await new P2pApi(createClient()).p2pMerchantChatUploadChatFile(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
