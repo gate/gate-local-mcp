@@ -6,3 +6,13 @@ dist/
 !.env.example
 .claude/
 .worktrees/
+
+# macOS
+.DS_Store
+
+# MCP registry auth tokens
+.mcpregistry_github_token
+.mcpregistry_registry_token
+
+# Internal planning/superpowers working files
+docs/superpowers/
