@@ -4,7 +4,7 @@
 
 ## 功能特性
 
-- **181 个工具**，覆盖现货、合约、交割、杠杆、钱包、账户、期权、理财、闪兑、统一账户和子账户 API
+- **200 个工具**，覆盖现货、合约、交割、杠杆、钱包、账户、期权、理财、闪兑、统一账户和子账户 API
 - **公开端点零配置** — 行情数据、价格、订单簿无需任何凭证即可使用
 - **认证端点** — 设置 `GATE_API_KEY` + `GATE_API_SECRET` 环境变量后，交易、钱包和账户工具自动启用
 - **测试网支持** — 设置 `GATE_BASE_URL` 即可切换到测试网端点
@@ -243,7 +243,7 @@ GATE_API_KEY=你的key GATE_API_SECRET=你的secret npx -y gate-mcp
 
 ## 模块过滤
 
-默认情况下会注册全部 181 个工具（11 个模块）。Cursor 等客户端在工具数量超过 80 个时会发出警告——使用模块过滤可以只加载所需内容。
+默认情况下会注册全部 200 个工具（11 个模块）。Cursor 等客户端在工具数量超过 80 个时会发出警告——使用模块过滤可以只加载所需内容。
 
 **通过 MCP 配置（推荐）：**
 
@@ -285,7 +285,7 @@ GATE_API_KEY=你的key GATE_API_SECRET=你的secret npx -y gate-mcp
 | 模块 | 总工具数 | 只读工具数 |
 |---|---|---|
 | `spot` | 28 | 18 |
-| `futures` | 45 | 26 |
+| `futures` | 64 | 36 |
 | `delivery` | 11 | 9 |
 | `margin` | 5 | 4 |
 | `wallet` | 12 | 9 |
@@ -337,8 +337,8 @@ SOL_USDT 的盘口深度如何？
 ### 现货 Spot（28 个工具）
 `cex_spot_list_currencies`、`cex_spot_get_currency`、`cex_spot_list_currency_pairs`、`cex_spot_get_currency_pair`、`cex_spot_get_spot_tickers`、`cex_spot_get_spot_order_book`、`cex_spot_get_spot_trades`、`cex_spot_get_spot_candlesticks`、`cex_spot_get_spot_fee`\*、`cex_spot_get_spot_accounts`\*、`cex_spot_list_spot_account_book`\*、`cex_spot_list_spot_orders`\*、`cex_spot_create_spot_order`\*、`cex_spot_get_spot_order`\*、`cex_spot_cancel_spot_order`\*、`cex_spot_amend_spot_order`\*、`cex_spot_cancel_all_spot_orders`\*、`cex_spot_create_spot_batch_orders`\*、`cex_spot_cancel_spot_batch_orders`\*、`cex_spot_get_spot_batch_fee`\*、`cex_spot_list_spot_my_trades`\*、`cex_spot_list_all_open_orders`\*、`cex_spot_list_spot_price_triggered_orders`\*、`cex_spot_create_spot_price_triggered_order`\*、`cex_spot_get_spot_price_triggered_order`\*、`cex_spot_cancel_spot_price_triggered_order`\*、`cex_spot_cancel_spot_price_triggered_order_list`\*、`cex_spot_countdown_cancel_all_spot`\*
 
-### 合约 Futures（45 个工具）— 前缀：`cex_fx_`
-`cex_fx_list_fx_contracts`、`cex_fx_get_fx_contract`、`cex_fx_get_fx_order_book`、`cex_fx_get_fx_candlesticks`、`cex_fx_get_fx_tickers`、`cex_fx_get_fx_funding_rate`、`cex_fx_get_fx_trades`、`cex_fx_list_contract_stats`、`cex_fx_get_fx_premium_index`、`cex_fx_get_fx_accounts`\*、`cex_fx_list_fx_account_book`\*、`cex_fx_get_fx_fee`\*、`cex_fx_list_fx_positions`\*、`cex_fx_get_fx_position`\*、`cex_fx_get_leverage`\*、`cex_fx_update_fx_position_leverage`\*、`cex_fx_update_fx_position_margin`\*、`cex_fx_update_fx_position_risk_limit`\*、`cex_fx_list_fx_orders`\*、`cex_fx_create_fx_order`\*、`cex_fx_get_fx_order`\*、`cex_fx_cancel_fx_order`\*、`cex_fx_cancel_all_fx_orders`\*、`cex_fx_amend_fx_order`\*、`cex_fx_create_fx_batch_orders`\*、`cex_fx_cancel_fx_batch_orders`\*、`cex_fx_get_fx_orders_with_time_range`\*、`cex_fx_list_fx_my_trades`\*、`cex_fx_get_fx_my_trades_timerange`\*、`cex_fx_list_position_close`\*、`cex_fx_list_fx_liq_orders`\*、`cex_fx_list_price_triggered_orders`\*、`cex_fx_create_fx_price_triggered_order`\*、`cex_fx_get_fx_price_triggered_order`\*、`cex_fx_cancel_fx_price_triggered_order`\*、`cex_fx_cancel_fx_price_triggered_order_list`\*、`cex_fx_countdown_cancel_all_fx`\*、`cex_fx_list_fx_risk_limit_tiers`\*、`cex_fx_set_fx_dual`\*、`cex_fx_get_fx_dual_position`\*、`cex_fx_update_fx_dual_position_margin`\*、`cex_fx_update_fx_dual_position_leverage`\*、`cex_fx_update_fx_dual_position_risk_limit`\*、`cex_fx_update_fx_position_cross_mode`\*、`cex_fx_update_fx_dual_position_cross_mode`\*
+### 合约 Futures（64 个工具）— 前缀：`cex_fx_`
+`cex_fx_list_fx_contracts`、`cex_fx_get_fx_contract`、`cex_fx_get_fx_order_book`、`cex_fx_get_fx_candlesticks`、`cex_fx_get_fx_tickers`、`cex_fx_get_fx_funding_rate`、`cex_fx_get_fx_trades`、`cex_fx_list_contract_stats`、`cex_fx_get_fx_premium_index`、`cex_fx_list_batch_fx_funding_rates`、`cex_fx_list_fx_insurance_ledger`、`cex_fx_get_index_constituents`、`cex_fx_list_liquidated_orders`、`cex_fx_get_fx_accounts`\*、`cex_fx_list_fx_account_book`\*、`cex_fx_list_fx_positions`\*、`cex_fx_list_positions_timerange`\*、`cex_fx_get_fx_position`\*、`cex_fx_get_leverage`\*、`cex_fx_get_fx_fee`\*、`cex_fx_list_fx_risk_limit_tiers`、`cex_fx_get_fx_risk_limit_table`\*、`cex_fx_list_fx_orders`\*、`cex_fx_create_fx_order`\*、`cex_fx_create_fx_bbo_order`\*、`cex_fx_get_fx_order`\*、`cex_fx_amend_fx_order`\*、`cex_fx_cancel_fx_order`\*、`cex_fx_cancel_all_fx_orders`\*、`cex_fx_create_fx_batch_orders`\*、`cex_fx_cancel_fx_batch_orders`\*、`cex_fx_amend_batch_fx_orders`\*、`cex_fx_get_fx_orders_with_time_range`\*、`cex_fx_list_fx_my_trades`\*、`cex_fx_get_fx_my_trades_timerange`\*、`cex_fx_list_position_close`\*、`cex_fx_list_fx_liq_orders`\*、`cex_fx_list_auto_deleverages`\*、`cex_fx_update_fx_position_leverage`\*、`cex_fx_update_fx_contract_position_leverage`\*、`cex_fx_update_fx_position_margin`\*、`cex_fx_update_fx_position_risk_limit`\*、`cex_fx_update_fx_position_cross_mode`\*、`cex_fx_update_fx_dual_position_cross_mode`\*、`cex_fx_set_fx_dual`\*、`cex_fx_set_position_mode`\*、`cex_fx_get_fx_dual_position`\*、`cex_fx_update_fx_dual_position_margin`\*、`cex_fx_update_fx_dual_position_leverage`\*、`cex_fx_update_fx_dual_position_risk_limit`\*、`cex_fx_countdown_cancel_all_fx`\*、`cex_fx_create_trail_order`\*、`cex_fx_get_trail_orders`\*、`cex_fx_get_trail_order_detail`\*、`cex_fx_update_trail_order`\*、`cex_fx_stop_trail_order`\*、`cex_fx_stop_all_trail_orders`\*、`cex_fx_get_trail_order_change_log`\*、`cex_fx_list_price_triggered_orders`\*、`cex_fx_create_fx_price_triggered_order`\*、`cex_fx_get_fx_price_triggered_order`\*、`cex_fx_update_fx_price_triggered_order`\*、`cex_fx_cancel_fx_price_triggered_order`\*、`cex_fx_cancel_fx_price_triggered_order_list`\*
 
 ### 交割 Delivery（11 个工具）
 `cex_delivery_list_delivery_contracts`、`cex_delivery_get_delivery_contract`、`cex_delivery_list_delivery_order_book`、`cex_delivery_list_delivery_candlesticks`、`cex_delivery_list_delivery_tickers`、`cex_delivery_list_delivery_accounts`\*、`cex_delivery_list_delivery_positions`\*、`cex_delivery_list_delivery_orders`\*、`cex_delivery_create_delivery_order`\*、`cex_delivery_cancel_delivery_order`\*、`cex_delivery_get_my_delivery_trades`\*

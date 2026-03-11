@@ -47,7 +47,7 @@ export function errorContent(err: unknown) {
 const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
-  'swap', 'place', 'change',
+  'swap', 'place', 'change', 'stop',
 ]);
 
 /**

@@ -109,19 +109,74 @@
 
 ---
 
-## Futures (9 tools)
+## Futures (64 tools)
 
 | Tool | Description |
 |---|---|
+| `cex_fx_list_fx_contracts` | List all perpetual futures contracts |
+| `cex_fx_get_fx_contract` | Get details of a single futures contract |
+| `cex_fx_get_fx_order_book` | Get futures order book |
+| `cex_fx_get_fx_candlesticks` | Get futures candlestick/OHLCV data |
+| `cex_fx_get_fx_tickers` | Get ticker information for futures contracts |
+| `cex_fx_get_fx_funding_rate` | Get funding rate history for a futures contract |
+| `cex_fx_get_fx_trades` | Get recent public trades for a futures contract |
+| `cex_fx_list_contract_stats` | Get contract statistics (open interest, long/short ratio, etc.) |
+| `cex_fx_get_fx_premium_index` | Get premium index history for a contract |
+| `cex_fx_list_batch_fx_funding_rates` | Get current funding rates for multiple contracts in one request |
+| `cex_fx_list_fx_insurance_ledger` | Get futures insurance fund history |
+| `cex_fx_get_index_constituents` | Get constituent assets and weights for a futures index |
+| `cex_fx_list_liquidated_orders` | Get public market-wide liquidation order history |
+| `cex_fx_get_fx_accounts` | Get futures account balances (requires authentication) |
+| `cex_fx_list_fx_account_book` | Get futures account transaction/ledger history (requires authentication) |
+| `cex_fx_list_fx_positions` | List all open futures positions (requires authentication) |
+| `cex_fx_list_positions_timerange` | Get position history for a contract filtered by time range (requires authentication) |
+| `cex_fx_get_fx_position` | Get a single futures position (requires authentication) |
+| `cex_fx_get_leverage` | Get current leverage for a futures position (requires authentication) |
+| `cex_fx_get_fx_fee` | Get futures trading fee rates (requires authentication) |
+| `cex_fx_list_fx_risk_limit_tiers` | Get risk limit tiers for a futures contract |
+| `cex_fx_get_fx_risk_limit_table` | Get a specific risk limit tier table by table ID (requires authentication) |
+| `cex_fx_list_fx_orders` | List futures orders (requires authentication) |
+| `cex_fx_create_fx_order` | Create a futures order (requires authentication) |
+| `cex_fx_create_fx_bbo_order` | Create a Best-Bid/Offer futures order (requires authentication) |
+| `cex_fx_get_fx_order` | Get a futures order by ID (requires authentication) |
+| `cex_fx_amend_fx_order` | Amend an open futures order (requires authentication) |
+| `cex_fx_cancel_fx_order` | Cancel a futures order (requires authentication) |
+| `cex_fx_cancel_all_fx_orders` | Cancel all open futures orders (requires authentication) |
+| `cex_fx_create_fx_batch_orders` | Create multiple futures orders in a single request (requires authentication) |
+| `cex_fx_cancel_fx_batch_orders` | Cancel multiple futures orders by ID (requires authentication) |
+| `cex_fx_amend_batch_fx_orders` | Amend multiple futures orders in a single request (requires authentication) |
+| `cex_fx_get_fx_orders_with_time_range` | Get futures orders filtered by time range (requires authentication) |
+| `cex_fx_list_fx_my_trades` | Get personal futures trading history (requires authentication) |
+| `cex_fx_get_fx_my_trades_timerange` | Get personal futures trade history filtered by time range (requires authentication) |
+| `cex_fx_list_position_close` | List position close history (requires authentication) |
+| `cex_fx_list_fx_liq_orders` | Get personal futures liquidation history (requires authentication) |
+| `cex_fx_list_auto_deleverages` | Get personal auto-deleverage history (requires authentication) |
+| `cex_fx_update_fx_position_leverage` | Update leverage for a futures position (requires authentication) |
+| `cex_fx_update_fx_contract_position_leverage` | Update position leverage with explicit margin mode (requires authentication) |
+| `cex_fx_update_fx_position_margin` | Add or reduce margin for a futures position (requires authentication) |
+| `cex_fx_update_fx_position_risk_limit` | Update the risk limit for a futures position (requires authentication) |
+| `cex_fx_update_fx_position_cross_mode` | Switch a single-mode position between isolated and cross margin (requires authentication) |
+| `cex_fx_update_fx_dual_position_cross_mode` | Switch a dual-mode position between isolated and cross margin (requires authentication) |
+| `cex_fx_set_fx_dual` | Enable or disable dual-mode (hedge mode) (requires authentication) |
+| `cex_fx_set_position_mode` | Set account-level position mode (requires authentication) |
+| `cex_fx_get_fx_dual_position` | Get dual-mode positions for a contract (requires authentication) |
+| `cex_fx_update_fx_dual_position_margin` | Add or reduce margin for a dual-mode position (requires authentication) |
+| `cex_fx_update_fx_dual_position_leverage` | Update leverage for a dual-mode position (requires authentication) |
+| `cex_fx_update_fx_dual_position_risk_limit` | Update the risk limit for a dual-mode position (requires authentication) |
+| `cex_fx_countdown_cancel_all_fx` | Set a countdown timer to cancel all futures orders — safety kill-switch (requires authentication) |
+| `cex_fx_create_trail_order` | Create a trailing stop order (requires authentication) |
+| `cex_fx_get_trail_orders` | List trail orders (requires authentication) |
+| `cex_fx_get_trail_order_detail` | Get details of a single trail order (requires authentication) |
+| `cex_fx_update_trail_order` | Update an existing trail order (requires authentication) |
+| `cex_fx_stop_trail_order` | Stop a specific trail order (requires authentication) |
+| `cex_fx_stop_all_trail_orders` | Stop all trail orders (requires authentication) |
+| `cex_fx_get_trail_order_change_log` | Get change log for a trail order (requires authentication) |
 | `cex_fx_list_price_triggered_orders` | List futures price-triggered orders (requires authentication) |
 | `cex_fx_create_fx_price_triggered_order` | Create a futures price-triggered order (requires authentication) |
 | `cex_fx_get_fx_price_triggered_order` | Get details of a futures price-triggered order (requires authentication) |
+| `cex_fx_update_fx_price_triggered_order` | Update an existing futures price-triggered order (requires authentication) |
 | `cex_fx_cancel_fx_price_triggered_order` | Cancel a single futures price-triggered order (requires authentication) |
 | `cex_fx_cancel_fx_price_triggered_order_list` | Cancel all futures price-triggered orders for a contract (requires authentication) |
-| `cex_fx_get_fx_orders_with_time_range` | Get futures orders filtered by time range (requires authentication) |
-| `cex_fx_get_fx_my_trades_timerange` | Get personal futures trade history filtered by time range (requires authentication) |
-| `cex_fx_list_fx_liq_orders` | Get personal futures liquidation history (requires authentication) |
-| `cex_fx_countdown_cancel_all_fx` | Set a countdown timer to cancel all futures orders — safety kill-switch (requires authentication) |
 
 ---
 

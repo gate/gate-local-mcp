@@ -21,7 +21,7 @@ const PAYLOAD = `${MCP_INIT}\n${MCP_LIST}\n`;
 const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
-  'swap', 'place', 'change',
+  'swap', 'place', 'change', 'stop',
 ]);
 
 function isWrite(toolName) {
@@ -78,27 +78,27 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 181 tools by default', t.count, 181);
+  expect('loads all 200 tools by default', t.count, 200);
   expect('has 11 modules', t.modules.length, 11);
-  expect('has 58 write tools', t.writeCount, 58);
-  expect('has 123 read tools', t.readCount, 123);
+  expect('has 67 write tools', t.writeCount, 67);
+  expect('has 133 read tools', t.readCount, 133);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 123 tools', cli.count, 123);
+  expect('--readonly: 133 tools', cli.count, 133);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 123 tools', env.count, 123);
+  expect('GATE_READONLY=true: 133 tools', env.count, 133);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
 console.log('\n── Per-module filtering (--modules) ─────────────────────────────────────');
 const MODULE_COUNTS = {
   spot:        { total: 28, readonly: 18, write: 10 },
-  futures:     { total: 45, readonly: 26, write: 19 },
+  futures:     { total: 64, readonly: 36, write: 28 },
   delivery:    { total: 11, readonly:  9, write:  2 },
   margin:      { total:  5, readonly:  4, write:  1 },
   wallet:      { total: 12, readonly:  9, write:  3 },
@@ -138,13 +138,13 @@ console.log('\n── Per-module filtering (GATE_MODULES env var) ────�
   expectAllMatch('all tools prefixed cex_spot_', t.names, 'cex_spot_');
 
   const t2 = getTools('', { GATE_MODULES: 'spot,futures' });
-  expect('GATE_MODULES=spot,futures: 73 tools', t2.count, 73);
+  expect('GATE_MODULES=spot,futures: 92 tools', t2.count, 92);
 }
 
 console.log('\n── Combined module + readonly ───────────────────────────────────────────');
 {
   const t1 = getTools('--modules=spot,futures --readonly');
-  expect('spot+futures --readonly: 44 tools', t1.count, 44);
+  expect('spot+futures --readonly: 54 tools', t1.count, 54);
   expectNoWrite('no write tools', t1.names);
 
   const t2 = getTools('', { GATE_MODULES: 'wallet,unified,sub_account' });
