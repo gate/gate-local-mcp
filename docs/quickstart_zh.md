@@ -1,6 +1,6 @@
 # gate-mcp 快速入门指南
 
-一个 MCP（模型上下文协议）服务器，将完整的 [Gate.com](https://www.gate.com) API v4 暴露给任何兼容 MCP 的客户端（Claude Desktop、Cursor、Windsurf、OpenAI Agents 等）。
+一个 MCP（模型上下文协议）服务器，将完整的 [Gate](https://www.gate.com) API v4 暴露给任何兼容 MCP 的客户端（Claude Desktop、Cursor、Windsurf、OpenAI Agents 等）。
 
 ## 功能特性
 
@@ -16,13 +16,13 @@
 ## 前置要求
 
 - **Node.js 18+** — [安装指南](https://nodejs.org/en/download)。通过 `node --version` 验证版本。
-- **[Gate.com](https://www.gate.com) 账户** — 仅私有/交易工具需要。公开行情数据无需账户。
+- **[Gate](https://www.gate.com) 账户** — 仅私有/交易工具需要。公开行情数据无需账户。
 
 ---
 
 ## 获取 API 密钥
 
-1. 登录 [gate.com](https://www.gate.com)
+1. 登录 [https://www.gate.com](https://www.gate.com)
 2. 点击右上角的**头像**（个人头像图片）
 3. 在下拉菜单中选择 **API 管理**
 4. 创建新的 API 密钥 — 仅授予所需权限（持仓监控只需要开只读权限）
@@ -172,7 +172,7 @@ async def main():
 
     agent = Agent(
         name="Trading Assistant",
-        instructions="You have access to Gate.com via MCP tools. Help with market data and portfolio queries.",
+        instructions="You have access to Gate via MCP tools. Help with market data and portfolio queries.",
         mcp_servers=[gate],
     )
 
@@ -371,7 +371,7 @@ SOL_USDT 的盘口深度如何？
 
 ## 警告：写操作风险
 
-下单、撤单、划转资金、修改账户设置等写操作工具会**立即且不可撤销地**作用于你的 Gate.com 真实账户。一旦提交，错误的交易对、方向（买/卖）、数量或价格均无法撤回。
+下单、撤单、划转资金、修改账户设置等写操作工具会**立即且不可撤销地**作用于你的 Gate 真实账户。一旦提交，错误的交易对、方向（买/卖）、数量或价格均无法撤回。
 
 使用任何写操作工具前，请务必：
 - 在确认前仔细核对交易对、买卖方向、数量和价格
@@ -387,7 +387,7 @@ SOL_USDT 的盘口深度如何？
 
 - 切勿将 API 密钥硬编码在源文件中或提交到 git。请使用环境变量。
 - 如果只需要行情数据或持仓监控，请创建**只读**密钥，无需交易权限。
-- 尽可能在 Gate.com 的 API 密钥设置中启用 **IP 白名单**。
+- 尽可能在 Gate 的 API 密钥设置中启用 **IP 白名单**。
 - 该服务器完全运行在本地机器上。凭证仅发送至 `api.gateio.ws`（或你配置的基础地址），不会传输至其他任何地方。
 
 ---
@@ -395,7 +395,7 @@ SOL_USDT 的盘口深度如何？
 ## 常见问题排查
 
 **报错"Authentication required"（需要认证）**
-`GATE_API_KEY` 或 `GATE_API_SECRET` 未设置或不正确。请确认环境变量已正确配置，且密钥在 Gate.com 上拥有所需权限。
+`GATE_API_KEY` 或 `GATE_API_SECRET` 未设置或不正确。请确认环境变量已正确配置，且密钥在 Gate 上拥有所需权限。
 
 **Agent 中工具未出现 / 锤子图标缺失**
 编辑配置后，请完全退出并重启 Agent 应用。使用 JSON 验证器检查配置文件是否有语法错误。在终端运行 `npx --version` 确认 `npx` 可正常访问。
@@ -404,7 +404,7 @@ SOL_USDT 的盘口深度如何？
 Node.js 未安装或未加入 PATH。请安装 Node.js 18+ 并通过 `node --version` 和 `npx --version` 验证。
 
 **频率限制报错**
-Gate.com 对各端点有请求频率限制，请避免短时间内频繁调用同一工具。可使用 `get_account_rate_limit` 查看当前限制。
+Gate 对各端点有请求频率限制，请避免短时间内频繁调用同一工具。可使用 `get_account_rate_limit` 查看当前限制。
 
 **直接验证服务器是否正常运行**
 

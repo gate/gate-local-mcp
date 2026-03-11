@@ -1,6 +1,6 @@
 # gate-mcp Quickstart Guide
 
-An MCP (Model Context Protocol) server that exposes the full [Gate.com](https://www.gate.com) API v4 to any MCP-compatible client (Claude Desktop, Cursor, Windsurf, OpenAI Agents, and more).
+An MCP (Model Context Protocol) server that exposes the full [Gate](https://www.gate.com) API v4 to any MCP-compatible client (Claude Desktop, Cursor, Windsurf, OpenAI Agents, and more).
 
 ## Features
 
@@ -16,13 +16,13 @@ An MCP (Model Context Protocol) server that exposes the full [Gate.com](https://
 ## Prerequisites
 
 - **Node.js 18+** — [Installation guide](https://nodejs.org/en/download). Verify with `node --version`.
-- A **[Gate.com](https://www.gate.com) account** — only needed for private/trading tools. Public market data works without credentials.
+- A **[Gate](https://www.gate.com) account** — only needed for private/trading tools. Public market data works without credentials.
 
 ---
 
 ## Getting API Keys
 
-1. Log in to [gate.com](https://www.gate.com)
+1. Log in to [https://www.gate.com](https://www.gate.com)
 2. Click your **avatar** (profile picture) in the top-right corner
 3. Select **API Management** from the dropdown menu
 4. Create a new API key — grant only the permissions you need (read-only is enough for portfolio monitoring)
@@ -172,7 +172,7 @@ async def main():
 
     agent = Agent(
         name="Trading Assistant",
-        instructions="You have access to Gate.com via MCP tools. Help with market data and portfolio queries.",
+        instructions="You have access to Gate via MCP tools. Help with market data and portfolio queries.",
         mcp_servers=[gate],
     )
 
@@ -371,7 +371,7 @@ Tools marked `*` require authentication. Tool names use the convention `cex_{mod
 
 ## Warning: Write Operations
 
-Tools that place orders, cancel orders, transfer funds, or change account settings execute **immediately and irreversibly** against your live Gate.com account. Mistakes — such as wrong size, price, or direction — cannot be undone once submitted.
+Tools that place orders, cancel orders, transfer funds, or change account settings execute **immediately and irreversibly** against your live Gate account. Mistakes — such as wrong size, price, or direction — cannot be undone once submitted.
 
 Before using any write tool, always:
 - Double-check the currency pair, side (buy/sell), amount, and price before confirming
@@ -387,7 +387,7 @@ Before using any write tool, always:
 
 - Never hardcode API keys in source files or commit them to git. Use environment variables.
 - Create a **read-only** key if you only need market data or portfolio monitoring — no trading permissions needed.
-- Enable **IP whitelisting** on your Gate.com API key when possible.
+- Enable **IP whitelisting** on your Gate API key when possible.
 - This server runs entirely on your local machine. Credentials are sent only to `api.gateio.ws` (or your configured base URL) and nowhere else.
 
 ---
@@ -395,7 +395,7 @@ Before using any write tool, always:
 ## Troubleshooting
 
 **"Authentication required" error**
-`GATE_API_KEY` or `GATE_API_SECRET` are missing or incorrect. Verify the env vars are set and the key has the required permissions on Gate.com.
+`GATE_API_KEY` or `GATE_API_SECRET` are missing or incorrect. Verify the env vars are set and the key has the required permissions on Gate.
 
 **Tools not appearing in agent / hammer icon missing**
 Fully quit and restart the agent app after editing config. Check the config file for JSON syntax errors with a JSON validator. Ensure `npx` is accessible (`npx --version` in terminal).
@@ -404,7 +404,7 @@ Fully quit and restart the agent app after editing config. Check the config file
 Node.js is not installed or not on PATH. Install Node.js 18+ and verify with `node --version` and `npx --version`.
 
 **Rate limit errors**
-Gate.com enforces per-endpoint rate limits. Avoid rapid repeated calls. Use `get_account_rate_limit` to check your current limits.
+Gate enforces per-endpoint rate limits. Avoid rapid repeated calls. Use `get_account_rate_limit` to check your current limits.
 
 **Verify the server works directly**
 
