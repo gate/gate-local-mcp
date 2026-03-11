@@ -4,7 +4,7 @@ An MCP (Model Context Protocol) server that exposes the full [Gate](https://www.
 
 ## Features
 
-- **161 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, and Sub-Account APIs
+- **181 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, and Sub-Account APIs
 - **Zero config for public endpoints** — market data, tickers, order books work without any credentials
 - **Authenticated endpoints** — trading, wallet, and account tools activate automatically when `GATE_API_KEY` + `GATE_API_SECRET` env vars are set
 - **Testnet support** — set `GATE_BASE_URL` to use the testnet endpoint
@@ -243,7 +243,7 @@ GATE_API_KEY=your-key GATE_API_SECRET=your-secret npx -y gate-mcp
 
 ## Module Filtering
 
-By default all 161 tools (11 modules) are registered. Clients like Cursor warn when a server provides more than 80 tools — use module filtering to load only what you need.
+By default all 181 tools (11 modules) are registered. Clients like Cursor warn when a server provides more than 80 tools — use module filtering to load only what you need.
 
 **Via MCP config (recommended):**
 
@@ -291,7 +291,7 @@ By default all 161 tools (11 modules) are registered. Clients like Cursor warn w
 | `wallet` | 12 | 9 |
 | `account` | 10 | 6 |
 | `options` | 13 | 11 |
-| `earn` | 5 | 5 |
+| `earn` | 25 | 19 |
 | `flash_swap` | 5 | 4 |
 | `unified` | 16 | 12 |
 | `sub_account` | 11 | 5 |
@@ -355,8 +355,8 @@ Tools marked `*` require authentication. Tool names use the convention `cex_{mod
 ### Options (13 tools)
 `cex_options_list_options_underlyings`, `cex_options_list_options_expirations`, `cex_options_list_options_contracts`, `cex_options_get_options_contract`, `cex_options_list_options_order_book`, `cex_options_list_options_tickers`, `cex_options_list_options_candlesticks`, `cex_options_list_options_account`\*, `cex_options_list_options_positions`\*, `cex_options_list_options_orders`\*, `cex_options_create_options_order`\*, `cex_options_cancel_options_order`\*, `cex_options_list_my_options_trades`\*
 
-### Earn (5 tools)
-`cex_earn_list_dual_investment_plans`, `cex_earn_list_structured_products`, `cex_earn_list_dual_orders`\*, `cex_earn_list_dual_balance`\*, `cex_earn_list_structured_orders`\*
+### Earn (25 tools)
+`cex_earn_rate_list_eth2`, `cex_earn_list_dual_investment_plans`, `cex_earn_list_structured_products`, `cex_earn_find_coin`, `cex_earn_list_uni_currencies`, `cex_earn_get_uni_currency`, `cex_earn_list_uni_chart`, `cex_earn_list_uni_rate`, `cex_earn_swap_eth2`\*, `cex_earn_list_dual_orders`\*, `cex_earn_place_dual_order`\*, `cex_earn_list_dual_balance`\*, `cex_earn_list_structured_orders`\*, `cex_earn_place_structured_order`\*, `cex_earn_swap_staking_coin`\*, `cex_earn_order_list`\*, `cex_earn_award_list`\*, `cex_earn_asset_list`\*, `cex_earn_list_user_uni_lends`\*, `cex_earn_create_uni_lend`\*, `cex_earn_change_uni_lend`\*, `cex_earn_list_uni_lend_records`\*, `cex_earn_get_uni_interest`\*, `cex_earn_list_uni_interest_records`\*, `cex_earn_get_uni_interest_status`\*
 
 ### Flash Swap (5 tools) — prefix: `cex_fc_`
 `cex_fc_list_fc_currency_pairs`, `cex_fc_preview_fc_order`\*, `cex_fc_create_fc_order`\*, `cex_fc_list_fc_orders`\*, `cex_fc_get_fc_order`\*
