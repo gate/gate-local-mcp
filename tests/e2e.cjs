@@ -78,26 +78,26 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 200 tools by default', t.count, 200);
+  expect('loads all 204 tools by default', t.count, 204);
   expect('has 11 modules', t.modules.length, 11);
-  expect('has 67 write tools', t.writeCount, 67);
-  expect('has 133 read tools', t.readCount, 133);
+  expect('has 69 write tools', t.writeCount, 69);
+  expect('has 135 read tools', t.readCount, 135);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 133 tools', cli.count, 133);
+  expect('--readonly: 135 tools', cli.count, 135);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 133 tools', env.count, 133);
+  expect('GATE_READONLY=true: 135 tools', env.count, 135);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
 console.log('\n── Per-module filtering (--modules) ─────────────────────────────────────');
 const MODULE_COUNTS = {
-  spot:        { total: 28, readonly: 18, write: 10 },
+  spot:        { total: 32, readonly: 20, write: 12 },
   futures:     { total: 64, readonly: 36, write: 28 },
   delivery:    { total: 11, readonly:  9, write:  2 },
   margin:      { total:  5, readonly:  4, write:  1 },
@@ -134,17 +134,17 @@ for (const [mod, counts] of Object.entries(MODULE_COUNTS)) {
 console.log('\n── Per-module filtering (GATE_MODULES env var) ──────────────────────────');
 {
   const t = getTools('', { GATE_MODULES: 'spot' });
-  expect('GATE_MODULES=spot: 28 tools', t.count, 28);
+  expect('GATE_MODULES=spot: 32 tools', t.count, 32);
   expectAllMatch('all tools prefixed cex_spot_', t.names, 'cex_spot_');
 
   const t2 = getTools('', { GATE_MODULES: 'spot,futures' });
-  expect('GATE_MODULES=spot,futures: 92 tools', t2.count, 92);
+  expect('GATE_MODULES=spot,futures: 96 tools', t2.count, 96);
 }
 
 console.log('\n── Combined module + readonly ───────────────────────────────────────────');
 {
   const t1 = getTools('--modules=spot,futures --readonly');
-  expect('spot+futures --readonly: 54 tools', t1.count, 54);
+  expect('spot+futures --readonly: 56 tools', t1.count, 56);
   expectNoWrite('no write tools', t1.names);
 
   const t2 = getTools('', { GATE_MODULES: 'wallet,unified,sub_account' });
@@ -184,7 +184,7 @@ console.log('\n── Unknown module handling ───────────�
 
   // Should still load valid modules
   const t = getTools('', { GATE_MODULES: 'spot,unknown' });
-  expect('valid modules still load despite unknown name', t.count, 28);
+  expect('valid modules still load despite unknown name', t.count, 32);
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────────

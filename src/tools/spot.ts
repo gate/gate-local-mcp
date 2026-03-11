@@ -68,12 +68,14 @@ export function registerSpotTools(server: McpServer): void {
     'Get the order book for a currency pair',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
+      interval: z.string().optional().describe('Price precision (0, 0.1, 0.01, …); default 0 means no grouping'),
       limit: z.number().int().min(1).max(5000).optional().describe('Number of price levels (default 10)'),
       with_id: z.boolean().optional().describe('Include order book ID'),
     },
-    async ({ currency_pair, limit, with_id }) => {
+    async ({ currency_pair, interval, limit, with_id }) => {
       try {
         const opts: Record<string, unknown> = {};
+        if (interval !== undefined) opts.interval = interval;
         if (limit !== undefined) opts.limit = limit;
         if (with_id !== undefined) opts.withId = with_id;
         const { body } = await new SpotApi(createClient()).listOrderBook(currency_pair, opts);
@@ -88,11 +90,21 @@ export function registerSpotTools(server: McpServer): void {
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       limit: z.number().int().min(1).max(1000).optional(),
+      last_id: z.string().optional().describe('Paginate by returning records after this trade ID'),
+      reverse: z.boolean().optional().describe('Return newest records first'),
+      from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
+      to: z.number().optional().describe('End time (Unix timestamp in seconds)'),
+      page: z.number().int().min(1).optional(),
     },
-    async ({ currency_pair, limit }) => {
+    async ({ currency_pair, limit, last_id, reverse, from, to, page }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (limit !== undefined) opts.limit = limit;
+        if (last_id !== undefined) opts.lastId = last_id;
+        if (reverse !== undefined) opts.reverse = reverse;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (page !== undefined) opts.page = page;
         const { body } = await new SpotApi(createClient()).listTrades(currency_pair, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -104,7 +116,7 @@ export function registerSpotTools(server: McpServer): void {
     'Get candlestick/OHLCV data for a currency pair',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
-      interval: z.enum(['10s', '1m', '5m', '15m', '30m', '1h', '4h', '8h', '1d', '7d', '30d']).optional().describe('Candlestick interval (default 30m)'),
+      interval: z.enum(['1s', '10s', '1m', '5m', '15m', '30m', '1h', '4h', '8h', '1d', '7d', '30d']).optional().describe('Candlestick interval (default 30m)'),
       limit: z.number().int().min(1).max(1000).optional(),
       from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       to: z.number().optional().describe('End time (Unix timestamp in seconds)'),
@@ -117,6 +129,40 @@ export function registerSpotTools(server: McpServer): void {
         if (from !== undefined) opts.from = from;
         if (to !== undefined) opts.to = to;
         const { body } = await new SpotApi(createClient()).listCandlesticks(currency_pair, opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_spot_get_system_time',
+    'Get current server time (Unix timestamp in seconds)',
+    {},
+    async () => {
+      try {
+        const { body } = await new SpotApi(createClient()).getSystemTime();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_spot_get_spot_insurance_history',
+    'Get spot insurance fund history for a currency',
+    {
+      business: z.string().describe('Business type (e.g. spot)'),
+      currency: z.string().describe('Currency symbol e.g. USDT'),
+      from: z.number().describe('Start time (Unix timestamp in seconds)'),
+      to: z.number().describe('End time (Unix timestamp in seconds)'),
+      page: z.number().int().min(1).optional(),
+      limit: z.number().int().min(1).max(1000).optional(),
+    },
+    async ({ business, currency, from, to, page, limit }) => {
+      try {
+        const opts: Record<string, unknown> = {};
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
+        const { body } = await new SpotApi(createClient()).getSpotInsuranceHistory(business, currency, from, to, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -160,13 +206,21 @@ export function registerSpotTools(server: McpServer): void {
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       status: z.enum(['open', 'finished']).optional().describe('Order status (default: open)'),
+      account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
+      from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
+      to: z.number().optional().describe('End time (Unix timestamp in seconds)'),
+      side: z.enum(['buy', 'sell']).optional(),
       page: z.number().int().min(1).optional(),
       limit: z.number().int().min(1).max(1000).optional(),
     },
-    async ({ currency_pair, status, page, limit }) => {
+    async ({ currency_pair, status, account, from, to, side, page, limit }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
+        if (account !== undefined) opts.account = account;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (side !== undefined) opts.side = side;
         if (page !== undefined) opts.page = page;
         if (limit !== undefined) opts.limit = limit;
         const { body } = await new SpotApi(createClient()).listOrders(currency_pair, status ?? 'open', opts);
@@ -208,11 +262,14 @@ export function registerSpotTools(server: McpServer): void {
     {
       order_id: z.string().describe('Order ID'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
+      account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
     },
-    async ({ order_id, currency_pair }) => {
+    async ({ order_id, currency_pair, account }) => {
       try {
         requireAuth();
-        const { body } = await new SpotApi(createClient()).getOrder(order_id, currency_pair, {});
+        const opts: Record<string, unknown> = {};
+        if (account !== undefined) opts.account = account;
+        const { body } = await new SpotApi(createClient()).getOrder(order_id, currency_pair, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -224,11 +281,16 @@ export function registerSpotTools(server: McpServer): void {
     {
       order_id: z.string().describe('Order ID'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
+      account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
+      action_mode: z.string().optional().describe('Processing mode: ACK, RESULT, or FULL'),
     },
-    async ({ order_id, currency_pair }) => {
+    async ({ order_id, currency_pair, account, action_mode }) => {
       try {
         requireAuth();
-        const { body } = await new SpotApi(createClient()).cancelOrder(order_id, currency_pair, {});
+        const opts: Record<string, unknown> = {};
+        if (account !== undefined) opts.account = account;
+        if (action_mode !== undefined) opts.actionMode = action_mode;
+        const { body } = await new SpotApi(createClient()).cancelOrder(order_id, currency_pair, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -261,12 +323,16 @@ export function registerSpotTools(server: McpServer): void {
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       side: z.enum(['buy', 'sell']).optional().describe('Cancel only buy or sell orders'),
+      account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
+      action_mode: z.string().optional().describe('Processing mode: ACK, RESULT, or FULL'),
     },
-    async ({ currency_pair, side }) => {
+    async ({ currency_pair, side, account, action_mode }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = { currencyPair: currency_pair };
         if (side) opts.side = side;
+        if (account !== undefined) opts.account = account;
+        if (action_mode !== undefined) opts.actionMode = action_mode;
         const { body } = await new SpotApi(createClient()).cancelOrders(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -278,14 +344,22 @@ export function registerSpotTools(server: McpServer): void {
     'List personal trading history (requires authentication)',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
+      order_id: z.string().optional().describe('Filter by order ID'),
+      account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
+      from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
+      to: z.number().optional().describe('End time (Unix timestamp in seconds)'),
       limit: z.number().int().min(1).max(1000).optional(),
       page: z.number().int().min(1).optional(),
     },
-    async ({ currency_pair, limit, page }) => {
+    async ({ currency_pair, order_id, account, from, to, limit, page }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (currency_pair) opts.currencyPair = currency_pair;
+        if (order_id !== undefined) opts.orderId = order_id;
+        if (account !== undefined) opts.account = account;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
         if (limit !== undefined) opts.limit = limit;
         if (page !== undefined) opts.page = page;
         const { body } = await new SpotApi(createClient()).listMyTrades(opts);
@@ -297,11 +371,16 @@ export function registerSpotTools(server: McpServer): void {
   server.tool(
     'cex_spot_list_all_open_orders',
     'List all open orders across all pairs (requires authentication)',
-    { page: z.number().int().min(1).optional(), limit: z.number().int().min(1).max(100).optional() },
-    async ({ page, limit }) => {
+    {
+      account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
+      page: z.number().int().min(1).optional(),
+      limit: z.number().int().min(1).max(100).optional(),
+    },
+    async ({ account, page, limit }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
+        if (account !== undefined) opts.account = account;
         if (page !== undefined) opts.page = page;
         if (limit !== undefined) opts.limit = limit;
         const { body } = await new SpotApi(createClient()).listAllOpenOrders(opts);
@@ -316,14 +395,18 @@ export function registerSpotTools(server: McpServer): void {
     {
       status: z.enum(['open', 'finished']).describe('Order status'),
       currency_pair: z.string().optional(),
+      account: z.enum(['normal', 'margin', 'unified']).optional(),
       limit: z.number().int().optional(),
+      offset: z.number().int().optional(),
     },
-    async ({ status, currency_pair, limit }) => {
+    async ({ status, currency_pair, account, limit, offset }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (currency_pair) opts.market = currency_pair;
+        if (account !== undefined) opts.account = account;
         if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
         const { body } = await new SpotApi(createClient()).listSpotPriceTriggeredOrders(status, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -339,8 +422,10 @@ export function registerSpotTools(server: McpServer): void {
       to: z.number().optional().describe('End time (Unix timestamp)'),
       page: z.number().int().min(1).optional(),
       limit: z.number().int().min(1).max(1000).optional(),
+      type: z.string().optional().describe('Transaction type filter (e.g. trade, fee, transfer)'),
+      code: z.string().optional().describe('Account change code filter'),
     },
-    async ({ currency, from, to, page, limit }) => {
+    async ({ currency, from, to, page, limit, type, code }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
@@ -349,6 +434,8 @@ export function registerSpotTools(server: McpServer): void {
         if (to !== undefined) opts.to = to;
         if (page !== undefined) opts.page = page;
         if (limit !== undefined) opts.limit = limit;
+        if (type !== undefined) opts.type = type;
+        if (code !== undefined) opts.code = code;
         const { body } = await new SpotApi(createClient()).listSpotAccountBook(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -401,6 +488,41 @@ export function registerSpotTools(server: McpServer): void {
   );
 
   server.tool(
+    'cex_spot_amend_spot_batch_orders',
+    'Amend multiple spot orders in a single request (requires authentication) — always confirm the new values with the user before calling this tool',
+    {
+      orders: z.array(z.object({
+        order_id: z.string().describe('Order ID to amend'),
+        currency_pair: z.string(),
+        account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
+        amount: z.string().optional().describe('New order amount'),
+        price: z.string().optional().describe('New order price'),
+        amend_text: z.string().optional().describe('Amendment note'),
+        action_mode: z.string().optional(),
+      })).describe('Array of order amendments'),
+    },
+    async ({ orders }) => {
+      try {
+        requireAuth();
+        const { BatchAmendItem } = await import('gate-api');
+        const items = orders.map(o => {
+          const item = new BatchAmendItem();
+          item.orderId = o.order_id;
+          item.currencyPair = o.currency_pair;
+          if (o.account !== undefined) item.account = o.account;
+          if (o.amount !== undefined) item.amount = o.amount;
+          if (o.price !== undefined) item.price = o.price;
+          if (o.amend_text !== undefined) item.amendText = o.amend_text;
+          if (o.action_mode !== undefined) item.actionMode = o.action_mode;
+          return item;
+        });
+        const { body } = await new SpotApi(createClient()).amendBatchOrders(items, {});
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
     'cex_spot_cancel_spot_batch_orders',
     'Cancel multiple spot orders in a single request (requires authentication) — always confirm with the user before calling this tool',
     {
@@ -419,6 +541,32 @@ export function registerSpotTools(server: McpServer): void {
           return item;
         });
         const { body } = await new SpotApi(createClient()).cancelBatchOrders(mapped as never, {});
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_spot_create_cross_liquidate_order',
+    'Create a cross-margin liquidation order (requires authentication) — always confirm the details with the user before calling this tool',
+    {
+      currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
+      amount: z.string().describe('Order amount'),
+      price: z.string().describe('Order price'),
+      text: z.string().optional().describe('Custom order text'),
+      action_mode: z.string().optional().describe('Processing mode: ACK, RESULT, or FULL'),
+    },
+    async ({ currency_pair, amount, price, text, action_mode }) => {
+      try {
+        requireAuth();
+        const { LiquidateOrder } = await import('gate-api');
+        const order = new LiquidateOrder();
+        order.currencyPair = currency_pair;
+        order.amount = amount;
+        order.price = price;
+        if (text !== undefined) order.text = text;
+        if (action_mode !== undefined) order.actionMode = action_mode;
+        const { body } = await new SpotApi(createClient()).createCrossLiquidateOrder(order);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
