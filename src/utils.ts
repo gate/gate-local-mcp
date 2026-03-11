@@ -4,11 +4,12 @@
  * reduces wire-level name length for clients with character limits).
  */
 export const NAME_ABBREVIATIONS: Record<string, string> = {
-  futures:    'fx',
-  sub_account: 'sa',
-  dual_mode:  'dual',
-  dual_comp:  'dual',
-  flash_swap: 'fc',
+  futures:               'fx',
+  sub_account:           'sa',
+  dual_mode:             'dual',
+  dual_comp:             'dual',
+  flash_swap:            'fc',
+  multi_collateral_loan: 'mcl',
 };
 
 /**
@@ -47,7 +48,7 @@ export function errorContent(err: unknown) {
 const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
-  'swap', 'place', 'change', 'stop',
+  'swap', 'place', 'change', 'stop', 'repay', 'operate',
 ]);
 
 /**

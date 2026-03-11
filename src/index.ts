@@ -14,6 +14,7 @@ import { registerEarnTools } from './tools/earn.js';
 import { registerFlashSwapTools } from './tools/flash_swap.js';
 import { registerUnifiedTools } from './tools/unified.js';
 import { registerSubAccountTools } from './tools/sub_account.js';
+import { registerMultiCollateralLoanTools } from './tools/multi_collateral_loan.js';
 
 const config = parseConfig();
 
@@ -41,7 +42,8 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   earn:        registerEarnTools,
   flash_swap:  registerFlashSwapTools,
   unified:     registerUnifiedTools,
-  sub_account: registerSubAccountTools,
+  sub_account:           registerSubAccountTools,
+  multi_collateral_loan: registerMultiCollateralLoanTools,
 };
 
 const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);
