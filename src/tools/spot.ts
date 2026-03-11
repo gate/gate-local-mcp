@@ -135,18 +135,6 @@ export function registerSpotTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_spot_get_system_time',
-    'Get current server time (Unix timestamp in seconds)',
-    {},
-    async () => {
-      try {
-        const { body } = await new SpotApi(createClient()).getSystemTime();
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
-  server.tool(
     'cex_spot_get_spot_insurance_history',
     'Get spot insurance fund history for a currency',
     {
