@@ -21,6 +21,7 @@ const PAYLOAD = `${MCP_INIT}\n${MCP_LIST}\n`;
 const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
+  'swap', 'place', 'change',
 ]);
 
 function isWrite(toolName) {
@@ -77,20 +78,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 161 tools by default', t.count, 161);
+  expect('loads all 181 tools by default', t.count, 181);
   expect('has 11 modules', t.modules.length, 11);
-  expect('has 52 write tools', t.writeCount, 52);
-  expect('has 109 read tools', t.readCount, 109);
+  expect('has 58 write tools', t.writeCount, 58);
+  expect('has 123 read tools', t.readCount, 123);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 109 tools', cli.count, 109);
+  expect('--readonly: 123 tools', cli.count, 123);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 109 tools', env.count, 109);
+  expect('GATE_READONLY=true: 123 tools', env.count, 123);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -103,7 +104,7 @@ const MODULE_COUNTS = {
   wallet:      { total: 12, readonly:  9, write:  3 },
   account:     { total: 10, readonly:  6, write:  4 },
   options:     { total: 13, readonly: 11, write:  2 },
-  earn:        { total:  5, readonly:  5, write:  0 },
+  earn:        { total: 25, readonly: 19, write:  6 },
   flash_swap:  { total:  5, readonly:  4, write:  1 },
   unified:     { total: 16, readonly: 12, write:  4 },
   sub_account: { total: 11, readonly:  5, write:  6 },

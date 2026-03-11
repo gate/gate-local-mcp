@@ -4,7 +4,7 @@
 
 ## 功能特性
 
-- **161 个工具**，覆盖现货、合约、交割、杠杆、钱包、账户、期权、理财、闪兑、统一账户和子账户 API
+- **181 个工具**，覆盖现货、合约、交割、杠杆、钱包、账户、期权、理财、闪兑、统一账户和子账户 API
 - **公开端点零配置** — 行情数据、价格、订单簿无需任何凭证即可使用
 - **认证端点** — 设置 `GATE_API_KEY` + `GATE_API_SECRET` 环境变量后，交易、钱包和账户工具自动启用
 - **测试网支持** — 设置 `GATE_BASE_URL` 即可切换到测试网端点
@@ -243,7 +243,7 @@ GATE_API_KEY=你的key GATE_API_SECRET=你的secret npx -y gate-mcp
 
 ## 模块过滤
 
-默认情况下会注册全部 161 个工具（11 个模块）。Cursor 等客户端在工具数量超过 80 个时会发出警告——使用模块过滤可以只加载所需内容。
+默认情况下会注册全部 181 个工具（11 个模块）。Cursor 等客户端在工具数量超过 80 个时会发出警告——使用模块过滤可以只加载所需内容。
 
 **通过 MCP 配置（推荐）：**
 
@@ -291,7 +291,7 @@ GATE_API_KEY=你的key GATE_API_SECRET=你的secret npx -y gate-mcp
 | `wallet` | 12 | 9 |
 | `account` | 10 | 6 |
 | `options` | 13 | 11 |
-| `earn` | 5 | 5 |
+| `earn` | 25 | 19 |
 | `flash_swap` | 5 | 4 |
 | `unified` | 16 | 12 |
 | `sub_account` | 11 | 5 |
@@ -355,8 +355,8 @@ SOL_USDT 的盘口深度如何？
 ### 期权 Options（13 个工具）
 `cex_options_list_options_underlyings`、`cex_options_list_options_expirations`、`cex_options_list_options_contracts`、`cex_options_get_options_contract`、`cex_options_list_options_order_book`、`cex_options_list_options_tickers`、`cex_options_list_options_candlesticks`、`cex_options_list_options_account`\*、`cex_options_list_options_positions`\*、`cex_options_list_options_orders`\*、`cex_options_create_options_order`\*、`cex_options_cancel_options_order`\*、`cex_options_list_my_options_trades`\*
 
-### 理财 Earn（5 个工具）
-`cex_earn_list_dual_investment_plans`、`cex_earn_list_structured_products`、`cex_earn_list_dual_orders`\*、`cex_earn_list_dual_balance`\*、`cex_earn_list_structured_orders`\*
+### 理财 Earn（25 个工具）
+`cex_earn_rate_list_eth2`、`cex_earn_list_dual_investment_plans`、`cex_earn_list_structured_products`、`cex_earn_find_coin`、`cex_earn_list_uni_currencies`、`cex_earn_get_uni_currency`、`cex_earn_list_uni_chart`、`cex_earn_list_uni_rate`、`cex_earn_swap_eth2`\*、`cex_earn_list_dual_orders`\*、`cex_earn_place_dual_order`\*、`cex_earn_list_dual_balance`\*、`cex_earn_list_structured_orders`\*、`cex_earn_place_structured_order`\*、`cex_earn_swap_staking_coin`\*、`cex_earn_order_list`\*、`cex_earn_award_list`\*、`cex_earn_asset_list`\*、`cex_earn_list_user_uni_lends`\*、`cex_earn_create_uni_lend`\*、`cex_earn_change_uni_lend`\*、`cex_earn_list_uni_lend_records`\*、`cex_earn_get_uni_interest`\*、`cex_earn_list_uni_interest_records`\*、`cex_earn_get_uni_interest_status`\*
 
 ### 闪兑 Flash Swap（5 个工具）— 前缀：`cex_fc_`
 `cex_fc_list_fc_currency_pairs`、`cex_fc_preview_fc_order`\*、`cex_fc_create_fc_order`\*、`cex_fc_list_fc_orders`\*、`cex_fc_get_fc_order`\*

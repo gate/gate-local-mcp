@@ -1,24 +1,56 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { EarnApi } from 'gate-api';
+import { EarnApi, EarnUniApi } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
 export function registerEarnTools(server: McpServer): void {
+  // ── ETH2 ──────────────────────────────────────────────────────────────────
+
+  server.tool(
+    'cex_earn_swap_eth2',
+    'Swap ETH to ETH2 or ETH2 to ETH (requires authentication)',
+    {
+      side: z.enum(['lend', 'redeem']).describe('lend = ETH→ETH2, redeem = ETH2→ETH'),
+      amount: z.string().describe('Amount to swap'),
+    },
+    async ({ side, amount }) => {
+      try {
+        requireAuth();
+        const { Eth2Swap } = await import('gate-api');
+        const body = new Eth2Swap();
+        body.side = side;
+        body.amount = amount;
+        const { body: result } = await new EarnApi(createClient()).swapETH2(body);
+        return textContent(result);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_rate_list_eth2',
+    'Get ETH2 swap rate list',
+    {},
+    async () => {
+      try {
+        const { body } = await new EarnApi(createClient()).rateListETH2();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
   // ── Dual Investment ───────────────────────────────────────────────────────
 
   server.tool(
     'cex_earn_list_dual_investment_plans',
     'List dual investment plans',
     {
-      limit: z.number().int().optional(),
-      offset: z.number().int().optional(),
+      plan_id: z.number().int().optional().describe('Filter by plan ID'),
     },
-    async ({ limit, offset }) => {
+    async ({ plan_id }) => {
       try {
         const opts: Record<string, unknown> = {};
-        if (limit !== undefined) opts.limit = limit;
-        if (offset !== undefined) opts.offset = offset;
+        if (plan_id !== undefined) opts.planId = plan_id;
         const { body } = await new EarnApi(createClient()).listDualInvestmentPlans(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -29,16 +61,42 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_dual_orders',
     'List dual investment orders (requires authentication)',
     {
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+      page: z.number().int().optional(),
       limit: z.number().int().optional(),
-      offset: z.number().int().optional(),
     },
-    async ({ limit, offset }) => {
+    async ({ from, to, page, limit }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (page !== undefined) opts.page = page;
         if (limit !== undefined) opts.limit = limit;
-        if (offset !== undefined) opts.offset = offset;
         const { body } = await new EarnApi(createClient()).listDualOrders(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_place_dual_order',
+    'Place a dual investment order (requires authentication)',
+    {
+      plan_id: z.string().describe('Plan ID'),
+      amount: z.string().describe('Investment amount'),
+      text: z.string().optional().describe('Custom order comment'),
+    },
+    async ({ plan_id, amount, text }) => {
+      try {
+        requireAuth();
+        const { PlaceDualInvestmentOrderParams } = await import('gate-api');
+        const params = new PlaceDualInvestmentOrderParams();
+        params.planId = plan_id;
+        params.amount = amount;
+        if (text !== undefined) params.text = text;
+        const { body } = await new EarnApi(createClient()).placeDualOrder(params);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -65,15 +123,15 @@ export function registerEarnTools(server: McpServer): void {
     {
       status: z.enum(['in_progress', 'will_begin', 'waiting', 'done']).describe('Product status'),
       type: z.string().optional().describe('Product type'),
+      page: z.number().int().optional(),
       limit: z.number().int().optional(),
-      offset: z.number().int().optional(),
     },
-    async ({ status, type, limit, offset }) => {
+    async ({ status, type, page, limit }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (type) opts.type = type;
+        if (page !== undefined) opts.page = page;
         if (limit !== undefined) opts.limit = limit;
-        if (offset !== undefined) opts.offset = offset;
         const { body } = await new EarnApi(createClient()).listStructuredProducts(status, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -86,18 +144,345 @@ export function registerEarnTools(server: McpServer): void {
     {
       from: z.number().optional().describe('Start time (Unix timestamp)'),
       to: z.number().optional().describe('End time (Unix timestamp)'),
+      page: z.number().int().optional(),
       limit: z.number().int().optional(),
-      offset: z.number().int().optional(),
     },
-    async ({ from, to, limit, offset }) => {
+    async ({ from, to, page, limit }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (from !== undefined) opts.from = from;
         if (to !== undefined) opts.to = to;
+        if (page !== undefined) opts.page = page;
         if (limit !== undefined) opts.limit = limit;
-        if (offset !== undefined) opts.offset = offset;
         const { body } = await new EarnApi(createClient()).listStructuredOrders(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_place_structured_order',
+    'Purchase a structured product (requires authentication)',
+    {
+      pid: z.string().optional().describe('Product ID'),
+      amount: z.string().optional().describe('Investment amount'),
+    },
+    async ({ pid, amount }) => {
+      try {
+        requireAuth();
+        const { StructuredBuy } = await import('gate-api');
+        const order = new StructuredBuy();
+        if (pid !== undefined) order.pid = pid;
+        if (amount !== undefined) order.amount = amount;
+        const { body } = await new EarnApi(createClient()).placeStructuredOrder(order);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  // ── Staking ───────────────────────────────────────────────────────────────
+
+  server.tool(
+    'cex_earn_find_coin',
+    'Search for staking coins',
+    {
+      cointype: z.string().optional().describe('Coin type filter'),
+    },
+    async ({ cointype }) => {
+      try {
+        const { FindCoin } = await import('gate-api');
+        const req = new FindCoin();
+        if (cointype !== undefined) req.cointype = cointype;
+        const { body } = await new EarnApi(createClient()).findCoin(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_swap_staking_coin',
+    'Swap staking coins (requires authentication)',
+    {
+      coin: z.string().describe('Coin name'),
+      side: z.number().int().describe('1 = stake, 2 = redeem'),
+      amount: z.string().describe('Amount'),
+      pid: z.number().int().optional().describe('Product ID'),
+    },
+    async ({ coin, side, amount, pid }) => {
+      try {
+        requireAuth();
+        const { SwapCoin } = await import('gate-api');
+        const req = new SwapCoin();
+        req.coin = coin;
+        req.side = side;
+        req.amount = amount;
+        if (pid !== undefined) req.pid = pid;
+        const { body } = await new EarnApi(createClient()).swapStakingCoin(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_order_list',
+    'List staking orders (requires authentication)',
+    {
+      pid: z.number().int().optional().describe('Product ID'),
+      coin: z.string().optional().describe('Coin name'),
+      type: z.number().int().optional().describe('Order type'),
+      page: z.number().int().optional(),
+    },
+    async ({ pid, coin, type, page }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (pid !== undefined) opts.pid = pid;
+        if (coin !== undefined) opts.coin = coin;
+        if (type !== undefined) opts.type = type;
+        if (page !== undefined) opts.page = page;
+        const { body } = await new EarnApi(createClient()).orderList(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_award_list',
+    'List staking awards (requires authentication)',
+    {
+      pid: z.number().int().optional().describe('Product ID'),
+      coin: z.string().optional().describe('Coin name'),
+      page: z.number().int().optional(),
+    },
+    async ({ pid, coin, page }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (pid !== undefined) opts.pid = pid;
+        if (coin !== undefined) opts.coin = coin;
+        if (page !== undefined) opts.page = page;
+        const { body } = await new EarnApi(createClient()).awardList(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_asset_list',
+    'List staking assets (requires authentication)',
+    {
+      coin: z.string().optional().describe('Coin name filter'),
+    },
+    async ({ coin }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (coin !== undefined) opts.coin = coin;
+        const { body } = await new EarnApi(createClient()).assetList(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  // ── Earn Uni (Simple Earn) ─────────────────────────────────────────────────
+
+  server.tool(
+    'cex_earn_list_uni_currencies',
+    'List currencies available for Simple Earn lending',
+    {},
+    async () => {
+      try {
+        const { body } = await new EarnUniApi(createClient()).listUniCurrencies();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_get_uni_currency',
+    'Get details of a Simple Earn lending currency',
+    {
+      currency: z.string().describe('Currency name'),
+    },
+    async ({ currency }) => {
+      try {
+        const { body } = await new EarnUniApi(createClient()).getUniCurrency(currency);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_user_uni_lends',
+    'List user Simple Earn lending records (requires authentication)',
+    {
+      currency: z.string().optional(),
+      page: z.number().int().optional(),
+      limit: z.number().int().optional(),
+    },
+    async ({ currency, page, limit }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency !== undefined) opts.currency = currency;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
+        const { body } = await new EarnUniApi(createClient()).listUserUniLends(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_create_uni_lend',
+    'Create a Simple Earn lending order (requires authentication)',
+    {
+      currency: z.string().describe('Currency to lend'),
+      amount: z.string().describe('Amount to lend'),
+      type: z.enum(['lend', 'redeem']).describe('lend or redeem'),
+      min_rate: z.string().optional().describe('Minimum lending rate'),
+    },
+    async ({ currency, amount, type, min_rate }) => {
+      try {
+        requireAuth();
+        const { CreateUniLend } = await import('gate-api');
+        const req = new CreateUniLend();
+        req.currency = currency;
+        req.amount = amount;
+        req.type = type === 'lend' ? CreateUniLend.Type.Lend : CreateUniLend.Type.Redeem;
+        if (min_rate !== undefined) req.minRate = min_rate;
+        const { body } = await new EarnUniApi(createClient()).createUniLend(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_change_uni_lend',
+    'Modify a Simple Earn lending order (requires authentication)',
+    {
+      currency: z.string().optional().describe('Currency'),
+      min_rate: z.string().optional().describe('New minimum lending rate'),
+    },
+    async ({ currency, min_rate }) => {
+      try {
+        requireAuth();
+        const { PatchUniLend } = await import('gate-api');
+        const req = new PatchUniLend();
+        if (currency !== undefined) req.currency = currency;
+        if (min_rate !== undefined) req.minRate = min_rate;
+        const { body } = await new EarnUniApi(createClient()).changeUniLend(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_uni_lend_records',
+    'List Simple Earn lending history (requires authentication)',
+    {
+      currency: z.string().optional(),
+      page: z.number().int().optional(),
+      limit: z.number().int().optional(),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+      type: z.enum(['lend', 'redeem']).optional(),
+    },
+    async ({ currency, page, limit, from, to, type }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency !== undefined) opts.currency = currency;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (type !== undefined) opts.type = type;
+        const { body } = await new EarnUniApi(createClient()).listUniLendRecords(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_get_uni_interest',
+    'Get Simple Earn interest for a currency (requires authentication)',
+    {
+      currency: z.string().describe('Currency name'),
+    },
+    async ({ currency }) => {
+      try {
+        requireAuth();
+        const { body } = await new EarnUniApi(createClient()).getUniInterest(currency);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_uni_interest_records',
+    'List Simple Earn interest history (requires authentication)',
+    {
+      currency: z.string().optional(),
+      page: z.number().int().optional(),
+      limit: z.number().int().optional(),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+    },
+    async ({ currency, page, limit, from, to }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency !== undefined) opts.currency = currency;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        const { body } = await new EarnUniApi(createClient()).listUniInterestRecords(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_get_uni_interest_status',
+    'Get Simple Earn interest reinvestment status for a currency (requires authentication)',
+    {
+      currency: z.string().describe('Currency name'),
+    },
+    async ({ currency }) => {
+      try {
+        requireAuth();
+        const { body } = await new EarnUniApi(createClient()).getUniInterestStatus(currency);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_uni_chart',
+    'Get Simple Earn lending rate chart data',
+    {
+      from: z.number().describe('Start time (Unix timestamp)'),
+      to: z.number().describe('End time (Unix timestamp)'),
+      asset: z.string().describe('Asset name'),
+    },
+    async ({ from, to, asset }) => {
+      try {
+        const { body } = await new EarnUniApi(createClient()).listUniChart(from, to, asset);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_uni_rate',
+    'Get Simple Earn current lending rates for all currencies',
+    {},
+    async () => {
+      try {
+        const { body } = await new EarnUniApi(createClient()).listUniRate();
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
