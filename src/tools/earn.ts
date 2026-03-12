@@ -5,40 +5,6 @@ import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
 export function registerEarnTools(server: McpServer): void {
-  // ── ETH2 ──────────────────────────────────────────────────────────────────
-
-  server.tool(
-    'cex_earn_swap_eth2',
-    'Swap ETH to ETH2 or ETH2 to ETH (requires authentication)',
-    {
-      side: z.enum(['lend', 'redeem']).describe('lend = ETH→ETH2, redeem = ETH2→ETH'),
-      amount: z.string().describe('Amount to swap'),
-    },
-    async ({ side, amount }) => {
-      try {
-        requireAuth();
-        const { Eth2Swap } = await import('gate-api');
-        const body = new Eth2Swap();
-        body.side = side;
-        body.amount = amount;
-        const { body: result } = await new EarnApi(createClient()).swapETH2(body);
-        return textContent(result);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
-  server.tool(
-    'cex_earn_rate_list_eth2',
-    'Get ETH2 swap rate list',
-    {},
-    async () => {
-      try {
-        const { body } = await new EarnApi(createClient()).rateListETH2();
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
   // ── Dual Investment ───────────────────────────────────────────────────────
 
   server.tool(
