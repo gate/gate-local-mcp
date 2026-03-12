@@ -49,11 +49,11 @@ export function registerFlashSwapTools(server: McpServer): void {
   server.tool(
     'cex_flash_swap_get_flash_swap_order',
     'Get details of a flash swap order (requires authentication)',
-    { order_id: z.number().int().describe('Order ID') },
+    { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
         requireAuth();
-        const { body } = await new FlashSwapApi(createClient()).getFlashSwapOrder(order_id);
+        const { body } = await new FlashSwapApi(createClient()).getFlashSwapOrder(order_id as unknown as number);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

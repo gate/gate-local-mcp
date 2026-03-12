@@ -116,4 +116,40 @@ describe('large integer order ID — end-to-end precision', () => {
     expect(path).toContain(LARGE_ORDER_ID);
     expect(path).not.toContain('144115188075947648');
   });
+
+  test('cex_fx_cancel_fx_price_triggered_order: request URL contains exact large order ID', async () => {
+    await client.callTool({
+      name: 'cex_fx_cancel_fx_price_triggered_order',
+      arguments: { settle: 'usdt', order_id: LARGE_ORDER_ID },
+    });
+
+    const path = mock.getLastPath();
+    expect(path).not.toBeNull();
+    expect(path).toContain(LARGE_ORDER_ID);
+    expect(path).not.toContain('144115188075947648');
+  });
+
+  test('cex_fx_get_fx_price_triggered_order: request URL contains exact large order ID', async () => {
+    await client.callTool({
+      name: 'cex_fx_get_fx_price_triggered_order',
+      arguments: { settle: 'usdt', order_id: LARGE_ORDER_ID },
+    });
+
+    const path = mock.getLastPath();
+    expect(path).not.toBeNull();
+    expect(path).toContain(LARGE_ORDER_ID);
+    expect(path).not.toContain('144115188075947648');
+  });
+
+  test('cex_fc_get_flash_swap_order: request URL contains exact large order ID', async () => {
+    await client.callTool({
+      name: 'cex_fc_get_flash_swap_order',
+      arguments: { order_id: LARGE_ORDER_ID },
+    });
+
+    const path = mock.getLastPath();
+    expect(path).not.toBeNull();
+    expect(path).toContain(LARGE_ORDER_ID);
+    expect(path).not.toContain('144115188075947648');
+  });
 });
