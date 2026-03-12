@@ -11,6 +11,7 @@ export const NAME_ABBREVIATIONS: Record<string, string> = {
   flash_swap:            'fc',
   multi_collateral_loan: 'mcl',
   trad_fi:               'tradfi',
+  cross_ex:              'crossex',
 };
 
 /**

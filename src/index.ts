@@ -17,6 +17,7 @@ import { registerSubAccountTools } from './tools/sub_account.js';
 import { registerMultiCollateralLoanTools } from './tools/multi_collateral_loan.js';
 import { registerP2PTools } from './tools/p2p.js';
 import { registerTradFiTools } from './tools/trad_fi.js';
+import { registerCrossExTools } from './tools/cross_ex.js';
 
 const config = parseConfig();
 
@@ -48,6 +49,7 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   multi_collateral_loan: registerMultiCollateralLoanTools,
   p2p:                   registerP2PTools,
   trad_fi:               registerTradFiTools,
+  cross_ex:              registerCrossExTools,
 };
 
 const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);
