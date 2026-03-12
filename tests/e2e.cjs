@@ -79,20 +79,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 277 tools by default', t.count, 277);
-  expect('has 15 modules', t.modules.length, 15);
-  expect('has 92 write tools', t.writeCount, 92);
-  expect('has 185 read tools', t.readCount, 185);
+  expect('loads all 265 tools by default', t.count, 265);
+  expect('has 14 modules', t.modules.length, 14);
+  expect('has 89 write tools', t.writeCount, 89);
+  expect('has 176 read tools', t.readCount, 176);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 185 tools', cli.count, 185);
+  expect('--readonly: 176 tools', cli.count, 176);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 185 tools', env.count, 185); // read count unchanged
+  expect('GATE_READONLY=true: 176 tools', env.count, 176);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -109,7 +109,6 @@ const MODULE_COUNTS = {
   flash_swap:  { total:  3, readonly:  3, write:  0 },
   unified:     { total: 16, readonly: 12, write:  4 },
   sub_account:           { total: 11, readonly:  5, write:  6 },
-  multi_collateral_loan: { total: 12, readonly:  9, write:  3 },
   p2p:                   { total: 17, readonly: 10, write:  7 },
   tradfi:                { total: 18, readonly: 12, write:  6 },
   crossex:               { total: 31, readonly: 21, write: 10 },

@@ -14,7 +14,6 @@ import { registerEarnTools } from './tools/earn.js';
 import { registerFlashSwapTools } from './tools/flash_swap.js';
 import { registerUnifiedTools } from './tools/unified.js';
 import { registerSubAccountTools } from './tools/sub_account.js';
-import { registerMultiCollateralLoanTools } from './tools/multi_collateral_loan.js';
 import { registerP2PTools } from './tools/p2p.js';
 import { registerTradFiTools } from './tools/trad_fi.js';
 import { registerCrossExTools } from './tools/cross_ex.js';
@@ -46,7 +45,6 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   flash_swap:  registerFlashSwapTools,
   unified:     registerUnifiedTools,
   sub_account:           registerSubAccountTools,
-  multi_collateral_loan: registerMultiCollateralLoanTools,
   p2p:                   registerP2PTools,
   tradfi:                registerTradFiTools,
   crossex:               registerCrossExTools,
