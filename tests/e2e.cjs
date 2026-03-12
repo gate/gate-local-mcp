@@ -79,20 +79,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 248 tools by default', t.count, 248);
-  expect('has 14 modules', t.modules.length, 14);
-  expect('has 84 write tools', t.writeCount, 84);
-  expect('has 164 read tools', t.readCount, 164);
+  expect('loads all 279 tools by default', t.count, 279);
+  expect('has 15 modules', t.modules.length, 15);
+  expect('has 94 write tools', t.writeCount, 94);
+  expect('has 185 read tools', t.readCount, 185);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 164 tools', cli.count, 164);
+  expect('--readonly: 185 tools', cli.count, 185);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 164 tools', env.count, 164);
+  expect('GATE_READONLY=true: 185 tools', env.count, 185);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -112,10 +112,11 @@ const MODULE_COUNTS = {
   multi_collateral_loan: { total: 12, readonly:  9, write:  3 },
   p2p:                   { total: 17, readonly: 10, write:  7 },
   trad_fi:               { total: 18, readonly: 12, write:  6 },
+  cross_ex:              { total: 31, readonly: 21, write: 10 },
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)
-const ABBREV = { futures: 'fx', sub_account: 'sa', dual_mode: 'dual', dual_comp: 'dual', flash_swap: 'fc', multi_collateral_loan: 'mcl', trad_fi: 'tradfi' };
+const ABBREV = { futures: 'fx', sub_account: 'sa', dual_mode: 'dual', dual_comp: 'dual', flash_swap: 'fc', multi_collateral_loan: 'mcl', trad_fi: 'tradfi', cross_ex: 'crossex' };
 function modulePrefix(mod) {
   const abbr = Object.entries(ABBREV).reduce((s, [l, r]) => s.replaceAll(l, r), mod);
   return `cex_${abbr}_`;
@@ -142,7 +143,7 @@ console.log('\n── Per-module filtering (GATE_MODULES env var) ────�
   expectAllMatch('all tools prefixed cex_spot_', t.names, 'cex_spot_');
 
   const t2 = getTools('', { GATE_MODULES: 'spot,futures' });
-  expect('GATE_MODULES=spot,futures: 95 tools', t2.count, 95);
+  expect('GATE_MODULES=spot,futures: 95 tools', t2.count, 95); // spot(31)+futures(64)
 }
 
 console.log('\n── Combined module + readonly ───────────────────────────────────────────');
