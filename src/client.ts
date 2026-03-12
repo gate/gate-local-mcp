@@ -1,15 +1,20 @@
 import { ApiClient } from 'gate-api';
 import { createRequire } from 'module';
+import { AsyncLocalStorage } from 'async_hooks';
 
 const DEFAULT_BASE_URL = 'https://api.gateio.ws';
 const _require = createRequire(import.meta.url);
 const { version } = _require('../package.json') as { version: string };
-const USER_AGENT = `gate-local-mcp/${version}`;
+const UA_BASE = `gate-local-mcp/${version}`;
+
+export const toolContext = new AsyncLocalStorage<string>();
 
 export function createClient(): ApiClient {
   const baseUrl = process.env.GATE_BASE_URL ?? DEFAULT_BASE_URL;
   const client = new ApiClient(`${baseUrl}/api/v4`);
-  client.defaultHeaders = { ...client.defaultHeaders, 'User-Agent': USER_AGENT };
+  const toolName = toolContext.getStore();
+  const userAgent = toolName ? `${UA_BASE}/${toolName}` : UA_BASE;
+  client.defaultHeaders = { ...client.defaultHeaders, 'User-Agent': userAgent };
   const key = process.env.GATE_API_KEY;
   const secret = process.env.GATE_API_SECRET;
   if (key && secret) {

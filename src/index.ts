@@ -22,6 +22,7 @@ stdioShared.ReadBuffer.prototype.readMessage = function (this: { _buffer?: Buffe
 };
 import { sanitizeToolName, isWriteTool } from './utils.js';
 import { parseConfig, ModuleName } from './config.js';
+import { toolContext } from './client.js';
 import { registerSpotTools } from './tools/spot.js';
 import { registerFuturesTools } from './tools/futures.js';
 import { registerDeliveryTools } from './tools/delivery.js';
@@ -44,11 +45,14 @@ const server = new McpServer({
   version: '0.1.0',
 });
 
-// Monkey-patch server.tool: apply name sanitization + readonly filter
+// Monkey-patch server.tool: apply name sanitization, readonly filter, and tool-name UA injection
 const _registerTool = server.tool.bind(server);
 (server as any).tool = (name: string, ...args: unknown[]) => {
   const sanitized = sanitizeToolName(name);
   if (config.readonly && isWriteTool(sanitized)) return;
+  // Wrap the handler (last arg) to run inside toolContext so createClient() picks up the tool name
+  const handler = args[args.length - 1] as (...a: unknown[]) => unknown;
+  args[args.length - 1] = (...hArgs: unknown[]) => toolContext.run(sanitized, () => handler(...hArgs));
   (_registerTool as (name: string, ...rest: unknown[]) => void)(sanitized, ...args);
 };
 
