@@ -22,7 +22,7 @@ const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
   'swap', 'place', 'change', 'stop', 'repay', 'operate',
-  'confirm', 'send', 'upload', 'close', 'reset',
+  'confirm', 'send', 'upload', 'close', 'reset', 'quote',
 ]);
 
 function isWrite(toolName) {
@@ -79,20 +79,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 278 tools by default', t.count, 278);
-  expect('has 14 modules', t.modules.length, 14);
-  expect('has 92 write tools', t.writeCount, 92);
-  expect('has 186 read tools', t.readCount, 186);
+  expect('loads all 287 tools by default', t.count, 287);
+  expect('has 15 modules', t.modules.length, 15);
+  expect('has 94 write tools', t.writeCount, 94);
+  expect('has 193 read tools', t.readCount, 193);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 186 tools', cli.count, 186);
+  expect('--readonly: 193 tools', cli.count, 193);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 186 tools', env.count, 186);
+  expect('GATE_READONLY=true: 193 tools', env.count, 193);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -112,10 +112,11 @@ const MODULE_COUNTS = {
   p2p:                   { total: 17, readonly: 10, write:  7 },
   tradfi:                { total: 18, readonly: 12, write:  6 },
   crossex:               { total: 31, readonly: 21, write: 10 },
+  alpha:                 { total:  9, readonly:  7, write:  2 },
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)
-const ABBREV = { futures: 'fx', sub_account: 'sa', dual_mode: 'dual', dual_comp: 'dual', flash_swap: 'fc', multi_collateral_loan: 'mcl' };
+const ABBREV = { futures: 'fx', sub_account: 'sa', dual_mode: 'dual', dual_comp: 'dual', flash_swap: 'fc', multi_collateral_loan: 'mcl', alpha: 'alpha' };
 function modulePrefix(mod) {
   const abbr = Object.entries(ABBREV).reduce((s, [l, r]) => s.replaceAll(l, r), mod);
   return `cex_${abbr}_`;
