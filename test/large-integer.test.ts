@@ -1,6 +1,9 @@
 /**
- * Validates that large order IDs (> Number.MAX_SAFE_INTEGER) are transmitted
- * without precision loss through the MCP stdio transport.
+ * Validates that:
+ * 1. Large order IDs (> Number.MAX_SAFE_INTEGER) are transmitted without
+ *    precision loss through the MCP stdio transport.
+ * 2. The User-Agent header sent to Gate API includes the tool name in the
+ *    format gate-local-mcp/<version>/<tool_name>.
  *
  * Without the ReadBuffer patch in src/index.ts, JSON.parse would silently
  * truncate 144115188075947640 → 144115188075947648 before the tool handler
@@ -23,27 +26,33 @@ const ORDER_STUB = JSON.stringify({ id: 1, status: 'cancelled', contract: 'BTC_U
 const FUTURES_STUB = JSON.stringify({ id: 1, status: 'cancelled', contract: 'BTC_USDT', settle: 'usdt' });
 
 function startMockServer(getStub: (path: string) => string) {
-  return new Promise<{ port: number; getLastPath: () => string | null; close: () => Promise<void> }>(
-    (resolve) => {
-      let lastPath: string | null = null;
+  return new Promise<{
+    port: number;
+    getLastPath: () => string | null;
+    getLastUserAgent: () => string | null;
+    close: () => Promise<void>;
+  }>((resolve) => {
+    let lastPath: string | null = null;
+    let lastUserAgent: string | null = null;
 
-      const server = createServer((req: IncomingMessage, res: ServerResponse) => {
-        lastPath = req.url ?? null;
-        const body = getStub(req.url ?? '');
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(body);
-      });
+    const server = createServer((req: IncomingMessage, res: ServerResponse) => {
+      lastPath = req.url ?? null;
+      lastUserAgent = (req.headers['user-agent'] as string) ?? null;
+      const body = getStub(req.url ?? '');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(body);
+    });
 
-      server.listen(0, '127.0.0.1', () => {
-        const { port } = server.address() as { port: number };
-        resolve({
-          port,
-          getLastPath: () => lastPath,
-          close: () => new Promise<void>((r) => server.close(() => r())),
-        });
+    server.listen(0, '127.0.0.1', () => {
+      const { port } = server.address() as { port: number };
+      resolve({
+        port,
+        getLastPath: () => lastPath,
+        getLastUserAgent: () => lastUserAgent,
+        close: () => new Promise<void>((r) => server.close(() => r())),
       });
-    }
-  );
+    });
+  });
 }
 
 describe('large integer order ID — end-to-end precision', () => {
@@ -151,5 +160,48 @@ describe('large integer order ID — end-to-end precision', () => {
     expect(path).not.toBeNull();
     expect(path).toContain(LARGE_ORDER_ID);
     expect(path).not.toContain('144115188075947648');
+  });
+});
+
+describe('User-Agent includes tool name', () => {
+  let mock: Awaited<ReturnType<typeof startMockServer>>;
+  let client: Client;
+
+  beforeAll(async () => {
+    mock = await startMockServer(() => JSON.stringify({ id: 1, status: 'open' }));
+    client = await createTestClient({
+      GATE_BASE_URL: `http://127.0.0.1:${mock.port}`,
+      GATE_API_KEY: 'test-key',
+      GATE_API_SECRET: 'test-secret-that-is-long-enough-for-hmac',
+    });
+  });
+
+  afterAll(async () => {
+    await (client as any)?.close?.();
+    await mock.close();
+  });
+
+  test('User-Agent is gate-local-mcp/<version>/<tool_name>', async () => {
+    await client.callTool({
+      name: 'cex_spot_get_spot_tickers',
+      arguments: { currency_pair: 'BTC_USDT' },
+    });
+
+    const ua = mock.getLastUserAgent();
+    expect(ua).not.toBeNull();
+    // Format: gate-local-mcp/<version>/<tool_name>
+    expect(ua).toMatch(/^gate-local-mcp\/\d+\.\d+\.\d+\/cex_spot_get_spot_tickers$/);
+  });
+
+  test('different tools produce different User-Agent tool segments', async () => {
+    await client.callTool({ name: 'cex_spot_list_currencies', arguments: {} });
+    const ua1 = mock.getLastUserAgent();
+
+    await client.callTool({ name: 'cex_spot_list_currency_pairs', arguments: {} });
+    const ua2 = mock.getLastUserAgent();
+
+    expect(ua1).toContain('cex_spot_list_currencies');
+    expect(ua2).toContain('cex_spot_list_currency_pairs');
+    expect(ua1).not.toEqual(ua2);
   });
 });
