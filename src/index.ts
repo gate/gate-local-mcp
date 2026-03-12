@@ -48,8 +48,8 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   sub_account:           registerSubAccountTools,
   multi_collateral_loan: registerMultiCollateralLoanTools,
   p2p:                   registerP2PTools,
-  trad_fi:               registerTradFiTools,
-  cross_ex:              registerCrossExTools,
+  tradfi:                registerTradFiTools,
+  crossex:               registerCrossExTools,
 };
 
 const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);
