@@ -10,6 +10,7 @@ export const NAME_ABBREVIATIONS: Record<string, string> = {
   dual_comp:             'dual',
   flash_swap:            'fc',
   multi_collateral_loan: 'mcl',
+  trad_fi:               'tf',
 };
 
 /**
@@ -49,7 +50,7 @@ const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
   'swap', 'place', 'change', 'stop', 'repay', 'operate',
-  'confirm', 'send', 'upload',
+  'confirm', 'send', 'upload', 'close',
 ]);
 
 /**
