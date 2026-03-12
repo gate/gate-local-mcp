@@ -10,7 +10,7 @@ export const NAME_ABBREVIATIONS: Record<string, string> = {
   dual_comp:             'dual',
   flash_swap:            'fc',
   multi_collateral_loan: 'mcl',
-  trad_fi:               'tf',
+  trad_fi:               'tradfi',
 };
 
 /**
