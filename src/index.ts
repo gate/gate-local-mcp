@@ -1,6 +1,25 @@
 #!/usr/bin/env node
+import { createRequire } from 'module';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+
+// Patch MCP SDK stdio deserialization to handle large integers (> Number.MAX_SAFE_INTEGER).
+// ReadBuffer.readMessage() calls deserializeMessage() via local closure (not exports),
+// so we must override the prototype method to intercept JSON parsing.
+// json-bigint with storeAsString:true preserves large integers as strings.
+const _require = createRequire(import.meta.url);
+const JSONbig = _require('json-bigint')({ storeAsString: true });
+// Use subpaths without dist/cjs/ prefix — the SDK exports map routes them correctly
+const stdioShared = _require('@modelcontextprotocol/sdk/shared/stdio.js');
+const { JSONRPCMessageSchema } = _require('@modelcontextprotocol/sdk/types.js');
+stdioShared.ReadBuffer.prototype.readMessage = function (this: { _buffer?: Buffer }) {
+  if (!this._buffer) return null;
+  const index = this._buffer.indexOf('\n');
+  if (index === -1) return null;
+  const line = this._buffer.toString('utf8', 0, index).replace(/\r$/, '');
+  this._buffer = this._buffer.subarray(index + 1);
+  return JSONRPCMessageSchema.parse(JSONbig.parse(line));
+};
 import { sanitizeToolName, isWriteTool } from './utils.js';
 import { parseConfig, ModuleName } from './config.js';
 import { registerSpotTools } from './tools/spot.js';
