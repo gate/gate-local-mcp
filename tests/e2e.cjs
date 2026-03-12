@@ -79,9 +79,9 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 249 tools by default', t.count, 249);
+  expect('loads all 248 tools by default', t.count, 248);
   expect('has 14 modules', t.modules.length, 14);
-  expect('has 85 write tools', t.writeCount, 85);
+  expect('has 84 write tools', t.writeCount, 84);
   expect('has 164 read tools', t.readCount, 164);
 }
 
@@ -111,7 +111,7 @@ const MODULE_COUNTS = {
   sub_account:           { total: 11, readonly:  5, write:  6 },
   multi_collateral_loan: { total: 12, readonly:  9, write:  3 },
   p2p:                   { total: 17, readonly: 10, write:  7 },
-  trad_fi:               { total: 19, readonly: 12, write:  7 },
+  trad_fi:               { total: 18, readonly: 12, write:  6 },
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)

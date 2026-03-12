@@ -97,19 +97,6 @@ export function registerTradFiTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_trad_fi_create_tradfi_user',
-    'Create a TradFi (MT5) sub-account for the authenticated user (requires authentication)',
-    {},
-    async () => {
-      try {
-        requireAuth();
-        const { body } = await new TradFiApi(createClient()).createTradFiUser();
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
-  server.tool(
     'cex_trad_fi_query_user_assets',
     'Get TradFi account asset balances (requires authentication)',
     {},
