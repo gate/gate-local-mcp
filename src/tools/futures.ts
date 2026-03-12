@@ -1339,12 +1339,12 @@ export function registerFuturesTools(server: McpServer): void {
     'Get details of a futures price-triggered order (requires authentication)',
     {
       settle: settleSchema,
-      order_id: z.number().int().describe('Order ID'),
+      order_id: z.string().describe('Order ID'),
     },
     async ({ settle, order_id }) => {
       try {
         requireAuth();
-        const { body } = await new FuturesApi(createClient()).getPriceTriggeredOrder(settle, order_id);
+        const { body } = await new FuturesApi(createClient()).getPriceTriggeredOrder(settle, order_id as unknown as number);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -1355,7 +1355,7 @@ export function registerFuturesTools(server: McpServer): void {
     'Update an existing futures price-triggered order (requires authentication) — always confirm the new values with the user before calling this tool',
     {
       settle: settleSchema,
-      order_id: z.number().int().describe('Order ID'),
+      order_id: z.string().describe('Order ID'),
       size: z.number().int().optional().describe('New order size'),
       price: z.string().optional().describe('New execution price'),
       trigger_price: z.string().optional().describe('New trigger price'),
@@ -1367,14 +1367,14 @@ export function registerFuturesTools(server: McpServer): void {
       try {
         requireAuth();
         const req = new FuturesUpdatePriceTriggeredOrder();
-        req.orderId = order_id;
+        req.orderId = order_id as unknown as number;
         if (size !== undefined) req.size = size;
         if (price) req.price = price;
         if (trigger_price) req.triggerPrice = trigger_price;
         if (price_type !== undefined) req.priceType = price_type as unknown as FuturesUpdatePriceTriggeredOrder.PriceType;
         if (auto_size) req.autoSize = auto_size;
         if (close !== undefined) req.close = close;
-        const { body } = await new FuturesApi(createClient()).updatePriceTriggeredOrder(settle, order_id, req);
+        const { body } = await new FuturesApi(createClient()).updatePriceTriggeredOrder(settle, order_id as unknown as number, req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -1385,12 +1385,12 @@ export function registerFuturesTools(server: McpServer): void {
     'Cancel a single futures price-triggered order (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
-      order_id: z.number().int().describe('Order ID'),
+      order_id: z.string().describe('Order ID'),
     },
     async ({ settle, order_id }) => {
       try {
         requireAuth();
-        const { body } = await new FuturesApi(createClient()).cancelPriceTriggeredOrder(settle, order_id);
+        const { body } = await new FuturesApi(createClient()).cancelPriceTriggeredOrder(settle, order_id as unknown as number);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

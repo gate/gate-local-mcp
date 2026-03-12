@@ -117,7 +117,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
     'cex_multi_collateral_loan_repay_multi_collateral_loan',
     'Repay a multi-collateral loan (requires authentication) — always confirm repayment details with the user before calling this tool',
     {
-      order_id: z.number().int().describe('Order ID to repay'),
+      order_id: z.string().describe('Order ID to repay'),
       repay_items: z.array(z.object({
         currency: z.string().optional().describe('Repayment currency'),
         amount: z.string().optional().describe('Repayment amount'),
@@ -129,7 +129,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
         requireAuth();
         const { RepayMultiLoan, MultiLoanRepayItem } = await import('gate-api');
         const req = new RepayMultiLoan();
-        req.orderId = order_id;
+        req.orderId = order_id as unknown as number;
         req.repayItems = repay_items.map(item => {
           const r = new MultiLoanRepayItem();
           r.repaidAll = item.repaid_all;
@@ -172,7 +172,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
     'cex_multi_collateral_loan_operate_multi_collateral',
     'Adjust collateral for a multi-collateral loan (requires authentication) — always confirm with the user before calling this tool',
     {
-      order_id: z.number().int().describe('Order ID'),
+      order_id: z.string().describe('Order ID'),
       type: z.string().describe('Operation type: append or redeem'),
       collaterals: z.array(collateralCurrencySchema).optional().describe('Collateral currencies and amounts to adjust'),
     },
@@ -181,7 +181,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
         requireAuth();
         const { CollateralAdjust, CollateralCurrency } = await import('gate-api');
         const req = new CollateralAdjust();
-        req.orderId = order_id;
+        req.orderId = order_id as unknown as number;
         req.type = type;
         if (collaterals) {
           req.collaterals = collaterals.map(c => {

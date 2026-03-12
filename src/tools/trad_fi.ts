@@ -207,7 +207,7 @@ export function registerTradFiTools(server: McpServer): void {
     'cex_trad_fi_update_order',
     'Update an open TradFi order (requires authentication) — always confirm the new values with the user before calling this tool',
     {
-      order_id: z.number().int().describe('Order ID'),
+      order_id: z.string().describe('Order ID'),
       price: z.string().describe('New order price'),
       price_tp: z.string().nullable().optional().describe('New take-profit price (null to remove)'),
       price_sl: z.string().nullable().optional().describe('New stop-loss price (null to remove)'),
@@ -220,7 +220,7 @@ export function registerTradFiTools(server: McpServer): void {
         req.price = price;
         if (price_tp !== undefined) req.priceTp = price_tp;
         if (price_sl !== undefined) req.priceSl = price_sl;
-        const { body } = await new TradFiApi(createClient()).updateOrder(order_id, req);
+        const { body } = await new TradFiApi(createClient()).updateOrder(order_id as unknown as number, req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -230,12 +230,12 @@ export function registerTradFiTools(server: McpServer): void {
     'cex_trad_fi_delete_order',
     'Cancel/delete an open TradFi order (requires authentication) — always confirm with the user before calling this tool',
     {
-      order_id: z.number().int().describe('Order ID'),
+      order_id: z.string().describe('Order ID'),
     },
     async ({ order_id }) => {
       try {
         requireAuth();
-        const { body } = await new TradFiApi(createClient()).deleteOrder(order_id);
+        const { body } = await new TradFiApi(createClient()).deleteOrder(order_id as unknown as number);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
