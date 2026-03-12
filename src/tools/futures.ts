@@ -683,7 +683,7 @@ export function registerFuturesTools(server: McpServer): void {
     {
       settle: settleSchema,
       orders: z.array(z.object({
-        order_id: z.number().int().optional().describe('Order ID to amend'),
+        order_id: z.string().optional().describe('Order ID to amend'),
         size: z.string().optional().describe('New size'),
         price: z.string().optional().describe('New price'),
         text: z.string().optional(),
@@ -695,7 +695,7 @@ export function registerFuturesTools(server: McpServer): void {
         requireAuth();
         const reqs = orders.map(o => {
           const req = new BatchAmendOrderReq();
-          if (o.order_id !== undefined) req.orderId = o.order_id;
+          if (o.order_id !== undefined) req.orderId = o.order_id as unknown as number;
           if (o.size) req.size = o.size;
           if (o.price) req.price = o.price;
           if (o.text) req.text = o.text;

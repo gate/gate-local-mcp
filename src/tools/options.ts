@@ -382,11 +382,11 @@ export function registerOptionsTools(server: McpServer): void {
   server.tool(
     'cex_options_cancel_options_order',
     'Cancel an options order (requires authentication) — always confirm with the user before calling this tool',
-    { order_id: z.number().int().describe('Order ID') },
+    { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
         requireAuth();
-        const { body } = await new OptionsApi(createClient()).cancelOptionsOrder(order_id);
+        const { body } = await new OptionsApi(createClient()).cancelOptionsOrder(order_id as unknown as number);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -395,11 +395,11 @@ export function registerOptionsTools(server: McpServer): void {
   server.tool(
     'cex_options_get_options_order',
     'Get a single options order (requires authentication)',
-    { order_id: z.number().int().describe('Order ID') },
+    { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
         requireAuth();
-        const { body } = await new OptionsApi(createClient()).getOptionsOrder(order_id);
+        const { body } = await new OptionsApi(createClient()).getOptionsOrder(order_id as unknown as number);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
