@@ -81,28 +81,6 @@ export function registerEarnTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_earn_place_dual_order',
-    'Place a dual investment order (requires authentication)',
-    {
-      plan_id: z.string().describe('Plan ID'),
-      amount: z.string().describe('Investment amount'),
-      text: z.string().optional().describe('Custom order comment'),
-    },
-    async ({ plan_id, amount, text }) => {
-      try {
-        requireAuth();
-        const { PlaceDualInvestmentOrderParams } = await import('gate-api');
-        const params = new PlaceDualInvestmentOrderParams();
-        params.planId = plan_id;
-        params.amount = amount;
-        if (text !== undefined) params.text = text;
-        const { body } = await new EarnApi(createClient()).placeDualOrder(params);
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
-  server.tool(
     'cex_earn_list_dual_balance',
     'Get dual investment balance (requires authentication)',
     {},
@@ -195,30 +173,6 @@ export function registerEarnTools(server: McpServer): void {
         const req = new FindCoin();
         if (cointype !== undefined) req.cointype = cointype;
         const { body } = await new EarnApi(createClient()).findCoin(req);
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
-  server.tool(
-    'cex_earn_swap_staking_coin',
-    'Swap staking coins (requires authentication)',
-    {
-      coin: z.string().describe('Coin name'),
-      side: z.number().int().describe('1 = stake, 2 = redeem'),
-      amount: z.string().describe('Amount'),
-      pid: z.number().int().optional().describe('Product ID'),
-    },
-    async ({ coin, side, amount, pid }) => {
-      try {
-        requireAuth();
-        const { SwapCoin } = await import('gate-api');
-        const req = new SwapCoin();
-        req.coin = coin;
-        req.side = side;
-        req.amount = amount;
-        if (pid !== undefined) req.pid = pid;
-        const { body } = await new EarnApi(createClient()).swapStakingCoin(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
