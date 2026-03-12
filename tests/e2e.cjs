@@ -79,20 +79,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 265 tools by default', t.count, 265);
+  expect('loads all 280 tools by default', t.count, 280);
   expect('has 14 modules', t.modules.length, 14);
-  expect('has 89 write tools', t.writeCount, 89);
-  expect('has 176 read tools', t.readCount, 176);
+  expect('has 92 write tools', t.writeCount, 92);
+  expect('has 188 read tools', t.readCount, 188);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 176 tools', cli.count, 176);
+  expect('--readonly: 188 tools', cli.count, 188);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 176 tools', env.count, 176);
+  expect('GATE_READONLY=true: 188 tools', env.count, 188);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -104,7 +104,7 @@ const MODULE_COUNTS = {
   margin:      { total:  5, readonly:  4, write:  1 },
   wallet:      { total: 12, readonly:  9, write:  3 },
   account:     { total: 10, readonly:  6, write:  4 },
-  options:     { total: 13, readonly: 11, write:  2 },
+  options:     { total: 28, readonly: 23, write:  5 },
   earn:        { total: 23, readonly: 19, write:  4 },
   flash_swap:  { total:  3, readonly:  3, write:  0 },
   unified:     { total: 16, readonly: 12, write:  4 },
