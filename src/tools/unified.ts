@@ -260,15 +260,16 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_set_unified_collateral',
-    'Enable or disable currencies as collateral in unified account (requires authentication)',
+    'Set collateral currencies for unified account (requires authentication) — always confirm with the user before calling this tool',
     {
-      enable_list: z.array(z.string()).optional().describe('Currencies to enable as collateral'),
-      disable_list: z.array(z.string()).optional().describe('Currencies to disable as collateral'),
+      collateral_type: z.union([z.literal(0), z.literal(1)]).describe('0 = all currencies as collateral; 1 = custom currencies (use enable_list/disable_list)'),
+      enable_list: z.array(z.string()).optional().describe('Currencies to enable as collateral (only valid when collateral_type=1)'),
+      disable_list: z.array(z.string()).optional().describe('Currencies to disable as collateral (only valid when collateral_type=1)'),
     },
-    async ({ enable_list, disable_list }) => {
+    async ({ collateral_type, enable_list, disable_list }) => {
       try {
         requireAuth();
-        const req: Record<string, unknown> = {};
+        const req: Record<string, unknown> = { collateralType: collateral_type };
         if (enable_list) req.enableList = enable_list;
         if (disable_list) req.disableList = disable_list;
         const { body } = await new UnifiedApi(createClient()).setUnifiedCollateral(req as never);
