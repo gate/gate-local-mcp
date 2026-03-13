@@ -1,0 +1,82 @@
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+import { RebateApi } from 'gate-api';
+import { createClient, requireAuth } from '../client.js';
+import { textContent, errorContent } from '../utils.js';
+
+export function registerRebateTools(server: McpServer): void {
+  server.tool(
+    'cex_rebate_partner_transaction_history',
+    'Get partner rebate transaction history (requires authentication)',
+    {
+      currency_pair: z.string().optional().describe('Filter by currency pair e.g. BTC_USDT'),
+      user_id: z.number().int().optional().describe('Filter by sub-user ID'),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+      limit: z.number().int().optional().describe('Max results per page (default 100, max 100)'),
+      offset: z.number().int().optional().describe('Pagination offset'),
+    },
+    async ({ currency_pair, user_id, from, to, limit, offset }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency_pair !== undefined) opts.currencyPair = currency_pair;
+        if (user_id !== undefined) opts.userId = user_id;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        const { body } = await new RebateApi(createClient()).partnerTransactionHistory(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_rebate_partner_commissions_history',
+    'Get partner rebate commission history (requires authentication)',
+    {
+      currency: z.string().optional().describe('Filter by currency symbol'),
+      user_id: z.number().int().optional().describe('Filter by sub-user ID'),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+      limit: z.number().int().optional().describe('Max results per page (default 100, max 100)'),
+      offset: z.number().int().optional().describe('Pagination offset'),
+    },
+    async ({ currency, user_id, from, to, limit, offset }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency !== undefined) opts.currency = currency;
+        if (user_id !== undefined) opts.userId = user_id;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        const { body } = await new RebateApi(createClient()).partnerCommissionsHistory(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_rebate_partner_sub_list',
+    'Get list of partner sub-users (requires authentication)',
+    {
+      user_id: z.number().int().optional().describe('Filter by sub-user ID'),
+      limit: z.number().int().optional().describe('Max results per page (default 100, max 100)'),
+      offset: z.number().int().optional().describe('Pagination offset'),
+    },
+    async ({ user_id, limit, offset }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (user_id !== undefined) opts.userId = user_id;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        const { body } = await new RebateApi(createClient()).partnerSubList(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+}

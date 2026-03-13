@@ -38,6 +38,7 @@ import { registerP2PTools } from './tools/p2p.js';
 import { registerTradFiTools } from './tools/trad_fi.js';
 import { registerCrossExTools } from './tools/cross_ex.js';
 import { registerAlphaTools } from './tools/alpha.js';
+import { registerRebateTools } from './tools/rebate.js';
 
 const config = parseConfig();
 
@@ -73,6 +74,7 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   tradfi:                registerTradFiTools,
   crossex:               registerCrossExTools,
   alpha:                 registerAlphaTools,
+  rebate:                registerRebateTools,
 };
 
 const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);
