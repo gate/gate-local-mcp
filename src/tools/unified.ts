@@ -58,11 +58,22 @@ export function registerUnifiedTools(server: McpServer): void {
     'Switch unified account mode (requires authentication) — always confirm with the user before calling this tool',
     {
       mode: z.string().describe('Mode: classic, multi_currency, or portfolio'),
+      settings_usdt_futures: z.boolean().optional().describe('Enable USDT futures in unified account'),
+      settings_spot_hedge: z.boolean().optional().describe('Enable spot hedging'),
+      settings_use_funding: z.boolean().optional().describe('Enable funding balance as margin'),
+      settings_options: z.boolean().optional().describe('Enable options trading'),
     },
-    async ({ mode }) => {
+    async ({ mode, settings_usdt_futures, settings_spot_hedge, settings_use_funding, settings_options }) => {
       try {
         requireAuth();
-        const { body } = await new UnifiedApi(createClient()).setUnifiedMode({ mode } as never);
+        const req: Record<string, unknown> = { mode };
+        const settings: Record<string, unknown> = {};
+        if (settings_usdt_futures !== undefined) settings.usdtFutures = settings_usdt_futures;
+        if (settings_spot_hedge !== undefined) settings.spotHedge = settings_spot_hedge;
+        if (settings_use_funding !== undefined) settings.useFunding = settings_use_funding;
+        if (settings_options !== undefined) settings.options = settings_options;
+        if (Object.keys(settings).length > 0) req.settings = settings;
+        const { body } = await new UnifiedApi(createClient()).setUnifiedMode(req as never);
         return textContent(body ?? { success: true });
       } catch (e) { return errorContent(e); }
     }
