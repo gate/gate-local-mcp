@@ -578,7 +578,7 @@ export function registerSpotTools(server: McpServer): void {
              order_side, order_amount, order_price, order_type, order_account, order_tif, order_text }) => {
       try {
         requireAuth();
-        const trigger: Record<string, unknown> = { price: trigger_price, rule: trigger_rule === '>=' ? 1 : 2 };
+        const trigger: Record<string, unknown> = { price: trigger_price, rule: trigger_rule };
         if (trigger_expiration !== undefined) trigger.expiration = trigger_expiration;
         const put: Record<string, unknown> = { side: order_side, price: order_price, amount: order_amount, account: order_account ?? 'normal' };
         if (order_type) put.type = order_type;
