@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { DeliveryApi } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
-import { textContent, errorContent } from '../utils.js';
+import { textContent, errorContent, ORDER_SOURCE_TEXT } from '../utils.js';
 
 // Delivery (expiring futures) only supports 'usdt' settlement
 const settleSchema = z.literal('usdt').describe('Settlement currency (only usdt supported)');
@@ -162,6 +162,7 @@ export function registerDeliveryTools(server: McpServer): void {
         if (tif) order.tif = tif;
         if (reduce_only !== undefined) order.reduceOnly = reduce_only;
         if (close !== undefined) order.close = close;
+        order.text = ORDER_SOURCE_TEXT;
         const { body } = await new DeliveryApi(createClient()).createDeliveryOrder(settle, order as never);
         return textContent(body);
       } catch (e) { return errorContent(e); }
