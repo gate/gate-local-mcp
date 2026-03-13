@@ -1318,7 +1318,7 @@ export function registerFuturesTools(server: McpServer): void {
              order_size, order_price, order_tif, order_reduce_only, order_close, order_text }) => {
       try {
         requireAuth();
-        const trigger: Record<string, unknown> = { price: trigger_price, rule: trigger_rule };
+        const trigger: Record<string, unknown> = { price: trigger_price, rule: trigger_rule === '>=' ? 1 : 2 };
         if (trigger_expiration !== undefined) trigger.expiration = trigger_expiration;
         const initial: Record<string, unknown> = { contract, size: order_size, price: order_price };
         initial.tif = order_tif ?? 'gtc';
