@@ -143,14 +143,14 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ coin, amount, from, to, text }) => {
       try {
         requireAuth();
-        const { InlineObject10 } = await import('gate-api');
-        const req = new InlineObject10();
+        const { InlineObject11 } = await import('gate-api');
+        const req = new InlineObject11();
         req.coin = coin;
         req.amount = amount;
         req.from = from;
         req.to = to;
         if (text !== undefined) req.text = text;
-        const { body } = await new CrossExApi(createClient()).createCrossexTransfer({ inlineObject10: req });
+        const { body } = await new CrossExApi(createClient()).createCrossexTransfer({ inlineObject11: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -197,19 +197,19 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ symbol, side, type, qty, price, quote_qty, time_in_force, reduce_only, position_side, text }) => {
       try {
         requireAuth();
-        const { InlineObject11 } = await import('gate-api');
-        const req = new InlineObject11();
+        const { InlineObject12 } = await import('gate-api');
+        const req = new InlineObject12();
         req.symbol = symbol;
-        req.side = side as unknown as typeof InlineObject11.Side[keyof typeof InlineObject11.Side];
-        if (type !== undefined) req.type = type as unknown as typeof InlineObject11.Type[keyof typeof InlineObject11.Type];
+        req.side = side as unknown as typeof InlineObject12.Side[keyof typeof InlineObject12.Side];
+        if (type !== undefined) req.type = type as unknown as typeof InlineObject12.Type[keyof typeof InlineObject12.Type];
         if (qty !== undefined) req.qty = qty;
         if (price !== undefined) req.price = price;
         if (quote_qty !== undefined) req.quoteQty = quote_qty;
-        if (time_in_force !== undefined) req.timeInForce = time_in_force as unknown as typeof InlineObject11.TimeInForce[keyof typeof InlineObject11.TimeInForce];
-        if (reduce_only !== undefined) req.reduceOnly = (reduce_only ? 'true' : 'false') as unknown as typeof InlineObject11.ReduceOnly[keyof typeof InlineObject11.ReduceOnly];
-        if (position_side !== undefined) req.positionSide = position_side as unknown as typeof InlineObject11.PositionSide[keyof typeof InlineObject11.PositionSide];
+        if (time_in_force !== undefined) req.timeInForce = time_in_force as unknown as typeof InlineObject12.TimeInForce[keyof typeof InlineObject12.TimeInForce];
+        if (reduce_only !== undefined) req.reduceOnly = (reduce_only ? 'true' : 'false') as unknown as typeof InlineObject12.ReduceOnly[keyof typeof InlineObject12.ReduceOnly];
+        if (position_side !== undefined) req.positionSide = position_side as unknown as typeof InlineObject12.PositionSide[keyof typeof InlineObject12.PositionSide];
         if (text !== undefined) req.text = text;
-        const { body } = await new CrossExApi(createClient()).createCrossexOrder({ inlineObject11: req });
+        const { body } = await new CrossExApi(createClient()).createCrossexOrder({ inlineObject12: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -241,11 +241,11 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ order_id, qty, price }) => {
       try {
         requireAuth();
-        const { InlineObject12 } = await import('gate-api');
-        const req = new InlineObject12();
+        const { InlineObject13 } = await import('gate-api');
+        const req = new InlineObject13();
         if (qty !== undefined) req.qty = qty;
         if (price !== undefined) req.price = price;
-        const { body } = await new CrossExApi(createClient()).updateCrossexOrder(order_id, { inlineObject12: req });
+        const { body } = await new CrossExApi(createClient()).updateCrossexOrder(order_id, { inlineObject13: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -330,13 +330,13 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ exchange_type, from_coin, to_coin, from_amount }) => {
       try {
         requireAuth();
-        const { InlineObject13 } = await import('gate-api');
-        const req = new InlineObject13();
+        const { InlineObject14 } = await import('gate-api');
+        const req = new InlineObject14();
         req.exchangeType = exchange_type;
         req.fromCoin = from_coin;
         req.toCoin = to_coin;
         req.fromAmount = from_amount;
-        const { body } = await new CrossExApi(createClient()).createCrossexConvertQuote({ inlineObject13: req });
+        const { body } = await new CrossExApi(createClient()).createCrossexConvertQuote({ inlineObject14: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -351,10 +351,10 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ quote_id }) => {
       try {
         requireAuth();
-        const { InlineObject14 } = await import('gate-api');
-        const req = new InlineObject14();
+        const { InlineObject15 } = await import('gate-api');
+        const req = new InlineObject15();
         req.quoteId = quote_id;
-        const { body } = await new CrossExApi(createClient()).createCrossexConvertOrder({ inlineObject14: req });
+        const { body } = await new CrossExApi(createClient()).createCrossexConvertOrder({ inlineObject15: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -390,12 +390,12 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ position_mode, account_mode, exchange_type }) => {
       try {
         requireAuth();
-        const { InlineObject15 } = await import('gate-api');
-        const req = new InlineObject15();
+        const { InlineObject16 } = await import('gate-api');
+        const req = new InlineObject16();
         if (position_mode !== undefined) req.positionMode = position_mode;
         if (account_mode !== undefined) req.accountMode = account_mode;
         if (exchange_type !== undefined) req.exchangeType = exchange_type;
-        const { body } = await new CrossExApi(createClient()).updateCrossexAccount({ inlineObject15: req });
+        const { body } = await new CrossExApi(createClient()).updateCrossexAccount({ inlineObject16: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -508,11 +508,11 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ symbol, leverage }) => {
       try {
         requireAuth();
-        const { InlineObject16 } = await import('gate-api');
-        const req = new InlineObject16();
+        const { InlineObject17 } = await import('gate-api');
+        const req = new InlineObject17();
         req.symbol = symbol;
         req.leverage = leverage;
-        const { body } = await new CrossExApi(createClient()).updateCrossexPositionsLeverage({ inlineObject16: req });
+        const { body } = await new CrossExApi(createClient()).updateCrossexPositionsLeverage({ inlineObject17: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -545,11 +545,11 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ symbol, leverage }) => {
       try {
         requireAuth();
-        const { InlineObject17 } = await import('gate-api');
-        const req = new InlineObject17();
+        const { InlineObject18 } = await import('gate-api');
+        const req = new InlineObject18();
         req.symbol = symbol;
         req.leverage = leverage;
-        const { body } = await new CrossExApi(createClient()).updateCrossexMarginPositionsLeverage({ inlineObject17: req });
+        const { body } = await new CrossExApi(createClient()).updateCrossexMarginPositionsLeverage({ inlineObject18: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -565,11 +565,11 @@ export function registerCrossExTools(server: McpServer): void {
     async ({ symbol, position_side }) => {
       try {
         requireAuth();
-        const { InlineObject18 } = await import('gate-api');
-        const req = new InlineObject18();
+        const { InlineObject19 } = await import('gate-api');
+        const req = new InlineObject19();
         req.symbol = symbol;
         if (position_side !== undefined) req.positionSide = position_side;
-        const { body } = await new CrossExApi(createClient()).closeCrossexPosition({ inlineObject18: req });
+        const { body } = await new CrossExApi(createClient()).closeCrossexPosition({ inlineObject19: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
