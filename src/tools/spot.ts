@@ -582,7 +582,7 @@ export function registerSpotTools(server: McpServer): void {
         if (trigger_expiration !== undefined) trigger.expiration = trigger_expiration;
         const put: Record<string, unknown> = { side: order_side, price: order_price, amount: order_amount, account: order_account ?? 'normal' };
         if (order_type) put.type = order_type;
-        if (order_tif) put.timeInForce = order_tif;
+        put.timeInForce = order_tif ?? 'gtc';
         if (order_text) put.text = order_text;
         const payload = { market: currency_pair, trigger, put };
         const { body } = await new SpotApi(createClient()).createSpotPriceTriggeredOrder(payload as never);
