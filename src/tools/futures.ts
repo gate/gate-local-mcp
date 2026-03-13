@@ -14,7 +14,7 @@ import {
   FuturesUpdatePriceTriggeredOrder,
 } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
-import { textContent, errorContent } from '../utils.js';
+import { textContent, errorContent, ORDER_SOURCE_TEXT } from '../utils.js';
 
 const settleSchema = z.enum(['btc', 'usdt']).describe('Settlement currency: btc or usdt');
 
@@ -504,16 +504,15 @@ export function registerFuturesTools(server: McpServer): void {
       tif: z.enum(['gtc', 'ioc', 'poc', 'fok']).optional().describe('Time in force'),
       reduce_only: z.boolean().optional().describe('Reduce-only order'),
       close: z.boolean().optional().describe('Close position'),
-      text: z.string().optional().describe('Custom reference text'),
     },
-    async ({ settle, contract, size, price, tif, reduce_only, close, text }) => {
+    async ({ settle, contract, size, price, tif, reduce_only, close }) => {
       try {
         requireAuth();
         const order: Record<string, unknown> = { contract, size, price };
         order.tif = tif ?? (price === '0' ? 'ioc' : 'gtc');
         if (reduce_only !== undefined) order.reduceOnly = reduce_only;
         if (close !== undefined) order.close = close;
-        if (text) order.text = text;
+        order.text = ORDER_SOURCE_TEXT;
         const { body } = await new FuturesApi(createClient()).createFuturesOrder(settle, order as never, {});
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -532,9 +531,8 @@ export function registerFuturesTools(server: McpServer): void {
       tif: z.enum(['gtc', 'ioc', 'poc', 'fok']).optional(),
       reduce_only: z.boolean().optional(),
       close: z.boolean().optional(),
-      text: z.string().optional(),
     },
-    async ({ settle, contract, size, direction, level, tif, reduce_only, close, text }) => {
+    async ({ settle, contract, size, direction, level, tif, reduce_only, close }) => {
       try {
         requireAuth();
         const order = new FuturesBBOOrder();
@@ -545,7 +543,7 @@ export function registerFuturesTools(server: McpServer): void {
         if (tif !== undefined) order.tif = tif as unknown as FuturesBBOOrder.Tif;
         if (reduce_only !== undefined) order.reduceOnly = reduce_only;
         if (close !== undefined) order.close = close;
-        if (text) order.text = text;
+        order.text = ORDER_SOURCE_TEXT;
         const { body } = await new FuturesApi(createClient()).createFuturesBBOOrder(settle, order, {});
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -641,7 +639,6 @@ export function registerFuturesTools(server: McpServer): void {
         tif: z.enum(['gtc', 'ioc', 'poc', 'fok']).optional(),
         reduce_only: z.boolean().optional(),
         close: z.boolean().optional(),
-        text: z.string().optional(),
       })).describe('Array of futures orders to create'),
     },
     async ({ settle, orders }) => {
@@ -652,7 +649,7 @@ export function registerFuturesTools(server: McpServer): void {
           order.tif = o.tif ?? (o.price === '0' ? 'ioc' : 'gtc');
           if (o.reduce_only !== undefined) order.reduceOnly = o.reduce_only;
           if (o.close !== undefined) order.close = o.close;
-          if (o.text) order.text = o.text;
+          order.text = ORDER_SOURCE_TEXT;
           return order;
         });
         const { body } = await new FuturesApi(createClient()).createBatchFuturesOrder(settle, mapped as never, {});

@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { SpotApi } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
-import { textContent, errorContent } from '../utils.js';
+import { textContent, errorContent, ORDER_SOURCE_TEXT } from '../utils.js';
 
 export function registerSpotTools(server: McpServer): void {
   // ── Public tools ──────────────────────────────────────────────────────────
@@ -227,9 +227,8 @@ export function registerSpotTools(server: McpServer): void {
       price: z.string().optional().describe('Order price (omit for market orders)'),
       type: z.enum(['limit', 'market']).optional().describe('Order type (default: limit)'),
       account: z.enum(['spot', 'margin', 'unified']).optional(),
-      text: z.string().optional().describe('Custom order reference text (prefix with t-)'),
     },
-    async ({ currency_pair, side, amount, price, type, account, text }) => {
+    async ({ currency_pair, side, amount, price, type, account }) => {
       try {
         requireAuth();
         const order: Record<string, unknown> = { currencyPair: currency_pair, side, amount };
@@ -237,7 +236,7 @@ export function registerSpotTools(server: McpServer): void {
         if (type) order.type = type;
         if (type === 'market') order.timeInForce = 'ioc';
         if (account) order.account = account;
-        if (text) order.text = text;
+        order.text = ORDER_SOURCE_TEXT;
         const { body } = await new SpotApi(createClient()).createOrder(order as never, {});
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -454,7 +453,6 @@ export function registerSpotTools(server: McpServer): void {
         price: z.string().optional(),
         type: z.enum(['limit', 'market']).optional(),
         account: z.enum(['spot', 'margin', 'unified']).optional(),
-        text: z.string().optional(),
       })).describe('Array of orders to create'),
     },
     async ({ orders }) => {
@@ -466,7 +464,7 @@ export function registerSpotTools(server: McpServer): void {
           if (o.type) order.type = o.type;
           if (o.type === 'market') order.timeInForce = 'ioc';
           if (o.account) order.account = o.account;
-          if (o.text) order.text = o.text;
+          order.text = ORDER_SOURCE_TEXT;
           return order;
         });
         const { body } = await new SpotApi(createClient()).createBatchOrders(mapped as never, {});

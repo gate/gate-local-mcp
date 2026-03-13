@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { OptionsApi } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
-import { textContent, errorContent } from '../utils.js';
+import { textContent, errorContent, ORDER_SOURCE_TEXT } from '../utils.js';
 
 export function registerOptionsTools(server: McpServer): void {
   // ── Public tools ──────────────────────────────────────────────────────────
@@ -373,6 +373,7 @@ export function registerOptionsTools(server: McpServer): void {
         if (tif) order.tif = tif;
         if (reduce_only !== undefined) order.reduceOnly = reduce_only;
         if (close !== undefined) order.close = close;
+        order.text = ORDER_SOURCE_TEXT;
         const { body } = await new OptionsApi(createClient()).createOptionsOrder(order as never);
         return textContent(body);
       } catch (e) { return errorContent(e); }

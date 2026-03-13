@@ -59,6 +59,9 @@ const WRITE_VERBS = new Set([
  * Tool names follow the pattern cex_{module}_{verb}_{rest}, so the verb is always
  * the third underscore-separated segment (index 2).
  */
+/** Identifies orders placed via this MCP server in Gate API order records. */
+export const ORDER_SOURCE_TEXT = 'local_mcp';
+
 export function isWriteTool(name: string): boolean {
   return WRITE_VERBS.has(name.split('_')[2] ?? '');
 }
