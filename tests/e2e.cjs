@@ -79,20 +79,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 290 tools by default', t.count, 290);
+  expect('loads all 294 tools by default', t.count, 294);
   expect('has 16 modules', t.modules.length, 16);
   expect('has 94 write tools', t.writeCount, 94);
-  expect('has 196 read tools', t.readCount, 196);
+  expect('has 200 read tools', t.readCount, 200);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 196 tools', cli.count, 196);
+  expect('--readonly: 200 tools', cli.count, 200);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 196 tools', env.count, 196);
+  expect('GATE_READONLY=true: 200 tools', env.count, 200);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -113,7 +113,7 @@ const MODULE_COUNTS = {
   tradfi:                { total: 18, readonly: 12, write:  6 },
   crossex:               { total: 31, readonly: 21, write: 10 },
   alpha:                 { total:  9, readonly:  7, write:  2 },
-  rebate:                { total:  3, readonly:  3, write:  0 },
+  rebate:                { total:  7, readonly:  7, write:  0 },
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)

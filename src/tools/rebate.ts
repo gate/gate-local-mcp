@@ -79,4 +79,82 @@ export function registerRebateTools(server: McpServer): void {
       } catch (e) { return errorContent(e); }
     }
   );
+
+  server.tool(
+    'cex_rebate_broker_commission_history',
+    'Get broker rebate commission history (requires authentication)',
+    {
+      user_id: z.number().int().optional().describe('Filter by sub-user ID'),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+      limit: z.number().int().optional().describe('Max results per page (default 100, max 100)'),
+      offset: z.number().int().optional().describe('Pagination offset'),
+    },
+    async ({ user_id, from, to, limit, offset }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (user_id !== undefined) opts.userId = user_id;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        const { body } = await new RebateApi(createClient()).rebateBrokerCommissionHistory(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_rebate_broker_transaction_history',
+    'Get broker rebate transaction history (requires authentication)',
+    {
+      user_id: z.number().int().optional().describe('Filter by sub-user ID'),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
+      limit: z.number().int().optional().describe('Max results per page (default 100, max 100)'),
+      offset: z.number().int().optional().describe('Pagination offset'),
+    },
+    async ({ user_id, from, to, limit, offset }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (user_id !== undefined) opts.userId = user_id;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        const { body } = await new RebateApi(createClient()).rebateBrokerTransactionHistory(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_rebate_user_info',
+    'Get rebate user info (requires authentication)',
+    {},
+    async () => {
+      try {
+        requireAuth();
+        const { body } = await new RebateApi(createClient()).rebateUserInfo();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_rebate_user_sub_relation',
+    'Query the relationship between users and their referrers (requires authentication)',
+    {
+      user_id_list: z.string().describe('Comma-separated list of user IDs to query'),
+    },
+    async ({ user_id_list }) => {
+      try {
+        requireAuth();
+        const { body } = await new RebateApi(createClient()).userSubRelation(user_id_list);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
 }
