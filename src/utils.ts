@@ -40,9 +40,25 @@ export function textContent(value: unknown) {
 }
 
 /**
- * Wrap an error message in the standard MCP tool content response format.
+ * Wrap an error in the standard MCP tool content response format.
+ * For HTTP errors (Axios), includes status code, Gate API error body,
+ * and response headers (e.g. x-gate-trace-id) to aid debugging.
  */
 export function errorContent(err: unknown) {
+  // Axios errors carry a `response` property with full HTTP details
+  const response = (err as { response?: { status?: number; data?: unknown; headers?: Record<string, unknown> } }).response;
+  if (response) {
+    const { status, data, headers = {} } = response;
+    const relevantHeaders: Record<string, unknown> = {};
+    for (const key of Object.keys(headers)) {
+      if (key.toLowerCase().startsWith('x-') || key.toLowerCase() === 'content-type') {
+        relevantHeaders[key] = headers[key];
+      }
+    }
+    const detail: Record<string, unknown> = { status, body: data };
+    if (Object.keys(relevantHeaders).length > 0) detail.headers = relevantHeaders;
+    return { content: [{ type: 'text' as const, text: `Error: ${toText(detail)}` }], isError: true };
+  }
   const message = err instanceof Error ? err.message : String(err);
   return { content: [{ type: 'text' as const, text: `Error: ${message}` }], isError: true };
 }
