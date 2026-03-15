@@ -147,11 +147,11 @@ export function registerTradFiTools(server: McpServer): void {
     async ({ asset, change, type }) => {
       try {
         requireAuth();
-        const { InlineObject1 } = await import('gate-api');
-        const req = new InlineObject1();
+        const { TradFiTransactionRequest } = await import('gate-api');
+        const req = new TradFiTransactionRequest();
         req.asset = asset;
         req.change = change;
-        req.type = type as unknown as typeof InlineObject1.Type[keyof typeof InlineObject1.Type];
+        req.type = type as unknown as typeof TradFiTransactionRequest.Type[keyof typeof TradFiTransactionRequest.Type];
         const { body } = await new TradFiApi(createClient()).createTransaction(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -188,12 +188,12 @@ export function registerTradFiTools(server: McpServer): void {
     async ({ symbol, side, price, price_type, volume, price_tp, price_sl }) => {
       try {
         requireAuth();
-        const { InlineObject2 } = await import('gate-api');
-        const req = new InlineObject2();
+        const { TradFiOrderRequest } = await import('gate-api');
+        const req = new TradFiOrderRequest();
         req.symbol = symbol;
-        req.side = side as unknown as typeof InlineObject2.Side[keyof typeof InlineObject2.Side];
+        req.side = side as unknown as typeof TradFiOrderRequest.Side[keyof typeof TradFiOrderRequest.Side];
         req.price = price;
-        req.priceType = price_type as unknown as typeof InlineObject2.PriceType[keyof typeof InlineObject2.PriceType];
+        req.priceType = price_type as unknown as typeof TradFiOrderRequest.PriceType[keyof typeof TradFiOrderRequest.PriceType];
         req.volume = volume;
         if (price_tp !== undefined) req.priceTp = price_tp;
         if (price_sl !== undefined) req.priceSl = price_sl;
@@ -215,8 +215,8 @@ export function registerTradFiTools(server: McpServer): void {
     async ({ order_id, price, price_tp, price_sl }) => {
       try {
         requireAuth();
-        const { InlineObject3 } = await import('gate-api');
-        const req = new InlineObject3();
+        const { TradFiOrderUpdateRequest } = await import('gate-api');
+        const req = new TradFiOrderUpdateRequest();
         req.price = price;
         if (price_tp !== undefined) req.priceTp = price_tp;
         if (price_sl !== undefined) req.priceSl = price_sl;
@@ -290,8 +290,8 @@ export function registerTradFiTools(server: McpServer): void {
     async ({ position_id, price_tp, price_sl }) => {
       try {
         requireAuth();
-        const { InlineObject4 } = await import('gate-api');
-        const req = new InlineObject4();
+        const { TradFiPositionUpdateRequest } = await import('gate-api');
+        const req = new TradFiPositionUpdateRequest();
         if (price_tp !== undefined) req.priceTp = price_tp;
         if (price_sl !== undefined) req.priceSl = price_sl;
         const { body } = await new TradFiApi(createClient()).updatePosition(position_id, req);
@@ -311,9 +311,9 @@ export function registerTradFiTools(server: McpServer): void {
     async ({ position_id, close_type, close_volume }) => {
       try {
         requireAuth();
-        const { InlineObject5 } = await import('gate-api');
-        const req = new InlineObject5();
-        req.closeType = close_type as unknown as typeof InlineObject5.CloseType[keyof typeof InlineObject5.CloseType];
+        const { TradFiClosePositionRequest } = await import('gate-api');
+        const req = new TradFiClosePositionRequest();
+        req.closeType = close_type as unknown as typeof TradFiClosePositionRequest.CloseType[keyof typeof TradFiClosePositionRequest.CloseType];
         if (close_volume !== undefined) req.closeVolume = close_volume;
         const { body } = await new TradFiApi(createClient()).closePosition(position_id, req);
         return textContent(body);
