@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { WalletApi, SubAccountTransfer, SubAccountToSubAccount } from 'gate-api';
+import { WalletApi, SubAccountTransfer, SubAccountToSubAccount, ConvertSmallBalance } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -229,6 +229,195 @@ export function registerWalletTools(server: McpServer): void {
         const opts: Record<string, unknown> = {};
         if (currency) opts.currency = currency;
         const { body } = await new WalletApi(createClient()).listWithdrawStatus(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_sub_account_transfers',
+    'List transfer records between main account and sub-accounts (requires authentication)',
+    {
+      sub_uid: z.string().optional().describe('Filter by sub-account UID'),
+      from: z.number().optional().describe('Start time (Unix timestamp seconds)'),
+      to: z.number().optional().describe('End time (Unix timestamp seconds)'),
+      limit: z.number().int().min(1).max(200).optional(),
+      offset: z.number().int().min(0).optional(),
+    },
+    async ({ sub_uid, from, to, limit, offset }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (sub_uid) opts.subUid = sub_uid;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        const { body } = await new WalletApi(createClient()).listSubAccountTransfers(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_sub_account_margin_balances',
+    'Query sub-account margin account balances (requires authentication)',
+    { sub_uid: z.string().optional().describe('Filter by sub-account UID') },
+    async ({ sub_uid }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (sub_uid) opts.subUid = sub_uid;
+        const { body } = await new WalletApi(createClient()).listSubAccountMarginBalances(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_sub_account_futures_balances',
+    'Query sub-account futures account balances (requires authentication)',
+    {
+      sub_uid: z.string().optional().describe('Filter by sub-account UID'),
+      settle: z.string().optional().describe('Settlement currency filter e.g. usdt, btc'),
+    },
+    async ({ sub_uid, settle }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (sub_uid) opts.subUid = sub_uid;
+        if (settle) opts.settle = settle;
+        const { body } = await new WalletApi(createClient()).listSubAccountFuturesBalances(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_sub_account_cross_margin_balances',
+    'Query sub-account cross-margin account balances (requires authentication)',
+    { sub_uid: z.string().optional().describe('Filter by sub-account UID') },
+    async ({ sub_uid }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (sub_uid) opts.subUid = sub_uid;
+        const { body } = await new WalletApi(createClient()).listSubAccountCrossMarginBalances(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_saved_address',
+    'List saved withdrawal addresses for a currency (requires authentication)',
+    {
+      currency: z.string().describe('Currency symbol e.g. USDT'),
+      chain: z.string().optional().describe('Chain name filter'),
+      limit: z.number().int().min(1).max(50).optional(),
+      page: z.number().int().min(1).optional(),
+    },
+    async ({ currency, chain, limit, page }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (chain) opts.chain = chain;
+        if (limit !== undefined) opts.limit = String(limit);
+        if (page !== undefined) opts.page = page;
+        const { body } = await new WalletApi(createClient()).listSavedAddress(currency, opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_small_balance',
+    'List currencies with small (dust) balances eligible for conversion (requires authentication)',
+    {},
+    async () => {
+      try {
+        requireAuth();
+        const { body } = await new WalletApi(createClient()).listSmallBalance();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_convert_small_balance',
+    'Convert small balances (dust) to GT (requires authentication) — always confirm the currencies to convert with the user before calling this tool',
+    {
+      currencies: z.array(z.string()).optional().describe('List of currencies to convert; omit or leave empty to convert all small balances'),
+      is_all: z.boolean().optional().describe('Convert all small balances (overrides currencies list)'),
+    },
+    async ({ currencies, is_all }) => {
+      try {
+        requireAuth();
+        const req = new ConvertSmallBalance();
+        if (currencies && currencies.length > 0) req.currency = currencies;
+        if (is_all !== undefined) req.isAll = is_all;
+        const { body } = await new WalletApi(createClient()).convertSmallBalance(req);
+        return textContent(body ?? { success: true });
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_small_balance_history',
+    'List small balance conversion history (requires authentication)',
+    {
+      currency: z.string().optional().describe('Filter by currency'),
+      page: z.number().int().min(1).optional(),
+      limit: z.number().int().min(1).max(100).optional(),
+    },
+    async ({ currency, page, limit }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (currency) opts.currency = currency;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
+        const { body } = await new WalletApi(createClient()).listSmallBalanceHistory(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_list_push_orders',
+    'List UID transfer (push) orders (requires authentication)',
+    {
+      id: z.number().int().optional().describe('Filter by push order ID'),
+      from: z.number().optional().describe('Start time (Unix timestamp seconds)'),
+      to: z.number().optional().describe('End time (Unix timestamp seconds)'),
+      limit: z.number().int().min(1).max(100).optional(),
+      offset: z.number().int().min(0).optional(),
+      transaction_type: z.string().optional().describe('Transaction type filter'),
+    },
+    async ({ id, from, to, limit, offset, transaction_type }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (id !== undefined) opts.id = id;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
+        if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        if (transaction_type) opts.transactionType = transaction_type;
+        const { body } = await new WalletApi(createClient()).listPushOrders(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_wallet_get_low_cap_exchange_list',
+    'Get list of low market cap currencies available for exchange (requires authentication)',
+    {},
+    async () => {
+      try {
+        requireAuth();
+        const { body } = await new WalletApi(createClient()).getLowCapExchangeList();
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
