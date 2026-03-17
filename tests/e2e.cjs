@@ -117,7 +117,7 @@ const MODULE_COUNTS = {
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)
-const ABBREV = { futures: 'fx', sub_account: 'sa', dual_mode: 'dual', dual_comp: 'dual', flash_swap: 'fc', multi_collateral_loan: 'mcl', alpha: 'alpha' };
+const ABBREV = { futures: 'fx', sub_account: 'sa', dual_mode: 'dual', dual_comp: 'dual', flash_swap: 'fc', multi_collateral_loan: 'mcl', alpha: 'alpha', crossex: 'crx', delivery: 'dc' };
 function modulePrefix(mod) {
   const abbr = Object.entries(ABBREV).reduce((s, [l, r]) => s.replaceAll(l, r), mod);
   return `cex_${abbr}_`;
