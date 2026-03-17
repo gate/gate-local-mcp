@@ -81,5 +81,9 @@ const WRITE_VERBS = new Set([
 export const ORDER_SOURCE_TEXT = 'local_mcp';
 
 export function isWriteTool(name: string): boolean {
-  return WRITE_VERBS.has(name.split('_')[2] ?? '');
+  const parts = name.split('_');
+  // Verb is at index 2 for most tools (cex_{module}_{verb}_...).
+  // Some SDK-based names place a category word at index 2 with the verb at index 3
+  // (e.g. cex_p2p_transaction_cancel), so check both positions.
+  return WRITE_VERBS.has(parts[2] ?? '') || WRITE_VERBS.has(parts[3] ?? '');
 }

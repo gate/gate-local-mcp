@@ -63,7 +63,7 @@ export function registerP2PTools(server: McpServer): void {
   // ── Transactions ──────────────────────────────────────────────────────────
 
   server.tool(
-    'cex_p2p_get_pending_transactions',
+    'cex_p2p_get_pending_transaction_list',
     'List pending P2P transactions (requires authentication)',
     {
       crypto_currency: z.string().describe('Crypto currency e.g. USDT'),
@@ -95,7 +95,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_get_completed_transactions',
+    'cex_p2p_get_completed_transaction_list',
     'List completed P2P transactions (requires authentication)',
     {
       crypto_currency: z.string().describe('Crypto currency e.g. USDT'),
@@ -151,7 +151,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_confirm_payment',
+    'cex_p2p_transaction_confirm_payment',
     'Confirm payment for a P2P transaction (requires authentication) — always confirm with the user before calling this tool',
     {
       trade_id: z.string().describe('Trade ID'),
@@ -171,7 +171,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_confirm_receipt',
+    'cex_p2p_transaction_confirm_receipt',
     'Confirm receipt of payment for a P2P transaction (requires authentication) — always confirm with the user before calling this tool',
     {
       trade_id: z.string().describe('Trade ID'),
@@ -189,7 +189,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_cancel_transaction',
+    'cex_p2p_transaction_cancel',
     'Cancel a P2P transaction (requires authentication) — always confirm with the user before calling this tool',
     {
       trade_id: z.string().describe('Trade ID'),
@@ -213,7 +213,7 @@ export function registerP2PTools(server: McpServer): void {
   // ── Ads / Order Book ──────────────────────────────────────────────────────
 
   server.tool(
-    'cex_p2p_place_ad_order',
+    'cex_p2p_place_biz_push_order',
     'Place a P2P advertisement order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       currency_type: z.string().describe('Crypto currency e.g. USDT'),
@@ -287,7 +287,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_update_ad_status',
+    'cex_p2p_ads_update_status',
     'Update the status of a P2P advertisement (requires authentication)',
     {
       adv_no: z.number().int().describe('Advertisement number'),
@@ -310,7 +310,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_get_ad_detail',
+    'cex_p2p_ads_detail',
     'Get details of a P2P advertisement (requires authentication)',
     {
       adv_no: z.string().describe('Advertisement number'),
@@ -328,7 +328,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_list_my_ads',
+    'cex_p2p_my_ads_list',
     'List my own P2P advertisements (requires authentication)',
     {
       asset: z.string().optional().describe('Filter by crypto asset e.g. USDT'),
@@ -354,7 +354,7 @@ export function registerP2PTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_p2p_list_ads',
+    'cex_p2p_ads_list',
     'List all available P2P advertisements for a given asset and fiat pair (requires authentication)',
     {
       asset: z.string().describe('Crypto asset e.g. USDT'),
@@ -378,7 +378,7 @@ export function registerP2PTools(server: McpServer): void {
   // ── Chat ──────────────────────────────────────────────────────────────────
 
   server.tool(
-    'cex_p2p_get_chat_messages',
+    'cex_p2p_get_chats_list',
     'Get chat messages for a P2P transaction (requires authentication)',
     {
       txid: z.number().int().describe('Transaction ID'),

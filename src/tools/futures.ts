@@ -675,7 +675,7 @@ export function registerFuturesTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_futures_amend_batch_futures_orders',
+    'cex_futures_amend_futures_batch_orders',
     'Amend multiple futures orders in a single request (requires authentication) — always confirm the new values with the user before calling this tool',
     {
       settle: settleSchema,
