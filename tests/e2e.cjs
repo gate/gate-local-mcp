@@ -17,7 +17,9 @@ const MCP_INIT = JSON.stringify({
 const MCP_LIST = JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} });
 const PAYLOAD = `${MCP_INIT}\n${MCP_LIST}\n`;
 
-// Tool names follow cex_{module}_{verb}_{rest}; verb is always at index 2.
+// Verb is at index 2 for most tools (cex_{module}_{verb}_...).
+// Some SDK-based names place a category word at index 2 with the verb at index 3
+// (e.g. cex_p2p_transaction_cancel), so check both positions.
 const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
@@ -26,7 +28,8 @@ const WRITE_VERBS = new Set([
 ]);
 
 function isWrite(toolName) {
-  return WRITE_VERBS.has(toolName.split('_')[2]);
+  const parts = toolName.split('_');
+  return WRITE_VERBS.has(parts[2]) || WRITE_VERBS.has(parts[3]);
 }
 
 function runServer(args = '', env = {}) {
