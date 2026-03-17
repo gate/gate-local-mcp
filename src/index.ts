@@ -39,6 +39,7 @@ import { registerTradFiTools } from './tools/trad_fi.js';
 import { registerCrossExTools } from './tools/cross_ex.js';
 import { registerAlphaTools } from './tools/alpha.js';
 import { registerRebateTools } from './tools/rebate.js';
+import { registerMultiCollateralLoanTools } from './tools/multi_collateral_loan.js';
 
 const config = parseConfig();
 
@@ -75,6 +76,7 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   crossex:               registerCrossExTools,
   alpha:                 registerAlphaTools,
   rebate:                registerRebateTools,
+  multi_collateral_loan: registerMultiCollateralLoanTools,
 };
 
 const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);
