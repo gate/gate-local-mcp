@@ -82,9 +82,9 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 330 tools by default', t.count, 330);
+  expect('loads all 331 tools by default', t.count, 331);
   expect('has 17 modules', t.modules.length, 17);
-  expect('has 102 write tools', t.writeCount, 102);
+  expect('has 103 write tools', t.writeCount, 103);
   expect('has 228 read tools', t.readCount, 228);
 }
 
@@ -107,7 +107,7 @@ const MODULE_COUNTS = {
   margin:      { total: 17, readonly: 14, write:  3 },
   wallet:      { total: 22, readonly: 18, write:  4 },
   account:     { total: 10, readonly:  6, write:  4 },
-  options:     { total: 28, readonly: 22, write:  6 },
+  options:     { total: 29, readonly: 22, write:  7 },
   earn:        { total: 23, readonly: 18, write:  5 },
   flash_swap:  { total:  3, readonly:  3, write:  0 },
   unified:     { total: 16, readonly: 12, write:  4 },
