@@ -381,6 +381,29 @@ export function registerOptionsTools(server: McpServer): void {
   );
 
   server.tool(
+    'cex_options_amend_options_order',
+    'Amend an open options order (requires authentication) — always confirm the new values with the user before calling this tool',
+    {
+      order_id: z.string().describe('Order ID'),
+      contract: z.string().describe('Options contract name'),
+      price: z.string().optional().describe('New price'),
+      size: z.number().int().optional().describe('New size'),
+    },
+    async ({ order_id, contract, price, size }) => {
+      try {
+        requireAuth();
+        const { InlineObject1 } = await import('gate-api');
+        const body = new InlineObject1();
+        body.contract = contract;
+        if (price !== undefined) body.price = price;
+        if (size !== undefined) body.size = size;
+        const { body: result } = await new OptionsApi(createClient()).amendOptionsOrder(order_id as unknown as number, body);
+        return textContent(result);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
     'cex_options_cancel_options_order',
     'Cancel an options order (requires authentication) — always confirm with the user before calling this tool',
     { order_id: z.string().describe('Order ID') },
