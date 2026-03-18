@@ -1364,7 +1364,7 @@ export function registerFuturesTools(server: McpServer): void {
       try {
         requireAuth();
         const req = new FuturesUpdatePriceTriggeredOrder();
-        req.orderId = order_id as unknown as number;
+        req.orderId = BigInt(order_id);
         if (size !== undefined) req.size = size;
         if (price) req.price = price;
         if (trigger_price) req.triggerPrice = trigger_price;
