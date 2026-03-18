@@ -99,7 +99,7 @@ export function registerAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_account_list_stp_group_users',
+    'cex_account_list_stp_groups_users',
     'List users in an STP group (requires authentication)',
     { stp_id: z.number().int().describe('STP group ID') },
     async ({ stp_id }) => {
@@ -128,7 +128,7 @@ export function registerAccountTools(server: McpServer): void {
   );
 
   server.tool(
-    'cex_account_delete_stp_group_user',
+    'cex_account_delete_stp_group_users',
     'Remove a user from an STP group (requires authentication)',
     {
       stp_id: z.number().int().describe('STP group ID'),
