@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { OptionsApi } from 'gate-api';
+import { OptionsApi, AmendOptionsOrderRequest } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent, ORDER_SOURCE_TEXT } from '../utils.js';
 
@@ -392,8 +392,7 @@ export function registerOptionsTools(server: McpServer): void {
     async ({ order_id, contract, price, size }) => {
       try {
         requireAuth();
-        const { InlineObject1 } = await import('gate-api');
-        const body = new InlineObject1();
+        const body = new AmendOptionsOrderRequest();
         body.contract = contract;
         if (price !== undefined) body.price = price;
         if (size !== undefined) body.size = size;

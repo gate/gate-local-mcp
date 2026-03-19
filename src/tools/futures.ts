@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   FuturesApi,
   FuturesPositionCrossMode,
-  InlineObject,
+  UpdateDualCompPositionCrossModeRequest,
   BatchFundingRatesRequest,
   FuturesBBOOrder,
   CreateTrailOrder,
@@ -404,10 +404,7 @@ export function registerFuturesTools(server: McpServer): void {
     async ({ settle, contract, pos_margin_mode, dual_side }) => {
       try {
         requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (pos_margin_mode) opts.posMarginMode = pos_margin_mode;
-        if (dual_side) opts.dualSide = dual_side;
-        const { body } = await new FuturesApi(createClient()).getLeverage(settle, contract, opts);
+        const { body } = await new FuturesApi(createClient()).getLeverage(settle, contract, pos_margin_mode ?? '', dual_side ?? '');
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -977,10 +974,10 @@ export function registerFuturesTools(server: McpServer): void {
     async ({ settle, contract, mode }) => {
       try {
         requireAuth();
-        const inlineObj = new InlineObject();
-        inlineObj.contract = contract;
-        inlineObj.mode = mode;
-        const { body } = await new FuturesApi(createClient()).updateDualCompPositionCrossMode(settle, inlineObj);
+        const req = new UpdateDualCompPositionCrossModeRequest();
+        req.contract = contract;
+        req.mode = mode;
+        const { body } = await new FuturesApi(createClient()).updateDualCompPositionCrossMode(settle, req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
