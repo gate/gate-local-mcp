@@ -144,6 +144,32 @@ export function registerRebateTools(server: McpServer): void {
   );
 
   server.tool(
+    'cex_rebate_get_partner_application_recent',
+    'Get most recent partner application status (requires authentication)',
+    {},
+    async () => {
+      try {
+        requireAuth();
+        const { body } = await new RebateApi(createClient()).getPartnerApplicationRecent();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_rebate_get_partner_eligibility',
+    'Check partner eligibility status (requires authentication)',
+    {},
+    async () => {
+      try {
+        requireAuth();
+        const { body } = await new RebateApi(createClient()).getPartnerEligibility();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
     'cex_rebate_user_sub_relation',
     'Query the relationship between users and their referrers (requires authentication)',
     {
