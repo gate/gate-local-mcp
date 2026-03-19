@@ -1313,9 +1313,10 @@ export function registerFuturesTools(server: McpServer): void {
       order_reduce_only: z.boolean().optional(),
       order_close: z.boolean().optional(),
       order_text: z.string().optional(),
+      order_type: z.enum(['close-long-position', 'close-short-position', 'plan-close-long-position', 'plan-close-short-position']).optional().describe('Order type: close-long-position (position TP/SL close all long), close-short-position (position TP/SL close all short), plan-close-long-position (plan TP/SL close all or partial long), plan-close-short-position (plan TP/SL close all or partial short)'),
     },
     async ({ settle, contract, trigger_price, trigger_rule, trigger_expiration,
-             order_size, order_price, order_tif, order_reduce_only, order_close, order_text }) => {
+             order_size, order_price, order_tif, order_reduce_only, order_close, order_text, order_type }) => {
       try {
         requireAuth();
         const trigger: Record<string, unknown> = { price: trigger_price, rule: trigger_rule === '>=' ? 1 : 2 };
@@ -1325,7 +1326,9 @@ export function registerFuturesTools(server: McpServer): void {
         if (order_reduce_only !== undefined) initial.reduceOnly = order_reduce_only;
         if (order_close !== undefined) initial.close = order_close;
         if (order_text) initial.text = order_text;
-        const { body } = await new FuturesApi(createClient()).createPriceTriggeredOrder(settle, { initial, trigger } as never);
+        const params: Record<string, unknown> = { initial, trigger };
+        if (order_type) params.orderType = order_type;
+        const { body } = await new FuturesApi(createClient()).createPriceTriggeredOrder(settle, params as never);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
