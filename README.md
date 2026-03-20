@@ -8,7 +8,7 @@ A local (stdio) MCP server that exposes the full [Gate](https://www.gate.com) AP
 
 ## Features
 
-- **330 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, Sub-Account, Multi-Collateral Loan, P2P, TradFi, CrossEx, Alpha, and Rebate APIs
+- **357 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, Sub-Account, Multi-Collateral Loan, P2P, TradFi, CrossEx, Alpha, Rebate, Activity, Coupon, Launch, Square, and Welfare APIs
 - **Zero config for public endpoints** — market data, tickers, order books work without any credentials
 - **Authenticated endpoints** — trading, wallet, and account tools activate automatically when `GATE_API_KEY` + `GATE_API_SECRET` env vars are set
 - **Testnet support** — set `GATE_BASE_URL` to use the testnet endpoint
@@ -66,7 +66,7 @@ A local (stdio) MCP server that exposes the full [Gate](https://www.gate.com) AP
 
 ## Module Filtering
 
-By default all 330 tools (17 modules) are registered. To reduce the tool count (e.g. Cursor warns above 80), restrict to specific modules:
+By default all 357 tools (22 modules) are registered. To reduce the tool count (e.g. Cursor warns above 80), restrict to specific modules:
 
 **CLI flags:**
 ```bash
@@ -95,7 +95,7 @@ npx gate-mcp --modules=futures --readonly
 }
 ```
 
-**Available modules:** `spot`, `futures`, `delivery`, `margin`, `wallet`, `account`, `options`, `earn`, `flash_swap`, `unified`, `sub_account`, `multi_collateral_loan`, `p2p`, `tradfi`, `crossex`, `alpha`, `rebate`
+**Available modules:** `spot`, `futures`, `delivery`, `margin`, `wallet`, `account`, `options`, `earn`, `flash_swap`, `unified`, `sub_account`, `multi_collateral_loan`, `p2p`, `tradfi`, `crossex`, `alpha`, `rebate`, `activity`, `coupon`, `launch`, `square`, `welfare`
 
 | Module | Total | Read-only |
 |---|---|---|
@@ -105,9 +105,9 @@ npx gate-mcp --modules=futures --readonly
 | margin | 17 | 14 |
 | wallet | 22 | 18 |
 | account | 10 | 6 |
-| options | 28 | 22 |
-| earn | 23 | 18 |
-| flash_swap | 3 | 3 |
+| options | 29 | 22 |
+| earn | 29 | 22 |
+| flash_swap | 7 | 5 |
 | unified | 16 | 12 |
 | sub_account | 11 | 5 |
 | multi_collateral_loan | 12 | 9 |
@@ -115,7 +115,12 @@ npx gate-mcp --modules=futures --readonly
 | tradfi | 18 | 12 |
 | crossex | 31 | 21 |
 | alpha | 9 | 7 |
-| rebate | 7 | 7 |
+| rebate | 9 | 9 |
+| activity | 3 | 3 |
+| coupon | 2 | 2 |
+| launch | 5 | 3 |
+| square | 2 | 2 |
+| welfare | 2 | 2 |
 
 ## Environment Variables
 
@@ -132,10 +137,10 @@ npx gate-mcp --modules=futures --readonly
 Tools marked `*` require authentication (`GATE_API_KEY` + `GATE_API_SECRET`).
 
 ### Spot (31 tools)
-`cex_spot_list_currencies`, `cex_spot_get_currency`, `cex_spot_list_currency_pairs`, `cex_spot_get_currency_pair`, `cex_spot_get_spot_tickers`, `cex_spot_get_spot_order_book`, `cex_spot_get_spot_trades`, `cex_spot_get_spot_candlesticks`, `cex_spot_get_spot_fee`\*, `cex_spot_get_spot_accounts`\*, `cex_spot_list_spot_account_book`\*, `cex_spot_list_spot_orders`\*, `cex_spot_create_spot_order`\*, `cex_spot_get_spot_order`\*, `cex_spot_cancel_spot_order`\*, `cex_spot_amend_spot_order`\*, `cex_spot_cancel_all_spot_orders`\*, `cex_spot_create_spot_batch_orders`\*, `cex_spot_cancel_spot_batch_orders`\*, `cex_spot_get_spot_batch_fee`\*, `cex_spot_list_spot_my_trades`\*, `cex_spot_list_all_open_orders`\*, `cex_spot_list_spot_price_triggered_orders`\*, `cex_spot_create_spot_price_triggered_order`\*, `cex_spot_get_spot_price_triggered_order`\*, `cex_spot_cancel_spot_price_triggered_order`\*, `cex_spot_cancel_spot_price_triggered_order_list`\*, `cex_spot_countdown_cancel_all_spot`\*
+`cex_spot_list_currencies`, `cex_spot_get_currency`, `cex_spot_list_currency_pairs`, `cex_spot_get_currency_pair`, `cex_spot_get_spot_tickers`, `cex_spot_get_spot_order_book`, `cex_spot_get_spot_trades`, `cex_spot_get_spot_candlesticks`, `cex_spot_get_spot_insurance_history`, `cex_spot_get_spot_fee`\*, `cex_spot_get_spot_accounts`\*, `cex_spot_list_spot_orders`\*, `cex_spot_create_spot_order`\*, `cex_spot_get_spot_order`\*, `cex_spot_cancel_spot_order`\*, `cex_spot_amend_spot_order`\*, `cex_spot_cancel_all_spot_orders`\*, `cex_spot_list_spot_my_trades`\*, `cex_spot_list_all_open_orders`\*, `cex_spot_list_spot_price_triggered_orders`\*, `cex_spot_list_spot_account_book`\*, `cex_spot_get_spot_batch_fee`\*, `cex_spot_create_spot_batch_orders`\*, `cex_spot_amend_spot_batch_orders`\*, `cex_spot_cancel_spot_batch_orders`\*, `cex_spot_create_cross_liquidate_order`\*, `cex_spot_create_spot_price_triggered_order`\*, `cex_spot_get_spot_price_triggered_order`\*, `cex_spot_cancel_spot_price_triggered_order`\*, `cex_spot_cancel_spot_price_triggered_order_list`\*, `cex_spot_countdown_cancel_all_spot`\*
 
-### Futures (45 tools) — prefix abbreviated to `cex_fx_`
-`cex_fx_list_fx_contracts`, `cex_fx_get_fx_contract`, `cex_fx_get_fx_order_book`, `cex_fx_get_fx_candlesticks`, `cex_fx_get_fx_tickers`, `cex_fx_get_fx_funding_rate`, `cex_fx_get_fx_trades`, `cex_fx_list_contract_stats`, `cex_fx_get_fx_premium_index`, `cex_fx_get_fx_accounts`\*, `cex_fx_list_fx_account_book`\*, `cex_fx_get_fx_fee`\*, `cex_fx_list_fx_positions`\*, `cex_fx_get_fx_position`\*, `cex_fx_get_leverage`\*, `cex_fx_update_fx_position_leverage`\*, `cex_fx_update_fx_position_margin`\*, `cex_fx_update_fx_position_risk_limit`\*, `cex_fx_list_fx_orders`\*, `cex_fx_create_fx_order`\*, `cex_fx_get_fx_order`\*, `cex_fx_cancel_fx_order`\*, `cex_fx_cancel_all_fx_orders`\*, `cex_fx_amend_fx_order`\*, `cex_fx_create_fx_batch_orders`\*, `cex_fx_cancel_fx_batch_orders`\*, `cex_fx_get_fx_orders_with_time_range`\*, `cex_fx_list_fx_my_trades`\*, `cex_fx_get_fx_my_trades_timerange`\*, `cex_fx_list_position_close`\*, `cex_fx_list_fx_liq_orders`\*, `cex_fx_list_price_triggered_orders`\*, `cex_fx_create_fx_price_triggered_order`\*, `cex_fx_get_fx_price_triggered_order`\*, `cex_fx_cancel_fx_price_triggered_order`\*, `cex_fx_cancel_fx_price_triggered_order_list`\*, `cex_fx_countdown_cancel_all_fx`\*, `cex_fx_list_fx_risk_limit_tiers`\*, `cex_fx_set_fx_dual`\*, `cex_fx_get_fx_dual_position`\*, `cex_fx_update_fx_dual_position_margin`\*, `cex_fx_update_fx_dual_position_leverage`\*, `cex_fx_update_fx_dual_position_risk_limit`\*, `cex_fx_update_fx_position_cross_mode`\*, `cex_fx_update_fx_dual_position_cross_mode`\*
+### Futures (64 tools) — prefix abbreviated to `cex_fx_`
+`cex_fx_list_fx_contracts`, `cex_fx_get_fx_contract`, `cex_fx_get_fx_order_book`, `cex_fx_get_fx_candlesticks`, `cex_fx_get_fx_tickers`, `cex_fx_get_fx_funding_rate`, `cex_fx_get_fx_trades`, `cex_fx_list_contract_stats`, `cex_fx_get_fx_premium_index`, `cex_fx_list_batch_fx_funding_rates`, `cex_fx_list_fx_insurance_ledger`, `cex_fx_get_index_constituents`, `cex_fx_list_liquidated_orders`, `cex_fx_get_fx_accounts`\*, `cex_fx_list_fx_account_book`\*, `cex_fx_list_fx_positions`\*, `cex_fx_list_positions_timerange`\*, `cex_fx_get_fx_position`\*, `cex_fx_get_leverage`\*, `cex_fx_get_fx_fee`\*, `cex_fx_list_fx_risk_limit_tiers`\*, `cex_fx_get_fx_risk_limit_table`\*, `cex_fx_list_fx_orders`\*, `cex_fx_create_fx_order`\*, `cex_fx_create_fx_bbo_order`\*, `cex_fx_get_fx_order`\*, `cex_fx_amend_fx_order`\*, `cex_fx_cancel_fx_order`\*, `cex_fx_cancel_all_fx_orders`\*, `cex_fx_create_fx_batch_orders`\*, `cex_fx_cancel_fx_batch_orders`\*, `cex_fx_amend_fx_batch_orders`\*, `cex_fx_get_fx_orders_with_time_range`\*, `cex_fx_list_fx_my_trades`\*, `cex_fx_get_fx_my_trades_timerange`\*, `cex_fx_list_position_close`\*, `cex_fx_list_fx_liq_orders`\*, `cex_fx_list_auto_deleverages`\*, `cex_fx_update_fx_position_leverage`\*, `cex_fx_update_fx_contract_position_leverage`\*, `cex_fx_update_fx_position_margin`\*, `cex_fx_update_fx_position_risk_limit`\*, `cex_fx_update_fx_position_cross_mode`\*, `cex_fx_update_fx_dual_position_cross_mode`\*, `cex_fx_set_fx_dual`\*, `cex_fx_set_position_mode`\*, `cex_fx_get_fx_dual_position`\*, `cex_fx_update_fx_dual_position_margin`\*, `cex_fx_update_fx_dual_position_leverage`\*, `cex_fx_update_fx_dual_position_risk_limit`\*, `cex_fx_countdown_cancel_all_fx`\*, `cex_fx_create_trail_order`\*, `cex_fx_get_trail_orders`\*, `cex_fx_get_trail_order_detail`\*, `cex_fx_update_trail_order`\*, `cex_fx_stop_trail_order`\*, `cex_fx_stop_all_trail_orders`\*, `cex_fx_get_trail_order_change_log`\*, `cex_fx_list_price_triggered_orders`\*, `cex_fx_create_fx_price_triggered_order`\*, `cex_fx_get_fx_price_triggered_order`\*, `cex_fx_update_fx_price_triggered_order`\*, `cex_fx_cancel_fx_price_triggered_order`\*, `cex_fx_cancel_fx_price_triggered_order_list`\*
 
 ### Delivery (11 tools) — prefix abbreviated to `cex_dc_`
 `cex_dc_list_dc_contracts`, `cex_dc_get_dc_contract`, `cex_dc_list_dc_order_book`, `cex_dc_list_dc_candlesticks`, `cex_dc_list_dc_tickers`, `cex_dc_list_dc_accounts`\*, `cex_dc_list_dc_positions`\*, `cex_dc_list_dc_orders`\*, `cex_dc_create_dc_order`\*, `cex_dc_cancel_dc_order`\*, `cex_dc_get_my_dc_trades`\*
@@ -149,14 +154,14 @@ Tools marked `*` require authentication (`GATE_API_KEY` + `GATE_API_SECRET`).
 ### Account (10 tools)
 `cex_account_get_account_detail`\*, `cex_account_get_account_rate_limit`\*, `cex_account_get_debit_fee`\*, `cex_account_set_debit_fee`\*, `cex_account_get_account_main_keys`\*, `cex_account_list_stp_groups`\*, `cex_account_create_stp_group`\*, `cex_account_list_stp_group_users`\*, `cex_account_add_stp_group_users`\*, `cex_account_delete_stp_group_user`\*
 
-### Options (28 tools)
-`cex_options_list_options_underlyings`, `cex_options_list_options_expirations`, `cex_options_list_options_contracts`, `cex_options_get_options_contract`, `cex_options_list_options_order_book`, `cex_options_list_options_tickers`, `cex_options_list_options_underlying_tickers`, `cex_options_list_options_candlesticks`, `cex_options_list_options_underlying_candlesticks`, `cex_options_list_options_settlements`, `cex_options_get_options_settlement`, `cex_options_list_options_trades`, `cex_options_list_options_account`\*, `cex_options_list_options_account_book`\*, `cex_options_list_my_options_settlements`\*, `cex_options_list_options_positions`\*, `cex_options_get_options_position`\*, `cex_options_list_options_position_close`\*, `cex_options_list_options_orders`\*, `cex_options_create_options_order`\*, `cex_options_cancel_options_order`\*, `cex_options_get_options_order`\*, `cex_options_cancel_options_orders`\*, `cex_options_countdown_cancel_all_options`\*, `cex_options_get_options_mmp`\*, `cex_options_set_options_mmp`\*, `cex_options_reset_options_mmp`\*, `cex_options_list_my_options_trades`\*
+### Options (29 tools)
+`cex_options_list_options_underlyings`, `cex_options_list_options_expirations`, `cex_options_list_options_contracts`, `cex_options_get_options_contract`, `cex_options_list_options_order_book`, `cex_options_list_options_tickers`, `cex_options_list_options_underlying_tickers`, `cex_options_list_options_candlesticks`, `cex_options_list_options_underlying_candlesticks`, `cex_options_list_options_settlements`, `cex_options_get_options_settlement`, `cex_options_list_options_trades`, `cex_options_list_options_account`\*, `cex_options_list_options_account_book`\*, `cex_options_list_my_options_settlements`\*, `cex_options_list_options_positions`\*, `cex_options_get_options_position`\*, `cex_options_list_options_position_close`\*, `cex_options_list_options_orders`\*, `cex_options_create_options_order`\*, `cex_options_amend_options_order`\*, `cex_options_cancel_options_order`\*, `cex_options_get_options_order`\*, `cex_options_cancel_options_orders`\*, `cex_options_countdown_cancel_all_options`\*, `cex_options_get_options_mmp`\*, `cex_options_set_options_mmp`\*, `cex_options_reset_options_mmp`\*, `cex_options_list_my_options_trades`\*
 
-### Earn (23 tools)
-`cex_earn_list_dual_investment_plans`, `cex_earn_list_structured_products`, `cex_earn_find_coin`, `cex_earn_list_uni_currencies`, `cex_earn_get_uni_currency`, `cex_earn_list_uni_chart`, `cex_earn_list_uni_rate`, `cex_earn_list_dual_orders`\*, `cex_earn_place_dual_order`\*, `cex_earn_list_dual_balance`\*, `cex_earn_list_structured_orders`\*, `cex_earn_place_structured_order`\*, `cex_earn_swap_staking_coin`\*, `cex_earn_order_list`\*, `cex_earn_award_list`\*, `cex_earn_asset_list`\*, `cex_earn_list_user_uni_lends`\*, `cex_earn_create_uni_lend`\*, `cex_earn_change_uni_lend`\*, `cex_earn_list_uni_lend_records`\*, `cex_earn_get_uni_interest`\*, `cex_earn_list_uni_interest_records`\*, `cex_earn_get_uni_interest_status`\*
+### Earn (29 tools)
+`cex_earn_list_dual_investment_plans`, `cex_earn_list_structured_products`, `cex_earn_find_coin`, `cex_earn_list_uni_currencies`, `cex_earn_get_uni_currency`, `cex_earn_list_uni_chart`, `cex_earn_list_uni_rate`, `cex_earn_list_earn_fixed_term_products`, `cex_earn_list_earn_fixed_term_products_by_asset`, `cex_earn_list_dual_orders`\*, `cex_earn_place_dual_order`\*, `cex_earn_list_dual_balance`\*, `cex_earn_list_structured_orders`\*, `cex_earn_place_structured_order`\*, `cex_earn_swap_staking_coin`\*, `cex_earn_order_list`\*, `cex_earn_award_list`\*, `cex_earn_asset_list`\*, `cex_earn_list_user_uni_lends`\*, `cex_earn_create_uni_lend`\*, `cex_earn_change_uni_lend`\*, `cex_earn_list_uni_lend_records`\*, `cex_earn_get_uni_interest`\*, `cex_earn_list_uni_interest_records`\*, `cex_earn_get_uni_interest_status`\*, `cex_earn_list_earn_fixed_term_lends`\*, `cex_earn_create_earn_fixed_term_lend`\*, `cex_earn_create_earn_fixed_term_pre_redeem`\*, `cex_earn_list_earn_fixed_term_history`\*
 
-### Flash Swap (3 tools) — prefix abbreviated to `cex_fc_`
-`cex_fc_list_fc_currency_pairs`, `cex_fc_list_fc_orders`\*, `cex_fc_get_fc_order`\*
+### Flash Swap (7 tools) — prefix abbreviated to `cex_fc_`
+`cex_fc_list_fc_currency_pairs`, `cex_fc_preview_fc_multi_currency_many_to_one_order`, `cex_fc_preview_fc_multi_currency_one_to_many_order`, `cex_fc_list_fc_orders`\*, `cex_fc_get_fc_order`\*, `cex_fc_create_fc_multi_currency_many_to_one_order`\*, `cex_fc_create_fc_multi_currency_one_to_many_order`\*
 
 ### Unified Account (16 tools)
 `cex_unified_list_currency_discount_tiers`, `cex_unified_get_unified_accounts`\*, `cex_unified_list_unified_currencies`\*, `cex_unified_get_unified_mode`\*, `cex_unified_set_unified_mode`\*, `cex_unified_get_unified_risk_units`\*, `cex_unified_get_unified_borrowable`\*, `cex_unified_get_unified_transferable`\*, `cex_unified_get_unified_estimate_rate`\*, `cex_unified_list_unified_loans`\*, `cex_unified_create_unified_loan`\*, `cex_unified_list_unified_loan_records`\*, `cex_unified_list_unified_loan_interest_records`\*, `cex_unified_get_user_leverage_currency_setting`\*, `cex_unified_set_user_leverage_currency_setting`\*, `cex_unified_set_unified_collateral`\*
@@ -171,7 +176,7 @@ Tools marked `*` require authentication (`GATE_API_KEY` + `GATE_API_SECRET`).
 `cex_p2p_get_user_info`\*, `cex_p2p_get_counterparty_user_info`\*, `cex_p2p_get_myself_payment`\*, `cex_p2p_get_pending_transactions`\*, `cex_p2p_get_completed_transactions`\*, `cex_p2p_get_transaction_details`\*, `cex_p2p_confirm_payment`\*, `cex_p2p_confirm_receipt`\*, `cex_p2p_cancel_transaction`\*, `cex_p2p_place_ad_order`\*, `cex_p2p_update_ad_status`\*, `cex_p2p_get_ad_detail`\*, `cex_p2p_list_my_ads`\*, `cex_p2p_list_ads`\*, `cex_p2p_get_chat_messages`\*, `cex_p2p_send_chat_message`\*, `cex_p2p_upload_chat_file`\*
 
 ### TradFi (18 tools) — prefix: `cex_tradfi_`
-`cex_tradfi_query_categories`, `cex_tradfi_query_symbols`, `cex_tradfi_query_symbol_detail`, `cex_tradfi_query_symbol_kline`, `cex_tradfi_query_symbol_ticker`, `cex_tradfi_query_mt5_account_info`\*, `cex_tradfi_query_user_assets`\*, `cex_tradfi_query_transaction`\*, `cex_tradfi_create_transaction`\*, `cex_tradfi_query_order_list`\*, `cex_tradfi_create_tradfi_order`\*, `cex_tradfi_update_order`\*, `cex_tradfi_delete_order`\*, `cex_tradfi_query_order_history_list`\*, `cex_tradfi_query_position_list`\*, `cex_tradfi_update_position`\*, `cex_tradfi_close_position`\*, `cex_tradfi_query_position_history_list`\*
+`cex_tradfi_query_categories`, `cex_tradfi_query_symbols`, `cex_tradfi_query_symbol_kline`, `cex_tradfi_query_symbol_ticker`, `cex_tradfi_query_symbol_detail`\*, `cex_tradfi_query_mt5_account_info`\*, `cex_tradfi_query_user_assets`\*, `cex_tradfi_query_transaction`\*, `cex_tradfi_create_transaction`\*, `cex_tradfi_query_order_list`\*, `cex_tradfi_create_tradfi_order`\*, `cex_tradfi_update_order`\*, `cex_tradfi_delete_order`\*, `cex_tradfi_query_order_history_list`\*, `cex_tradfi_query_position_list`\*, `cex_tradfi_update_position`\*, `cex_tradfi_close_position`\*, `cex_tradfi_query_position_history_list`\*
 
 ### CrossEx (31 tools) — prefix abbreviated to `cex_crx_`
 `cex_crx_list_crx_rule_symbols`, `cex_crx_list_crx_rule_risk_limits`, `cex_crx_list_crx_transfer_coins`, `cex_crx_get_crx_fee`, `cex_crx_get_crx_interest_rate`, `cex_crx_list_crx_coin_discount_rate`, `cex_crx_list_crx_transfers`\*, `cex_crx_create_crx_transfer`\*, `cex_crx_list_crx_open_orders`\*, `cex_crx_create_crx_order`\*, `cex_crx_get_crx_order`\*, `cex_crx_update_crx_order`\*, `cex_crx_cancel_crx_order`\*, `cex_crx_list_crx_history_orders`\*, `cex_crx_list_crx_history_trades`\*, `cex_crx_create_crx_convert_quote`\*, `cex_crx_create_crx_convert_order`\*, `cex_crx_get_crx_account`\*, `cex_crx_update_crx_account`\*, `cex_crx_list_crx_account_book`\*, `cex_crx_list_crx_positions`\*, `cex_crx_list_crx_margin_positions`\*, `cex_crx_list_crx_adl_rank`\*, `cex_crx_get_crx_positions_leverage`\*, `cex_crx_update_crx_positions_leverage`\*, `cex_crx_get_crx_margin_positions_leverage`\*, `cex_crx_update_crx_margin_positions_leverage`\*, `cex_crx_close_crx_position`\*, `cex_crx_list_crx_history_positions`\*, `cex_crx_list_crx_history_margin_positions`\*, `cex_crx_list_crx_history_margin_interests`\*
@@ -179,8 +184,23 @@ Tools marked `*` require authentication (`GATE_API_KEY` + `GATE_API_SECRET`).
 ### Alpha (9 tools)
 `cex_alpha_list_alpha_currencies`, `cex_alpha_list_alpha_tickers`, `cex_alpha_list_alpha_tokens`, `cex_alpha_list_alpha_accounts`\*, `cex_alpha_list_alpha_account_book`\*, `cex_alpha_list_alpha_orders`\*, `cex_alpha_get_alpha_order`\*, `cex_alpha_quote_alpha_order`\*, `cex_alpha_place_alpha_order`\*
 
-### Rebate (7 tools)
-`cex_rebate_partner_transaction_history`\*, `cex_rebate_partner_commissions_history`\*, `cex_rebate_partner_sub_list`\*, `cex_rebate_broker_commission_history`\*, `cex_rebate_broker_transaction_history`\*, `cex_rebate_user_info`\*, `cex_rebate_user_sub_relation`\*
+### Rebate (9 tools)
+`cex_rebate_partner_transaction_history`\*, `cex_rebate_partner_commissions_history`\*, `cex_rebate_partner_sub_list`\*, `cex_rebate_broker_commission_history`\*, `cex_rebate_broker_transaction_history`\*, `cex_rebate_user_info`\*, `cex_rebate_get_partner_application_recent`\*, `cex_rebate_get_partner_eligibility`\*, `cex_rebate_user_sub_relation`\*
+
+### Activity (3 tools)
+`cex_activity_list_activities`, `cex_activity_list_activity_types`, `cex_activity_get_my_activity_entry`\*
+
+### Coupon (2 tools)
+`cex_coupon_list_user_coupons`\*, `cex_coupon_get_user_coupon_detail`\*
+
+### Launch (5 tools)
+`cex_launch_list_launch_pool_projects`, `cex_launch_create_launch_pool_order`\*, `cex_launch_redeem_launch_pool`\*, `cex_launch_list_launch_pool_pledge_records`\*, `cex_launch_list_launch_pool_reward_records`\*
+
+### Square (2 tools)
+`cex_square_list_square_ai_search`, `cex_square_list_live_replay`
+
+### Welfare (2 tools)
+`cex_welfare_get_user_identity`\*, `cex_welfare_get_beginner_task_list`\*
 
 *\* Requires authentication (`GATE_API_KEY` + `GATE_API_SECRET`)*
 

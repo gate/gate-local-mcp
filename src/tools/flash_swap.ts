@@ -1,6 +1,14 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { FlashSwapApi } from 'gate-api';
+import {
+  FlashSwapApi,
+  FlashSwapMultiCurrencyManyToOneOrderCreateReq,
+  FlashSwapMultiCurrencyManyToOneOrderPreviewReq,
+  FlashSwapMultiCurrencyOneToManyOrderCreateReq,
+  FlashSwapMultiCurrencyOneToManyOrderPreviewReq,
+  FlashSwapMultiCurrencyCreateParam,
+  FlashSwapMultiCurrencyPreviewParam,
+} from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -54,6 +62,106 @@ export function registerFlashSwapTools(server: McpServer): void {
       try {
         requireAuth();
         const { body } = await new FlashSwapApi(createClient()).getFlashSwapOrder(order_id as unknown as number);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  const multiParamSchema = z.array(z.object({
+    sell_asset: z.string().describe('Asset to sell'),
+    sell_amount: z.string().describe('Amount to sell'),
+    buy_asset: z.string().describe('Asset to buy'),
+    buy_amount: z.string().describe('Amount to buy'),
+  })).describe('List of swap params');
+
+  const multiPreviewParamSchema = z.array(z.object({
+    sell_asset: z.string().describe('Asset to sell'),
+    sell_amount: z.string().optional().describe('Amount to sell'),
+    buy_asset: z.string().describe('Asset to buy'),
+    buy_amount: z.string().optional().describe('Amount to buy'),
+  })).describe('List of swap preview params');
+
+  server.tool(
+    'cex_flash_swap_create_flash_swap_multi_currency_many_to_one_order',
+    'Create a multi-currency many-to-one flash swap order (requires authentication)',
+    { params: multiParamSchema },
+    async ({ params }) => {
+      try {
+        requireAuth();
+        const req = new FlashSwapMultiCurrencyManyToOneOrderCreateReq();
+        req.params = params.map(p => {
+          const item = new FlashSwapMultiCurrencyCreateParam();
+          item.sellAsset = p.sell_asset;
+          item.sellAmount = p.sell_amount;
+          item.buyAsset = p.buy_asset;
+          item.buyAmount = p.buy_amount;
+          return item;
+        });
+        const { body } = await new FlashSwapApi(createClient()).createFlashSwapMultiCurrencyManyToOneOrder(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_flash_swap_preview_flash_swap_multi_currency_many_to_one_order',
+    'Preview a multi-currency many-to-one flash swap order',
+    { params: multiPreviewParamSchema },
+    async ({ params }) => {
+      try {
+        const req = new FlashSwapMultiCurrencyManyToOneOrderPreviewReq();
+        req.params = params.map(p => {
+          const item = new FlashSwapMultiCurrencyPreviewParam();
+          item.sellAsset = p.sell_asset;
+          item.buyAsset = p.buy_asset;
+          if (p.sell_amount !== undefined) item.sellAmount = p.sell_amount;
+          if (p.buy_amount !== undefined) item.buyAmount = p.buy_amount;
+          return item;
+        });
+        const { body } = await new FlashSwapApi(createClient()).previewFlashSwapMultiCurrencyManyToOneOrder(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_flash_swap_create_flash_swap_multi_currency_one_to_many_order',
+    'Create a multi-currency one-to-many flash swap order (requires authentication)',
+    { params: multiParamSchema },
+    async ({ params }) => {
+      try {
+        requireAuth();
+        const req = new FlashSwapMultiCurrencyOneToManyOrderCreateReq();
+        req.params = params.map(p => {
+          const item = new FlashSwapMultiCurrencyCreateParam();
+          item.sellAsset = p.sell_asset;
+          item.sellAmount = p.sell_amount;
+          item.buyAsset = p.buy_asset;
+          item.buyAmount = p.buy_amount;
+          return item;
+        });
+        const { body } = await new FlashSwapApi(createClient()).createFlashSwapMultiCurrencyOneToManyOrder(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_flash_swap_preview_flash_swap_multi_currency_one_to_many_order',
+    'Preview a multi-currency one-to-many flash swap order',
+    { params: multiPreviewParamSchema },
+    async ({ params }) => {
+      try {
+        const req = new FlashSwapMultiCurrencyOneToManyOrderPreviewReq();
+        req.params = params.map(p => {
+          const item = new FlashSwapMultiCurrencyPreviewParam();
+          item.sellAsset = p.sell_asset;
+          item.buyAsset = p.buy_asset;
+          if (p.sell_amount !== undefined) item.sellAmount = p.sell_amount;
+          if (p.buy_amount !== undefined) item.buyAmount = p.buy_amount;
+          return item;
+        });
+        const { body } = await new FlashSwapApi(createClient()).previewFlashSwapMultiCurrencyOneToManyOrder(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
