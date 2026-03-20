@@ -8,7 +8,7 @@ A local (stdio) MCP server that exposes the full [Gate](https://www.gate.com) AP
 
 ## Features
 
-- **357 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, Sub-Account, Multi-Collateral Loan, P2P, TradFi, CrossEx, Alpha, Rebate, Activity, Coupon, Launch, Square, and Welfare APIs
+- **384 tools** covering Spot, Futures, Delivery, Margin, Wallet, Account, Options, Earn, Flash Swap, Unified, Sub-Account, Multi-Collateral Loan, P2P, TradFi, CrossEx, Alpha, Rebate, Activity, Coupon, Launch, Square, and Welfare APIs
 - **Zero config for public endpoints** — market data, tickers, order books work without any credentials
 - **Authenticated endpoints** — trading, wallet, and account tools activate automatically when `GATE_API_KEY` + `GATE_API_SECRET` env vars are set
 - **Testnet support** — set `GATE_BASE_URL` to use the testnet endpoint
@@ -66,7 +66,7 @@ A local (stdio) MCP server that exposes the full [Gate](https://www.gate.com) AP
 
 ## Module Filtering
 
-By default all 357 tools (22 modules) are registered. To reduce the tool count (e.g. Cursor warns above 80), restrict to specific modules:
+By default all 384 tools (22 modules) are registered. To reduce the tool count (e.g. Cursor warns above 80), restrict to specific modules:
 
 **CLI flags:**
 ```bash
@@ -101,14 +101,14 @@ npx gate-mcp --modules=futures --readonly
 |---|---|---|
 | spot | 31 | 19 |
 | futures | 64 | 36 |
-| delivery | 11 | 9 |
-| margin | 17 | 14 |
+| delivery | 29 | 20 |
+| margin | 20 | 17 |
 | wallet | 22 | 18 |
 | account | 10 | 6 |
 | options | 29 | 22 |
 | earn | 29 | 22 |
 | flash_swap | 7 | 5 |
-| unified | 16 | 12 |
+| unified | 22 | 17 |
 | sub_account | 11 | 5 |
 | multi_collateral_loan | 12 | 9 |
 | p2p | 17 | 10 |
@@ -142,11 +142,11 @@ Tools marked `*` require authentication (`GATE_API_KEY` + `GATE_API_SECRET`).
 ### Futures (64 tools) — prefix abbreviated to `cex_fx_`
 `cex_fx_list_fx_contracts`, `cex_fx_get_fx_contract`, `cex_fx_get_fx_order_book`, `cex_fx_get_fx_candlesticks`, `cex_fx_get_fx_tickers`, `cex_fx_get_fx_funding_rate`, `cex_fx_get_fx_trades`, `cex_fx_list_contract_stats`, `cex_fx_get_fx_premium_index`, `cex_fx_list_batch_fx_funding_rates`, `cex_fx_list_fx_insurance_ledger`, `cex_fx_get_index_constituents`, `cex_fx_list_liquidated_orders`, `cex_fx_get_fx_accounts`\*, `cex_fx_list_fx_account_book`\*, `cex_fx_list_fx_positions`\*, `cex_fx_list_positions_timerange`\*, `cex_fx_get_fx_position`\*, `cex_fx_get_leverage`\*, `cex_fx_get_fx_fee`\*, `cex_fx_list_fx_risk_limit_tiers`\*, `cex_fx_get_fx_risk_limit_table`\*, `cex_fx_list_fx_orders`\*, `cex_fx_create_fx_order`\*, `cex_fx_create_fx_bbo_order`\*, `cex_fx_get_fx_order`\*, `cex_fx_amend_fx_order`\*, `cex_fx_cancel_fx_order`\*, `cex_fx_cancel_all_fx_orders`\*, `cex_fx_create_fx_batch_orders`\*, `cex_fx_cancel_fx_batch_orders`\*, `cex_fx_amend_fx_batch_orders`\*, `cex_fx_get_fx_orders_with_time_range`\*, `cex_fx_list_fx_my_trades`\*, `cex_fx_get_fx_my_trades_timerange`\*, `cex_fx_list_position_close`\*, `cex_fx_list_fx_liq_orders`\*, `cex_fx_list_auto_deleverages`\*, `cex_fx_update_fx_position_leverage`\*, `cex_fx_update_fx_contract_position_leverage`\*, `cex_fx_update_fx_position_margin`\*, `cex_fx_update_fx_position_risk_limit`\*, `cex_fx_update_fx_position_cross_mode`\*, `cex_fx_update_fx_dual_position_cross_mode`\*, `cex_fx_set_fx_dual`\*, `cex_fx_set_position_mode`\*, `cex_fx_get_fx_dual_position`\*, `cex_fx_update_fx_dual_position_margin`\*, `cex_fx_update_fx_dual_position_leverage`\*, `cex_fx_update_fx_dual_position_risk_limit`\*, `cex_fx_countdown_cancel_all_fx`\*, `cex_fx_create_trail_order`\*, `cex_fx_get_trail_orders`\*, `cex_fx_get_trail_order_detail`\*, `cex_fx_update_trail_order`\*, `cex_fx_stop_trail_order`\*, `cex_fx_stop_all_trail_orders`\*, `cex_fx_get_trail_order_change_log`\*, `cex_fx_list_price_triggered_orders`\*, `cex_fx_create_fx_price_triggered_order`\*, `cex_fx_get_fx_price_triggered_order`\*, `cex_fx_update_fx_price_triggered_order`\*, `cex_fx_cancel_fx_price_triggered_order`\*, `cex_fx_cancel_fx_price_triggered_order_list`\*
 
-### Delivery (11 tools) — prefix abbreviated to `cex_dc_`
-`cex_dc_list_dc_contracts`, `cex_dc_get_dc_contract`, `cex_dc_list_dc_order_book`, `cex_dc_list_dc_candlesticks`, `cex_dc_list_dc_tickers`, `cex_dc_list_dc_accounts`\*, `cex_dc_list_dc_positions`\*, `cex_dc_list_dc_orders`\*, `cex_dc_create_dc_order`\*, `cex_dc_cancel_dc_order`\*, `cex_dc_get_my_dc_trades`\*
+### Delivery (29 tools) — prefix abbreviated to `cex_dc_`
+`cex_dc_list_dc_contracts`, `cex_dc_get_dc_contract`, `cex_dc_list_dc_order_book`, `cex_dc_list_dc_candlesticks`, `cex_dc_list_dc_tickers`, `cex_dc_list_dc_trades`, `cex_dc_list_dc_insurance_ledger`, `cex_dc_list_dc_risk_limit_tiers`, `cex_dc_list_dc_accounts`\*, `cex_dc_list_dc_positions`\*, `cex_dc_list_dc_orders`\*, `cex_dc_create_dc_order`\*, `cex_dc_cancel_dc_order`\*, `cex_dc_cancel_dc_orders`\*, `cex_dc_get_my_dc_trades`\*, `cex_dc_list_dc_account_book`\*, `cex_dc_get_dc_position`\*, `cex_dc_update_dc_position_margin`\*, `cex_dc_update_dc_position_leverage`\*, `cex_dc_update_dc_position_risk_limit`\*, `cex_dc_get_dc_order`\*, `cex_dc_list_dc_position_close`\*, `cex_dc_list_dc_liquidates`\*, `cex_dc_list_dc_settlements`\*, `cex_dc_list_price_triggered_dc_orders`\*, `cex_dc_create_price_triggered_dc_order`\*, `cex_dc_get_price_triggered_dc_order`\*, `cex_dc_cancel_price_triggered_dc_order_list`\*, `cex_dc_cancel_price_triggered_dc_order`\*
 
-### Margin (17 tools)
-`cex_margin_list_margin_accounts`\*, `cex_margin_list_margin_account_book`\*, `cex_margin_get_auto_repay_status`\*, `cex_margin_set_auto_repay`\*, `cex_margin_get_margin_transferable`\*, `cex_margin_list_funding_accounts`\*, `cex_margin_get_user_margin_tier`\*, `cex_margin_set_user_market_leverage`\*, `cex_margin_list_margin_user_account`\*, `cex_margin_list_cross_margin_loans`\*, `cex_margin_list_cross_margin_repayments`\*, `cex_margin_list_uni_loans`\*, `cex_margin_create_uni_loan`\*, `cex_margin_list_uni_loan_records`\*, `cex_margin_list_uni_loan_interest_records`\*, `cex_margin_get_uni_borrowable`\*, `cex_margin_get_margin_uni_estimate_rate`\*
+### Margin (20 tools)
+`cex_margin_get_market_margin_tier`, `cex_margin_list_uni_currency_pairs`, `cex_margin_get_uni_currency_pair`, `cex_margin_list_margin_accounts`\*, `cex_margin_list_margin_account_book`\*, `cex_margin_get_auto_repay_status`\*, `cex_margin_set_auto_repay`\*, `cex_margin_get_margin_transferable`\*, `cex_margin_list_funding_accounts`\*, `cex_margin_get_user_margin_tier`\*, `cex_margin_set_user_market_leverage`\*, `cex_margin_list_margin_user_account`\*, `cex_margin_list_cross_margin_loans`\*, `cex_margin_list_cross_margin_repayments`\*, `cex_margin_list_uni_loans`\*, `cex_margin_create_uni_loan`\*, `cex_margin_list_uni_loan_records`\*, `cex_margin_list_uni_loan_interest_records`\*, `cex_margin_get_uni_borrowable`\*, `cex_margin_get_margin_uni_estimate_rate`\*
 
 ### Wallet (22 tools)
 `cex_wallet_list_currency_chains`, `cex_wallet_get_total_balance`\*, `cex_wallet_list_withdrawals`\*, `cex_wallet_list_deposits`\*, `cex_wallet_get_deposit_address`\*, `cex_wallet_create_transfer`\*, `cex_wallet_list_sa_balances`\*, `cex_wallet_get_wallet_fee`\*, `cex_wallet_create_sa_transfer`\*, `cex_wallet_create_sa_to_sa_transfer`\*, `cex_wallet_get_transfer_order_status`\*, `cex_wallet_list_withdraw_status`\*, `cex_wallet_list_sa_transfers`\*, `cex_wallet_list_sa_margin_balances`\*, `cex_wallet_list_sa_fx_balances`\*, `cex_wallet_list_sa_cross_margin_balances`\*, `cex_wallet_list_saved_address`\*, `cex_wallet_list_small_balance`\*, `cex_wallet_convert_small_balance`\*, `cex_wallet_list_small_balance_history`\*, `cex_wallet_list_push_orders`\*, `cex_wallet_get_low_cap_exchange_list`\*
@@ -163,8 +163,8 @@ Tools marked `*` require authentication (`GATE_API_KEY` + `GATE_API_SECRET`).
 ### Flash Swap (7 tools) — prefix abbreviated to `cex_fc_`
 `cex_fc_list_fc_currency_pairs`, `cex_fc_preview_fc_multi_currency_many_to_one_order`, `cex_fc_preview_fc_multi_currency_one_to_many_order`, `cex_fc_list_fc_orders`\*, `cex_fc_get_fc_order`\*, `cex_fc_create_fc_multi_currency_many_to_one_order`\*, `cex_fc_create_fc_multi_currency_one_to_many_order`\*
 
-### Unified Account (16 tools)
-`cex_unified_list_currency_discount_tiers`, `cex_unified_get_unified_accounts`\*, `cex_unified_list_unified_currencies`\*, `cex_unified_get_unified_mode`\*, `cex_unified_set_unified_mode`\*, `cex_unified_get_unified_risk_units`\*, `cex_unified_get_unified_borrowable`\*, `cex_unified_get_unified_transferable`\*, `cex_unified_get_unified_estimate_rate`\*, `cex_unified_list_unified_loans`\*, `cex_unified_create_unified_loan`\*, `cex_unified_list_unified_loan_records`\*, `cex_unified_list_unified_loan_interest_records`\*, `cex_unified_get_user_leverage_currency_setting`\*, `cex_unified_set_user_leverage_currency_setting`\*, `cex_unified_set_unified_collateral`\*
+### Unified Account (22 tools)
+`cex_unified_list_currency_discount_tiers`, `cex_unified_list_loan_margin_tiers`, `cex_unified_get_unified_accounts`\*, `cex_unified_list_unified_currencies`\*, `cex_unified_get_unified_mode`\*, `cex_unified_set_unified_mode`\*, `cex_unified_get_unified_risk_units`\*, `cex_unified_get_unified_borrowable`\*, `cex_unified_get_unified_borrowable_list`\*, `cex_unified_get_unified_transferable`\*, `cex_unified_get_unified_transferables`\*, `cex_unified_get_unified_estimate_rate`\*, `cex_unified_get_history_loan_rate`\*, `cex_unified_list_unified_loans`\*, `cex_unified_create_unified_loan`\*, `cex_unified_list_unified_loan_records`\*, `cex_unified_list_unified_loan_interest_records`\*, `cex_unified_get_user_leverage_currency_setting`\*, `cex_unified_get_user_leverage_currency_config`\*, `cex_unified_set_user_leverage_currency_setting`\*, `cex_unified_set_unified_collateral`\*, `cex_unified_calculate_portfolio_margin`\*
 
 ### Sub-Account (11 tools) — prefix abbreviated to `cex_sa_`
 `cex_sa_list_sas`\*, `cex_sa_create_sa`\*, `cex_sa_get_sa`\*, `cex_sa_lock_sa`\*, `cex_sa_unlock_sa`\*, `cex_sa_list_sa_keys`\*, `cex_sa_get_sa_key`\*, `cex_sa_create_sa_key`\*, `cex_sa_update_sa_key`\*, `cex_sa_get_sa_unified_mode`\*, `cex_sa_delete_sa_key`\*
