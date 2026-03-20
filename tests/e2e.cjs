@@ -24,7 +24,7 @@ const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
   'swap', 'place', 'change', 'stop', 'repay', 'operate',
-  'confirm', 'send', 'upload', 'close', 'reset', 'quote', 'convert', 'redeem',
+  'confirm', 'send', 'upload', 'close', 'reset', 'quote', 'convert', 'redeem', 'calculate',
 ]);
 
 function isWrite(toolName) {
@@ -82,20 +82,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 357 tools by default', t.count, 357);
+  expect('loads all 384 tools by default', t.count, 384);
   expect('has 22 modules', t.modules.length, 22);
-  expect('has 109 write tools', t.writeCount, 109);
-  expect('has 248 read tools', t.readCount, 248);
+  expect('has 117 write tools', t.writeCount, 117);
+  expect('has 267 read tools', t.readCount, 267);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 248 tools', cli.count, 248);
+  expect('--readonly: 267 tools', cli.count, 267);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 248 tools', env.count, 248);
+  expect('GATE_READONLY=true: 267 tools', env.count, 267);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -103,14 +103,14 @@ console.log('\n── Per-module filtering (--modules) ────────�
 const MODULE_COUNTS = {
   spot:        { total: 31, readonly: 19, write: 12 },
   futures:     { total: 64, readonly: 36, write: 28 },
-  delivery:    { total: 11, readonly:  9, write:  2 },
-  margin:      { total: 17, readonly: 14, write:  3 },
+  delivery:    { total: 29, readonly: 20, write:  9 },
+  margin:      { total: 20, readonly: 17, write:  3 },
   wallet:      { total: 22, readonly: 18, write:  4 },
   account:     { total: 10, readonly:  6, write:  4 },
   options:     { total: 29, readonly: 22, write:  7 },
   earn:        { total: 29, readonly: 22, write:  7 },
   flash_swap:  { total:  7, readonly:  5, write:  2 },
-  unified:     { total: 16, readonly: 12, write:  4 },
+  unified:     { total: 22, readonly: 17, write:  5 },  // calculate is write
   sub_account:           { total: 11, readonly:  5, write:  6 },
   p2p:                   { total: 17, readonly: 10, write:  7 },
   tradfi:                { total: 18, readonly: 12, write:  6 },
@@ -163,7 +163,7 @@ console.log('\n── Combined module + readonly ──────────�
   expectNoWrite('no write tools', t1.names);
 
   const t2 = getTools('', { GATE_MODULES: 'wallet,unified,sub_account' });
-  expect('wallet+unified+sub_account: 49 tools', t2.count, 49);
+  expect('wallet+unified+sub_account: 55 tools', t2.count, 55);
 }
 
 console.log('\n── CLI flag formats ─────────────────────────────────────────────────────');

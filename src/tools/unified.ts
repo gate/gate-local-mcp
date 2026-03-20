@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { UnifiedApi } from 'gate-api';
+import { UnifiedApi, UnifiedPortfolioInput, MockSpotBalance, MockSpotOrder, MockFuturesPosition, MockFuturesOrder, MockOptionsPosition, MockOptionsOrder } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -284,6 +284,136 @@ export function registerUnifiedTools(server: McpServer): void {
         if (enable_list) req.enableList = enable_list;
         if (disable_list) req.disableList = disable_list;
         const { body } = await new UnifiedApi(createClient()).setUnifiedCollateral(req as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_unified_get_unified_transferables',
+    'Get transferable amounts for specified currencies in unified account (requires authentication)',
+    {
+      currencies: z.string().describe('Comma-separated currency symbols e.g. BTC,USDT'),
+    },
+    async ({ currencies }) => {
+      try {
+        requireAuth();
+        const { body } = await new UnifiedApi(createClient()).getUnifiedTransferables(currencies);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_unified_get_unified_borrowable_list',
+    'Get borrowable amounts for a list of currencies in unified account (requires authentication)',
+    {
+      currencies: z.array(z.string()).describe('List of currency symbols e.g. ["BTC","USDT"]'),
+    },
+    async ({ currencies }) => {
+      try {
+        requireAuth();
+        const { body } = await new UnifiedApi(createClient()).getUnifiedBorrowableList(currencies);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_unified_list_loan_margin_tiers',
+    'List loan margin tiers for unified account',
+    {},
+    async () => {
+      try {
+        const { body } = await new UnifiedApi(createClient()).listLoanMarginTiers();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_unified_get_user_leverage_currency_config',
+    'Get leverage configuration for a specific currency (requires authentication)',
+    {
+      currency: z.string().describe('Currency symbol e.g. BTC'),
+    },
+    async ({ currency }) => {
+      try {
+        requireAuth();
+        const { body } = await new UnifiedApi(createClient()).getUserLeverageCurrencyConfig(currency);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_unified_get_history_loan_rate',
+    'Get historical loan rates for a currency (requires authentication)',
+    {
+      currency: z.string().describe('Currency symbol e.g. USDT'),
+      tier: z.string().optional().describe('Tier filter'),
+      page: z.number().int().optional().describe('Page number'),
+      limit: z.number().int().optional().describe('Max results'),
+    },
+    async ({ currency, tier, page, limit }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (tier !== undefined) opts.tier = tier;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
+        const { body } = await new UnifiedApi(createClient()).getHistoryLoanRate(currency, opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_unified_calculate_portfolio_margin',
+    'Calculate portfolio margin for hypothetical positions (requires authentication)',
+    {
+      spot_balances: z.array(z.object({
+        currency: z.string(),
+        equity: z.string(),
+      })).optional().describe('Hypothetical spot balances'),
+      spot_orders: z.array(z.object({
+        currency_pairs: z.string(),
+        order_price: z.string(),
+        count: z.string().optional(),
+        left: z.string(),
+      })).optional().describe('Hypothetical spot orders'),
+      futures_positions: z.array(z.object({
+        contract: z.string(),
+        size: z.string(),
+      })).optional().describe('Hypothetical futures positions'),
+      futures_orders: z.array(z.object({
+        contract: z.string(),
+        size: z.string(),
+        left: z.string(),
+      })).optional().describe('Hypothetical futures orders'),
+      options_positions: z.array(z.object({
+        options_name: z.string(),
+        size: z.string(),
+      })).optional().describe('Hypothetical options positions'),
+      options_orders: z.array(z.object({
+        options_name: z.string(),
+        size: z.string(),
+        left: z.string(),
+      })).optional().describe('Hypothetical options orders'),
+      spot_hedge: z.boolean().optional().describe('Whether spot hedge is enabled'),
+    },
+    async ({ spot_balances, spot_orders, futures_positions, futures_orders, options_positions, options_orders, spot_hedge }) => {
+      try {
+        requireAuth();
+        const input = new UnifiedPortfolioInput();
+        if (spot_balances) input.spotBalances = spot_balances.map(b => { const m = new MockSpotBalance(); m.currency = b.currency; m.equity = b.equity; return m; });
+        if (spot_orders) input.spotOrders = spot_orders.map(o => { const m = new MockSpotOrder(); m.currencyPairs = o.currency_pairs; m.orderPrice = o.order_price; m.left = o.left; if (o.count) m.count = o.count; return m; });
+        if (futures_positions) input.futuresPositions = futures_positions.map(p => { const m = new MockFuturesPosition(); m.contract = p.contract; m.size = p.size; return m; });
+        if (futures_orders) input.futuresOrders = futures_orders.map(o => { const m = new MockFuturesOrder(); m.contract = o.contract; m.size = o.size; m.left = o.left; return m; });
+        if (options_positions) input.optionsPositions = options_positions.map(p => { const m = new MockOptionsPosition(); m.optionsName = p.options_name; m.size = p.size; return m; });
+        if (options_orders) input.optionsOrders = options_orders.map(o => { const m = new MockOptionsOrder(); m.optionsName = o.options_name; m.size = o.size; m.left = o.left; return m; });
+        if (spot_hedge !== undefined) input.spotHedge = spot_hedge;
+        const { body } = await new UnifiedApi(createClient()).calculatePortfolioMargin(input);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

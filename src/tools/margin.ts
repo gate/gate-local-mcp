@@ -330,4 +330,44 @@ export function registerMarginTools(server: McpServer): void {
       } catch (e) { return errorContent(e); }
     }
   );
+
+  server.tool(
+    'cex_margin_get_market_margin_tier',
+    'Get margin leverage tiers for a currency pair',
+    {
+      currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
+    },
+    async ({ currency_pair }) => {
+      try {
+        const { body } = await new MarginApi(createClient()).getMarketMarginTier(currency_pair);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_margin_list_uni_currency_pairs',
+    'List all currency pairs supported for unified margin lending',
+    {},
+    async () => {
+      try {
+        const { body } = await new MarginUniApi(createClient()).listUniCurrencyPairs();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_margin_get_uni_currency_pair',
+    'Get details of a specific unified margin currency pair',
+    {
+      currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
+    },
+    async ({ currency_pair }) => {
+      try {
+        const { body } = await new MarginUniApi(createClient()).getUniCurrencyPair(currency_pair);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
 }
