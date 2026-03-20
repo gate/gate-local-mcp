@@ -40,6 +40,11 @@ import { registerCrossExTools } from './tools/cross_ex.js';
 import { registerAlphaTools } from './tools/alpha.js';
 import { registerRebateTools } from './tools/rebate.js';
 import { registerMultiCollateralLoanTools } from './tools/multi_collateral_loan.js';
+import { registerActivityTools } from './tools/activity.js';
+import { registerCouponTools } from './tools/coupon.js';
+import { registerLaunchTools } from './tools/launch.js';
+import { registerSquareTools } from './tools/square.js';
+import { registerWelfareTools } from './tools/welfare.js';
 
 const config = parseConfig();
 
@@ -77,6 +82,11 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   alpha:                 registerAlphaTools,
   rebate:                registerRebateTools,
   multi_collateral_loan: registerMultiCollateralLoanTools,
+  activity:              registerActivityTools,
+  coupon:                registerCouponTools,
+  launch:                registerLaunchTools,
+  square:                registerSquareTools,
+  welfare:               registerWelfareTools,
 };
 
 const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);

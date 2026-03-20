@@ -33,12 +33,13 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_symbol_detail',
-    'Get contract/instrument details for a TradFi symbol',
+    'Get contract/instrument details for a TradFi symbol (requires authentication)',
     {
       symbols: z.string().describe('Symbol name e.g. AAPL'),
     },
     async ({ symbols }) => {
       try {
+        requireAuth();
         const { body } = await new TradFiApi(createClient()).querySymbolDetail(symbols);
         return textContent(body);
       } catch (e) { return errorContent(e); }

@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { EarnApi, EarnUniApi } from 'gate-api';
+import { EarnApi, EarnUniApi, FixedTermLendRequest, InlineObject } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -449,6 +449,151 @@ export function registerEarnTools(server: McpServer): void {
         req.amount = amount;
         if (pid !== undefined) req.pid = pid;
         const { body } = await new EarnApi(createClient()).swapStakingCoin(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  // ── Fixed-Term ────────────────────────────────────────────────────────────
+
+  server.tool(
+    'cex_earn_list_earn_fixed_term_products',
+    'List fixed-term earn products',
+    {
+      page: z.number().int().describe('Page number'),
+      limit: z.number().int().describe('Results per page'),
+      asset: z.string().optional().describe('Filter by asset symbol e.g. USDT'),
+      type: z.number().int().optional().describe('Product type filter'),
+    },
+    async ({ page, limit, asset, type }) => {
+      try {
+        const opts: Record<string, unknown> = {};
+        if (asset !== undefined) opts.asset = asset;
+        if (type !== undefined) opts.type = type;
+        const { body } = await new EarnApi(createClient()).listEarnFixedTermProducts(page, limit, opts as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_earn_fixed_term_products_by_asset',
+    'List fixed-term earn products for a specific asset',
+    {
+      asset: z.string().describe('Asset symbol e.g. USDT'),
+      type: z.string().optional().describe('Product type filter'),
+    },
+    async ({ asset, type }) => {
+      try {
+        const opts: Record<string, unknown> = {};
+        if (type !== undefined) opts.type = type;
+        const { body } = await new EarnApi(createClient()).listEarnFixedTermProductsByAsset(asset, opts as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_earn_fixed_term_lends',
+    'List fixed-term earn lend orders (requires authentication)',
+    {
+      order_type: z.string().describe('Order type filter'),
+      page: z.number().int().describe('Page number'),
+      limit: z.number().int().describe('Results per page'),
+      product_id: z.number().int().optional().describe('Filter by product ID'),
+      order_id: z.number().int().optional().describe('Filter by order ID'),
+      asset: z.string().optional().describe('Filter by asset symbol'),
+      sub_business: z.number().int().optional().describe('Sub-business type filter'),
+      business_filter: z.string().optional().describe('Business filter string'),
+    },
+    async ({ order_type, page, limit, product_id, order_id, asset, sub_business, business_filter }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (product_id !== undefined) opts.productId = product_id;
+        if (order_id !== undefined) opts.orderId = order_id;
+        if (asset !== undefined) opts.asset = asset;
+        if (sub_business !== undefined) opts.subBusiness = sub_business;
+        if (business_filter !== undefined) opts.businessFilter = business_filter;
+        const { body } = await new EarnApi(createClient()).listEarnFixedTermLends(order_type, page, limit, opts as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_create_earn_fixed_term_lend',
+    'Create a fixed-term earn lend order (requires authentication)',
+    {
+      product_id: z.number().int().describe('Product ID to lend into'),
+      amount: z.string().describe('Lend amount'),
+      year_rate: z.string().optional().describe('Target annual rate'),
+      reinvest_status: z.number().int().optional().describe('Auto-reinvest flag'),
+      redeem_account_type: z.number().int().optional().describe('Redemption account type'),
+      financial_rate_id: z.number().int().optional().describe('Financial rate ID'),
+      sub_business: z.number().int().optional().describe('Sub-business type'),
+    },
+    async ({ product_id, amount, year_rate, reinvest_status, redeem_account_type, financial_rate_id, sub_business }) => {
+      try {
+        requireAuth();
+        const req = new FixedTermLendRequest();
+        req.productId = product_id;
+        req.amount = amount;
+        if (year_rate !== undefined) req.yearRate = year_rate;
+        if (reinvest_status !== undefined) req.reinvestStatus = reinvest_status;
+        if (redeem_account_type !== undefined) req.redeemAccountType = redeem_account_type;
+        if (financial_rate_id !== undefined) req.financialRateId = financial_rate_id;
+        if (sub_business !== undefined) req.subBusiness = sub_business;
+        const { body } = await new EarnApi(createClient()).createEarnFixedTermLend({ fixedTermLendRequest: req });
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_create_earn_fixed_term_pre_redeem',
+    'Pre-redeem a fixed-term earn order (requires authentication)',
+    {
+      order_id: z.string().describe('Order ID to pre-redeem'),
+    },
+    async ({ order_id }) => {
+      try {
+        requireAuth();
+        const req = new InlineObject();
+        req.orderId = order_id;
+        const { body } = await new EarnApi(createClient()).createEarnFixedTermPreRedeem({ inlineObject: req });
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_earn_fixed_term_history',
+    'List fixed-term earn order history (requires authentication)',
+    {
+      type: z.string().describe('History type filter'),
+      page: z.number().int().describe('Page number'),
+      limit: z.number().int().describe('Results per page'),
+      product_id: z.number().int().optional().describe('Filter by product ID'),
+      order_id: z.string().optional().describe('Filter by order ID'),
+      asset: z.string().optional().describe('Filter by asset symbol'),
+      start_at: z.number().optional().describe('Start time (Unix timestamp)'),
+      end_at: z.number().optional().describe('End time (Unix timestamp)'),
+      sub_business: z.number().int().optional().describe('Sub-business type filter'),
+      business_filter: z.string().optional().describe('Business filter string'),
+    },
+    async ({ type, page, limit, product_id, order_id, asset, start_at, end_at, sub_business, business_filter }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (product_id !== undefined) opts.productId = product_id;
+        if (order_id !== undefined) opts.orderId = order_id;
+        if (asset !== undefined) opts.asset = asset;
+        if (start_at !== undefined) opts.startAt = start_at;
+        if (end_at !== undefined) opts.endAt = end_at;
+        if (sub_business !== undefined) opts.subBusiness = sub_business;
+        if (business_filter !== undefined) opts.businessFilter = business_filter;
+        const { body } = await new EarnApi(createClient()).listEarnFixedTermHistory(type, page, limit, opts as never);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

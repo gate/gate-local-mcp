@@ -24,7 +24,7 @@ const WRITE_VERBS = new Set([
   'create', 'cancel', 'amend', 'update', 'set',
   'delete', 'lock', 'unlock', 'add', 'countdown',
   'swap', 'place', 'change', 'stop', 'repay', 'operate',
-  'confirm', 'send', 'upload', 'close', 'reset', 'quote', 'convert',
+  'confirm', 'send', 'upload', 'close', 'reset', 'quote', 'convert', 'redeem',
 ]);
 
 function isWrite(toolName) {
@@ -82,20 +82,20 @@ function expectNoWrite(label, names) {
 console.log('\n── Baseline ─────────────────────────────────────────────────────────────');
 {
   const t = getTools();
-  expect('loads all 333 tools by default', t.count, 333);
-  expect('has 17 modules', t.modules.length, 17);
-  expect('has 103 write tools', t.writeCount, 103);
-  expect('has 230 read tools', t.readCount, 230);
+  expect('loads all 357 tools by default', t.count, 357);
+  expect('has 22 modules', t.modules.length, 22);
+  expect('has 109 write tools', t.writeCount, 109);
+  expect('has 248 read tools', t.readCount, 248);
 }
 
 console.log('\n── --readonly / GATE_READONLY ───────────────────────────────────────────');
 {
   const cli = getTools('--readonly');
-  expect('--readonly: 230 tools', cli.count, 230);
+  expect('--readonly: 248 tools', cli.count, 248);
   expectNoWrite('--readonly: no write tools', cli.names);
 
   const env = getTools('', { GATE_READONLY: 'true' });
-  expect('GATE_READONLY=true: 230 tools', env.count, 230);
+  expect('GATE_READONLY=true: 248 tools', env.count, 248);
   expectNoWrite('GATE_READONLY=true: no write tools', env.names);
 }
 
@@ -108,8 +108,8 @@ const MODULE_COUNTS = {
   wallet:      { total: 22, readonly: 18, write:  4 },
   account:     { total: 10, readonly:  6, write:  4 },
   options:     { total: 29, readonly: 22, write:  7 },
-  earn:        { total: 23, readonly: 18, write:  5 },
-  flash_swap:  { total:  3, readonly:  3, write:  0 },
+  earn:        { total: 29, readonly: 22, write:  7 },
+  flash_swap:  { total:  7, readonly:  5, write:  2 },
   unified:     { total: 16, readonly: 12, write:  4 },
   sub_account:           { total: 11, readonly:  5, write:  6 },
   p2p:                   { total: 17, readonly: 10, write:  7 },
@@ -118,6 +118,11 @@ const MODULE_COUNTS = {
   alpha:                 { total:  9, readonly:  7, write:  2 },
   rebate:                { total:  9, readonly:  9, write:  0 },
   multi_collateral_loan: { total: 12, readonly:  9, write:  3 },
+  activity:              { total:  3, readonly:  3, write:  0 },
+  coupon:                { total:  2, readonly:  2, write:  0 },
+  launch:                { total:  5, readonly:  3, write:  2 },
+  square:                { total:  2, readonly:  2, write:  0 },
+  welfare:               { total:  2, readonly:  2, write:  0 },
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)
