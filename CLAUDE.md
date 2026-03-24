@@ -29,11 +29,10 @@ This is an MCP (Model Context Protocol) server that exposes the Gate.com REST AP
 Release flow (must follow this order):
 1. Commit all changes
 2. `npm version patch` — bumps version, creates git tag (requires clean working dir)
-3. `git push && git push --tags`
-4. `npm publish` — requires `npm login` as `gateio` account
-5. Update `server.json` version to match, commit & push
-6. `mcp-publisher login github` — token expires quickly, re-login if 401
-7. `mcp-publisher publish` — publishes to MCP registry as `io.github.gateio-dev/gate-mcp`
+3. Update `server.json` version to match, commit
+4. `git push && git push --tags` — triggers GitHub Actions to publish to npm automatically
+5. After npm publish completes, remind the user to manually publish to the MCP registry:
+   > Run `mcp-publisher login github` then `mcp-publisher publish` — requires browser-based approval.
 
 **Gotchas:**
 - `server.json` description must be ≤100 characters
