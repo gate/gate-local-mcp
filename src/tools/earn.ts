@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { EarnApi, EarnUniApi, FixedTermLendRequest, InlineObject } from 'gate-api';
+import { EarnApi, EarnUniApi, FixedTermLendRequest, EarnFixedTermPreRedeemRequest } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -559,9 +559,9 @@ export function registerEarnTools(server: McpServer): void {
     async ({ order_id }) => {
       try {
         requireAuth();
-        const req = new InlineObject();
+        const req = new EarnFixedTermPreRedeemRequest();
         req.orderId = order_id;
-        const { body } = await new EarnApi(createClient()).createEarnFixedTermPreRedeem({ inlineObject: req });
+        const { body } = await new EarnApi(createClient()).createEarnFixedTermPreRedeem({ earnFixedTermPreRedeemRequest: req });
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

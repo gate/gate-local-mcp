@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { DefaultApi } from 'gate-api';
+import { ActivityApi } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
 
@@ -12,7 +12,7 @@ export function registerActivityTools(server: McpServer): void {
     async () => {
       try {
         requireAuth();
-        const { body } = await new DefaultApi(createClient()).getMyActivityEntry();
+        const { body } = await new ActivityApi(createClient()).getMyActivityEntry();
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -38,7 +38,7 @@ export function registerActivityTools(server: McpServer): void {
         if (page !== undefined) opts.page = page;
         if (page_size !== undefined) opts.pageSize = page_size;
         if (sort_by !== undefined) opts.sortBy = sort_by;
-        const { body } = await new DefaultApi(createClient()).listActivities(opts as never);
+        const { body } = await new ActivityApi(createClient()).listActivities(opts as never);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -50,7 +50,7 @@ export function registerActivityTools(server: McpServer): void {
     {},
     async () => {
       try {
-        const { body } = await new DefaultApi(createClient()).listActivityTypes();
+        const { body } = await new ActivityApi(createClient()).listActivityTypes();
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
