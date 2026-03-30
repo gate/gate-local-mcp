@@ -1410,4 +1410,5 @@ export function registerFuturesTools(server: McpServer): void {
       } catch (e) { return errorContent(e); }
     }
   );
+
 }

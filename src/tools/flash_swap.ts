@@ -8,6 +8,8 @@ import {
   FlashSwapMultiCurrencyOneToManyOrderPreviewReq,
   FlashSwapMultiCurrencyCreateParam,
   FlashSwapMultiCurrencyPreviewParam,
+  FlashSwapOrderRequest,
+  FlashSwapOrderCreateReq,
 } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent } from '../utils.js';
@@ -162,6 +164,85 @@ export function registerFlashSwapTools(server: McpServer): void {
           return item;
         });
         const { body } = await new FlashSwapApi(createClient()).previewFlashSwapMultiCurrencyOneToManyOrder(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_flash_swap_create_flash_swap_order',
+    'Create a single-currency flash swap order (requires authentication)',
+    {
+      preview_id: z.string().describe('Preview result ID returned by preview endpoint'),
+      sell_currency: z.string().describe('Currency to sell e.g. BTC'),
+      sell_amount: z.string().describe('Amount to sell'),
+      buy_currency: z.string().describe('Currency to buy e.g. USDT'),
+      buy_amount: z.string().describe('Amount to buy'),
+    },
+    async ({ preview_id, sell_currency, sell_amount, buy_currency, buy_amount }) => {
+      try {
+        requireAuth();
+        const req = new FlashSwapOrderRequest();
+        req.previewId = preview_id;
+        req.sellCurrency = sell_currency;
+        req.sellAmount = sell_amount;
+        req.buyCurrency = buy_currency;
+        req.buyAmount = buy_amount;
+        const { body } = await new FlashSwapApi(createClient()).createFlashSwapOrder(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_flash_swap_preview_flash_swap_order_v1',
+    'Preview a flash swap order (V1 endpoint)',
+    {
+      sell_asset: z.string().describe('Asset to sell e.g. BTC'),
+      buy_asset: z.string().describe('Asset to buy e.g. USDT'),
+      sell_amount: z.string().optional().describe('Amount to sell (provide either sell_amount or buy_amount)'),
+      buy_amount: z.string().optional().describe('Amount to buy (provide either sell_amount or buy_amount)'),
+    },
+    async ({ sell_asset, buy_asset, sell_amount, buy_amount }) => {
+      try {
+        if (sell_amount === undefined && buy_amount === undefined) {
+          return errorContent(new Error('Either sell_amount or buy_amount must be provided'));
+        }
+        const opts: Record<string, unknown> = {};
+        if (sell_amount !== undefined) opts.sellAmount = sell_amount;
+        if (buy_amount !== undefined) opts.buyAmount = buy_amount;
+        const { body } = await new FlashSwapApi(createClient()).previewFlashSwapOrderV1(sell_asset, buy_asset, opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_flash_swap_create_flash_swap_order_v1',
+    'Create a flash swap order (V1 endpoint, requires authentication)',
+    {
+      sell_asset: z.string().describe('Asset to sell e.g. BTC'),
+      sell_amount: z.string().describe('Amount to sell'),
+      buy_asset: z.string().describe('Asset to buy e.g. USDT'),
+      buy_amount: z.string().describe('Amount to buy'),
+      quote_id: z.string().optional().describe('Quote ID from preview'),
+      hedge_type: z.number().int().optional().describe('Hedge type'),
+      client_req_id: z.string().optional().describe('Client request ID for idempotency'),
+      request_time_ms: z.number().int().optional().describe('Request timestamp in milliseconds'),
+    },
+    async ({ sell_asset, sell_amount, buy_asset, buy_amount, quote_id, hedge_type, client_req_id, request_time_ms }) => {
+      try {
+        requireAuth();
+        const req = new FlashSwapOrderCreateReq();
+        req.sellAsset = sell_asset;
+        req.sellAmount = sell_amount;
+        req.buyAsset = buy_asset;
+        req.buyAmount = buy_amount;
+        if (quote_id !== undefined) req.quoteId = quote_id;
+        if (hedge_type !== undefined) req.hedgeType = hedge_type;
+        if (client_req_id !== undefined) req.clientReqId = client_req_id;
+        if (request_time_ms !== undefined) req.requestTimeMs = request_time_ms;
+        const { body } = await new FlashSwapApi(createClient()).createFlashSwapOrderV1(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
