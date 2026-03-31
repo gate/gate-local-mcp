@@ -118,13 +118,17 @@ export function registerSubAccountTools(server: McpServer): void {
       user_id: z.number().int().describe('Sub-account user ID'),
       name: z.string().optional().describe('API key name/label'),
       ip_whitelist: z.array(z.string()).optional().describe('Allowed IP addresses'),
+      mode: z.number().int().optional().describe('Account mode: 1=classic, 2=portfolio'),
+      perms: z.array(z.string()).optional().describe('Permission list, e.g. ["spot","futures"]'),
     },
-    async ({ user_id, name, ip_whitelist }) => {
+    async ({ user_id, name, ip_whitelist, mode, perms }) => {
       try {
         requireAuth();
         const keyConfig: Record<string, unknown> = {};
         if (name) keyConfig.name = name;
         if (ip_whitelist) keyConfig.ipWhitelist = ip_whitelist;
+        if (mode !== undefined) keyConfig.mode = mode;
+        if (perms) keyConfig.perms = perms;
         const { body } = await new SubAccountApi(createClient()).createSubAccountKeys(user_id, keyConfig as never);
         return textContent(body);
       } catch (e) { return errorContent(e); }

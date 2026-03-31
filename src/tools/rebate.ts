@@ -183,4 +183,25 @@ export function registerRebateTools(server: McpServer): void {
       } catch (e) { return errorContent(e); }
     }
   );
+
+  server.tool(
+    'cex_rebate_get_partner_agent_data_aggregated',
+    'Get aggregated partner agent data (requires authentication)',
+    {
+      start_date: z.string().optional().describe('Start date e.g. 2024-01-01'),
+      end_date: z.string().optional().describe('End date e.g. 2024-01-31'),
+      business_type: z.number().int().optional().describe('Business type filter (0-8)'),
+    },
+    async ({ start_date, end_date, business_type }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (start_date !== undefined) opts.startDate = start_date;
+        if (end_date !== undefined) opts.endDate = end_date;
+        if (business_type !== undefined) opts.businessType = business_type;
+        const { body } = await new RebateApi(createClient()).getPartnerAgentDataAggregated(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
 }

@@ -29,14 +29,18 @@ export function registerWalletTools(server: McpServer): void {
       currency: z.string().optional().describe('Filter by currency'),
       limit: z.number().int().optional(),
       offset: z.number().int().optional(),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
     },
-    async ({ currency, limit, offset }) => {
+    async ({ currency, limit, offset, from, to }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (currency) opts.currency = currency;
         if (limit !== undefined) opts.limit = limit;
         if (offset !== undefined) opts.offset = offset;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
         const { body } = await new WalletApi(createClient()).listWithdrawals(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -50,14 +54,18 @@ export function registerWalletTools(server: McpServer): void {
       currency: z.string().optional().describe('Filter by currency'),
       limit: z.number().int().optional(),
       offset: z.number().int().optional(),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
     },
-    async ({ currency, limit, offset }) => {
+    async ({ currency, limit, offset, from, to }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (currency) opts.currency = currency;
         if (limit !== undefined) opts.limit = limit;
         if (offset !== undefined) opts.offset = offset;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
         const { body } = await new WalletApi(createClient()).listDeposits(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }

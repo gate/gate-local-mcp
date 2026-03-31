@@ -179,7 +179,7 @@ export function registerTradFiTools(server: McpServer): void {
     'Create a TradFi order (requires authentication) — always confirm the details with the user before calling this tool',
     {
       symbol: z.string().describe('Symbol name e.g. AAPL'),
-      side: z.number().int().min(1).max(2).describe('Order side: 1=buy, 2=sell'),
+      side: z.number().int().min(1).max(2).describe('Order side: 1=sell, 2=buy'),
       price: z.string().describe('Order price'),
       price_type: z.enum(['trigger', 'market']).describe('Price type: trigger or market'),
       volume: z.string().describe('Order volume'),
@@ -249,7 +249,7 @@ export function registerTradFiTools(server: McpServer): void {
       begin_time: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       end_time: z.number().optional().describe('End time (Unix timestamp in seconds)'),
       symbol: z.string().optional().describe('Filter by symbol'),
-      side: z.number().int().min(1).max(2).optional().describe('Filter by side: 1=buy, 2=sell'),
+      side: z.number().int().min(1).max(2).optional().describe('Filter by side: 1=sell, 2=buy'),
     },
     async ({ begin_time, end_time, symbol, side }) => {
       try {
@@ -306,7 +306,7 @@ export function registerTradFiTools(server: McpServer): void {
     'Close a TradFi position (requires authentication) — always confirm with the user before calling this tool',
     {
       position_id: z.number().int().describe('Position ID'),
-      close_type: z.number().int().min(1).max(2).describe('Close type: 1=market close, 2=limit close'),
+      close_type: z.number().int().min(1).max(2).describe('Close type: 1=partial close, 2=full close'),
       close_volume: z.string().nullable().optional().describe('Volume to close (null for full close)'),
     },
     async ({ position_id, close_type, close_volume }) => {

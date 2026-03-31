@@ -398,13 +398,13 @@ export function registerFuturesTools(server: McpServer): void {
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
-      pos_margin_mode: z.string().optional().describe('Position margin mode filter'),
-      dual_side: z.string().optional().describe('Dual side filter: long or short'),
+      pos_margin_mode: z.string().describe('Position margin mode filter'),
+      dual_side: z.string().describe('Dual side filter: dual_long or dual_short'),
     },
     async ({ settle, contract, pos_margin_mode, dual_side }) => {
       try {
         requireAuth();
-        const { body } = await new FuturesApi(createClient()).getLeverage(settle, contract, pos_margin_mode ?? '', dual_side ?? '');
+        const { body } = await new FuturesApi(createClient()).getLeverage(settle, contract, pos_margin_mode, dual_side);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -501,14 +501,24 @@ export function registerFuturesTools(server: McpServer): void {
       tif: z.enum(['gtc', 'ioc', 'poc', 'fok']).optional().describe('Time in force'),
       reduce_only: z.boolean().optional().describe('Reduce-only order'),
       close: z.boolean().optional().describe('Close position'),
+      iceberg: z.number().int().optional().describe('Iceberg order display size'),
+      auto_size: z.string().optional().describe('Auto size strategy: close_long or close_short'),
+      stp_act: z.string().optional().describe('Self-trade prevention action: cn, co, cb, -'),
+      market_order_slip_ratio: z.string().optional().describe('Market order slippage tolerance ratio'),
+      pos_margin_mode: z.string().optional().describe('Position margin mode'),
     },
-    async ({ settle, contract, size, price, tif, reduce_only, close }) => {
+    async ({ settle, contract, size, price, tif, reduce_only, close, iceberg, auto_size, stp_act, market_order_slip_ratio, pos_margin_mode }) => {
       try {
         requireAuth();
         const order: Record<string, unknown> = { contract, size, price };
         order.tif = tif ?? (price === '0' ? 'ioc' : 'gtc');
         if (reduce_only !== undefined) order.reduceOnly = reduce_only;
         if (close !== undefined) order.close = close;
+        if (iceberg !== undefined) order.iceberg = iceberg;
+        if (auto_size !== undefined) order.autoSize = auto_size;
+        if (stp_act !== undefined) order.stpAct = stp_act;
+        if (market_order_slip_ratio !== undefined) order.marketOrderSlipRatio = market_order_slip_ratio;
+        if (pos_margin_mode !== undefined) order.posMarginMode = pos_margin_mode;
         order.text = ORDER_SOURCE_TEXT;
         const { body } = await new FuturesApi(createClient()).createFuturesOrder(settle, order as never, {});
         return textContent(body);
@@ -571,13 +581,15 @@ export function registerFuturesTools(server: McpServer): void {
       order_id: z.string().describe('Order ID'),
       size: z.string().optional().describe('New order size'),
       price: z.string().optional().describe('New order price'),
+      amend_text: z.string().optional().describe('Custom amendment note'),
     },
-    async ({ settle, order_id, size, price }) => {
+    async ({ settle, order_id, size, price, amend_text }) => {
       try {
         requireAuth();
         const amendment: Record<string, unknown> = {};
         if (size !== undefined) amendment.size = size;
         if (price) amendment.price = price;
+        if (amend_text !== undefined) amendment.amendText = amend_text;
         const { body } = await new FuturesApi(createClient()).amendFuturesOrder(settle, order_id, amendment as never, {});
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -605,7 +617,7 @@ export function registerFuturesTools(server: McpServer): void {
     'Cancel all open futures orders (requires authentication) — always confirm with the user before calling this tool',
     {
       settle: settleSchema,
-      contract: z.string().optional().describe('Only cancel orders for this contract'),
+      contract: z.string().describe('Contract to cancel orders for'),
       side: z.enum(['ask', 'bid']).optional().describe('Only cancel ask (sell) or bid (buy) orders'),
       exclude_reduce_only: z.boolean().optional().describe('Exclude reduce-only orders from cancellation'),
       text: z.string().optional().describe('Only cancel orders with this text label'),
@@ -793,7 +805,7 @@ export function registerFuturesTools(server: McpServer): void {
       from: z.number().optional().describe('Start time (Unix timestamp)'),
       to: z.number().optional().describe('End time (Unix timestamp)'),
       side: z.string().optional().describe('Position side: long or short'),
-      pnl: z.string().optional().describe('Filter by profit/loss: profit or loss'),
+      pnl: z.string().optional().describe('Filter by profit/loss: win or loss'),
     },
     async ({ settle, contract, limit, offset, from, to, side, pnl }) => {
       try {
@@ -932,12 +944,12 @@ export function registerFuturesTools(server: McpServer): void {
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
-      risk_limit: z.string().describe('New risk limit value'),
+      risk_limit: z.number().describe('New risk limit value'),
     },
     async ({ settle, contract, risk_limit }) => {
       try {
         requireAuth();
-        const { body } = await new FuturesApi(createClient()).updatePositionRiskLimit(settle, contract, risk_limit);
+        const { body } = await new FuturesApi(createClient()).updatePositionRiskLimit(settle, contract, risk_limit as unknown as string);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -949,7 +961,7 @@ export function registerFuturesTools(server: McpServer): void {
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
-      mode: z.enum(['cross', 'isolated']).describe('Margin mode to set'),
+      mode: z.enum(['CROSS', 'ISOLATED']).describe('Margin mode to set: CROSS or ISOLATED'),
     },
     async ({ settle, contract, mode }) => {
       try {
@@ -969,7 +981,7 @@ export function registerFuturesTools(server: McpServer): void {
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
-      mode: z.enum(['cross', 'isolated']).describe('Margin mode to set'),
+      mode: z.enum(['CROSS', 'ISOLATED']).describe('Margin mode to set: CROSS or ISOLATED'),
     },
     async ({ settle, contract, mode }) => {
       try {
@@ -1075,12 +1087,12 @@ export function registerFuturesTools(server: McpServer): void {
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
-      risk_limit: z.string().describe('New risk limit value'),
+      risk_limit: z.number().describe('New risk limit value'),
     },
     async ({ settle, contract, risk_limit }) => {
       try {
         requireAuth();
-        const { body } = await new FuturesApi(createClient()).updateDualModePositionRiskLimit(settle, contract, risk_limit);
+        const { body } = await new FuturesApi(createClient()).updateDualModePositionRiskLimit(settle, contract, risk_limit as unknown as string);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

@@ -44,11 +44,15 @@ export function registerDeliveryTools(server: McpServer): void {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
       limit: z.number().int().optional(),
+      interval: z.string().optional().describe('Price grouping interval e.g. 0, 0.1, 0.01'),
+      with_id: z.boolean().optional().describe('Include order book ID'),
     },
-    async ({ settle, contract, limit }) => {
+    async ({ settle, contract, limit, interval, with_id }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (limit !== undefined) opts.limit = limit;
+        if (interval !== undefined) opts.interval = interval;
+        if (with_id !== undefined) opts.withId = with_id;
         const { body } = await new DeliveryApi(createClient()).listDeliveryOrderBook(settle, contract, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -63,12 +67,16 @@ export function registerDeliveryTools(server: McpServer): void {
       contract: z.string().describe('Contract name'),
       interval: z.enum(['1m', '5m', '15m', '30m', '1h', '4h', '8h', '1d']).optional(),
       limit: z.number().int().optional(),
+      from: z.number().optional().describe('Start time (Unix timestamp)'),
+      to: z.number().optional().describe('End time (Unix timestamp)'),
     },
-    async ({ settle, contract, interval, limit }) => {
+    async ({ settle, contract, interval, limit, from, to }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (interval) opts.interval = interval;
         if (limit !== undefined) opts.limit = limit;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
         const { body } = await new DeliveryApi(createClient()).listDeliveryCandlesticks(settle, contract, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -129,14 +137,16 @@ export function registerDeliveryTools(server: McpServer): void {
       contract: z.string().optional(),
       limit: z.number().int().optional(),
       offset: z.number().int().optional(),
+      last_id: z.string().optional().describe('Pagination cursor — return records after this ID'),
     },
-    async ({ settle, status, contract, limit, offset }) => {
+    async ({ settle, status, contract, limit, offset, last_id }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (contract) opts.contract = contract;
         if (limit !== undefined) opts.limit = limit;
         if (offset !== undefined) opts.offset = offset;
+        if (last_id !== undefined) opts.lastId = last_id;
         const { body } = await new DeliveryApi(createClient()).listDeliveryOrders(settle, status, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -192,13 +202,19 @@ export function registerDeliveryTools(server: McpServer): void {
       settle: settleSchema,
       contract: z.string().optional(),
       limit: z.number().int().optional(),
+      order: z.number().int().optional().describe('Filter by order ID'),
+      offset: z.number().int().optional().describe('Pagination offset'),
+      last_id: z.string().optional().describe('Pagination cursor — return records after this ID'),
     },
-    async ({ settle, contract, limit }) => {
+    async ({ settle, contract, limit, order, offset, last_id }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (contract) opts.contract = contract;
         if (limit !== undefined) opts.limit = limit;
+        if (order !== undefined) opts.order = order;
+        if (offset !== undefined) opts.offset = offset;
+        if (last_id !== undefined) opts.lastId = last_id;
         const { body } = await new DeliveryApi(createClient()).getMyDeliveryTrades(settle, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }

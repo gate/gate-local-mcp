@@ -13,7 +13,9 @@ export function createClient(): ApiClient {
   const baseUrl = process.env.GATE_BASE_URL ?? DEFAULT_BASE_URL;
   const client = new ApiClient(`${baseUrl}/api/v4`);
   const toolName = toolContext.getStore();
-  const userAgent = toolName ? `${UA_BASE}/${toolName}` : UA_BASE;
+  const origUA = client.defaultHeaders?.['User-Agent'];
+  const prefix = toolName ? `${UA_BASE}/${toolName}` : UA_BASE;
+  const userAgent = origUA ? `${prefix}/${origUA}` : prefix;
   client.defaultHeaders = { ...client.defaultHeaders, 'User-Agent': userAgent };
   const key = process.env.GATE_API_KEY;
   const secret = process.env.GATE_API_SECRET;

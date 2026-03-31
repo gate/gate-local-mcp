@@ -57,21 +57,21 @@ export function registerUnifiedTools(server: McpServer): void {
     'cex_unified_set_unified_mode',
     'Switch unified account mode (requires authentication) — always confirm with the user before calling this tool',
     {
-      mode: z.string().describe('Mode: classic, multi_currency, or portfolio'),
-      settings_usdt_futures: z.boolean().optional().describe('Enable USDT futures in unified account'),
-      settings_spot_hedge: z.boolean().optional().describe('Enable spot hedging'),
-      settings_use_funding: z.boolean().optional().describe('Enable funding balance as margin'),
-      settings_options: z.boolean().optional().describe('Enable options trading'),
+      mode: z.string().describe('Mode: classic, multi_currency, portfolio, or single_currency'),
+      usdt_futures: z.boolean().optional().describe('Enable USDT futures in unified account'),
+      spot_hedge: z.boolean().optional().describe('Enable spot hedging'),
+      use_funding: z.boolean().optional().describe('Enable funding balance as margin'),
+      options: z.boolean().optional().describe('Enable options trading'),
     },
-    async ({ mode, settings_usdt_futures, settings_spot_hedge, settings_use_funding, settings_options }) => {
+    async ({ mode, usdt_futures, spot_hedge, use_funding, options }) => {
       try {
         requireAuth();
         const req: Record<string, unknown> = { mode };
         const settings: Record<string, unknown> = {};
-        if (settings_usdt_futures !== undefined) settings.usdtFutures = settings_usdt_futures;
-        if (settings_spot_hedge !== undefined) settings.spotHedge = settings_spot_hedge;
-        if (settings_use_funding !== undefined) settings.useFunding = settings_use_funding;
-        if (settings_options !== undefined) settings.options = settings_options;
+        if (usdt_futures !== undefined) settings.usdtFutures = usdt_futures;
+        if (spot_hedge !== undefined) settings.spotHedge = spot_hedge;
+        if (use_funding !== undefined) settings.useFunding = use_funding;
+        if (options !== undefined) settings.options = options;
         if (Object.keys(settings).length > 0) req.settings = settings;
         const { body } = await new UnifiedApi(createClient()).setUnifiedMode(req as never);
         return textContent(body ?? { success: true });

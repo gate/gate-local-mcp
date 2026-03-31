@@ -6,12 +6,12 @@
     "url": "https://github.com/gate/gate-local-mcp",
     "source": "github"
   },
-  "version": "0.17.2",
+  "version": "0.18.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "gate-mcp",
-      "version": "0.17.2",
+      "version": "0.18.0",
       "transport": {
         "type": "stdio"
       },

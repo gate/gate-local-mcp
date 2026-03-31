@@ -227,15 +227,29 @@ export function registerSpotTools(server: McpServer): void {
       price: z.string().optional().describe('Order price (omit for market orders)'),
       type: z.enum(['limit', 'market']).optional().describe('Order type (default: limit)'),
       account: z.enum(['spot', 'margin', 'unified']).optional(),
+      time_in_force: z.enum(['gtc', 'ioc', 'poc', 'fok']).optional().describe('Time in force'),
+      iceberg: z.string().optional().describe('Iceberg order display amount'),
+      auto_borrow: z.boolean().optional().describe('Auto borrow for margin trading'),
+      auto_repay: z.boolean().optional().describe('Auto repay for margin trading'),
+      stp_act: z.string().optional().describe('Self-trade prevention action: cn (cancel newest), co (cancel oldest), cb (cancel both)'),
+      action_mode: z.string().optional().describe('Processing mode: ACK, RESULT, or FULL'),
+      slippage: z.string().optional().describe('Market order slippage tolerance'),
     },
-    async ({ currency_pair, side, amount, price, type, account }) => {
+    async ({ currency_pair, side, amount, price, type, account, time_in_force, iceberg, auto_borrow, auto_repay, stp_act, action_mode, slippage }) => {
       try {
         requireAuth();
         const order: Record<string, unknown> = { currencyPair: currency_pair, side, amount };
         if (price) order.price = price;
         if (type) order.type = type;
-        if (type === 'market') order.timeInForce = 'ioc';
+        if (time_in_force) order.timeInForce = time_in_force;
+        else if (type === 'market') order.timeInForce = 'ioc';
         if (account) order.account = account;
+        if (iceberg !== undefined) order.iceberg = iceberg;
+        if (auto_borrow !== undefined) order.autoBorrow = auto_borrow;
+        if (auto_repay !== undefined) order.autoRepay = auto_repay;
+        if (stp_act !== undefined) order.stpAct = stp_act;
+        if (action_mode !== undefined) order.actionMode = action_mode;
+        if (slippage !== undefined) order.slippage = slippage;
         order.text = ORDER_SOURCE_TEXT;
         const { body } = await new SpotApi(createClient()).createOrder(order as never, {});
         return textContent(body);
@@ -291,14 +305,21 @@ export function registerSpotTools(server: McpServer): void {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       amount: z.string().optional().describe('New order amount'),
       price: z.string().optional().describe('New order price'),
+      account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
+      amend_text: z.string().optional().describe('Custom amendment note'),
+      action_mode: z.string().optional().describe('Processing mode: ACK, RESULT, or FULL'),
     },
-    async ({ order_id, currency_pair, amount, price }) => {
+    async ({ order_id, currency_pair, amount, price, account, amend_text, action_mode }) => {
       try {
         requireAuth();
         const patch: Record<string, unknown> = {};
         if (amount) patch.amount = amount;
         if (price) patch.price = price;
-        const { body } = await new SpotApi(createClient()).amendOrder(order_id, patch as never, { currencyPair: currency_pair });
+        if (amend_text !== undefined) patch.amendText = amend_text;
+        const opts: Record<string, unknown> = { currencyPair: currency_pair };
+        if (account !== undefined) opts.account = account;
+        if (action_mode !== undefined) opts.actionMode = action_mode;
+        const { body } = await new SpotApi(createClient()).amendOrder(order_id, patch as never, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

@@ -59,72 +59,6 @@ export function registerEarnTools(server: McpServer): void {
     }
   );
 
-  // ── Structured Products ───────────────────────────────────────────────────
-
-  server.tool(
-    'cex_earn_list_structured_products',
-    'List structured products',
-    {
-      status: z.enum(['in_progress', 'will_begin', 'waiting', 'done']).describe('Product status'),
-      type: z.string().optional().describe('Product type'),
-      page: z.number().int().optional(),
-      limit: z.number().int().optional(),
-    },
-    async ({ status, type, page, limit }) => {
-      try {
-        const opts: Record<string, unknown> = {};
-        if (type) opts.type = type;
-        if (page !== undefined) opts.page = page;
-        if (limit !== undefined) opts.limit = limit;
-        const { body } = await new EarnApi(createClient()).listStructuredProducts(status, opts);
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
-  server.tool(
-    'cex_earn_list_structured_orders',
-    'List structured product orders (requires authentication)',
-    {
-      from: z.number().optional().describe('Start time (Unix timestamp)'),
-      to: z.number().optional().describe('End time (Unix timestamp)'),
-      page: z.number().int().optional(),
-      limit: z.number().int().optional(),
-    },
-    async ({ from, to, page, limit }) => {
-      try {
-        requireAuth();
-        const opts: Record<string, unknown> = {};
-        if (from !== undefined) opts.from = from;
-        if (to !== undefined) opts.to = to;
-        if (page !== undefined) opts.page = page;
-        if (limit !== undefined) opts.limit = limit;
-        const { body } = await new EarnApi(createClient()).listStructuredOrders(opts);
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
-  server.tool(
-    'cex_earn_place_structured_order',
-    'Purchase a structured product (requires authentication)',
-    {
-      pid: z.string().optional().describe('Product ID'),
-      amount: z.string().optional().describe('Investment amount'),
-    },
-    async ({ pid, amount }) => {
-      try {
-        requireAuth();
-        const { StructuredBuy } = await import('gate-api');
-        const order = new StructuredBuy();
-        if (pid !== undefined) order.pid = pid;
-        if (amount !== undefined) order.amount = amount;
-        const { body } = await new EarnApi(createClient()).placeStructuredOrder(order);
-        return textContent(body);
-      } catch (e) { return errorContent(e); }
-    }
-  );
-
   // ── Staking ───────────────────────────────────────────────────────────────
 
   server.tool(
@@ -135,10 +69,9 @@ export function registerEarnTools(server: McpServer): void {
     },
     async ({ cointype }) => {
       try {
-        const { FindCoin } = await import('gate-api');
-        const req = new FindCoin();
-        if (cointype !== undefined) req.cointype = cointype;
-        const { body } = await new EarnApi(createClient()).findCoin(req);
+        const opts: Record<string, unknown> = {};
+        if (cointype !== undefined) opts.cointype = cointype;
+        const { body } = await new EarnApi(createClient()).findCoin(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }
@@ -382,7 +315,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_uni_chart',
-    'Get Simple Earn lending rate chart data',
+    'Get Simple Earn lending rate chart data (requires authentication)',
     {
       from: z.number().describe('Start time (Unix timestamp)'),
       to: z.number().describe('End time (Unix timestamp)'),
@@ -390,6 +323,7 @@ export function registerEarnTools(server: McpServer): void {
     },
     async ({ from, to, asset }) => {
       try {
+        requireAuth();
         const { body } = await new EarnUniApi(createClient()).listUniChart(from, to, asset);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -398,10 +332,11 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_uni_rate',
-    'Get Simple Earn current lending rates for all currencies',
+    'Get Simple Earn current lending rates for all currencies (requires authentication)',
     {},
     async () => {
       try {
+        requireAuth();
         const { body } = await new EarnUniApi(createClient()).listUniRate();
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -435,7 +370,7 @@ export function registerEarnTools(server: McpServer): void {
     'Swap staking coins (requires authentication)',
     {
       coin: z.string().describe('Coin name'),
-      side: z.number().int().describe('1 = stake, 2 = redeem'),
+      side: z.number().int().describe('0 = Stake, 1 = Redeem'),
       amount: z.string().describe('Amount'),
       pid: z.number().int().optional().describe('Product ID'),
     },
@@ -594,6 +529,227 @@ export function registerEarnTools(server: McpServer): void {
         if (sub_business !== undefined) opts.subBusiness = sub_business;
         if (business_filter !== undefined) opts.businessFilter = business_filter;
         const { body } = await new EarnApi(createClient()).listEarnFixedTermHistory(type, page, limit, opts as never);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  // ── Auto Invest ──────────────────────────────────────────────────────────
+
+  server.tool(
+    'cex_earn_list_auto_invest_coins',
+    'List coins available for auto invest plans',
+    {
+      plan_money: z.string().optional().describe('Plan money currency, e.g. USDT or BTC'),
+    },
+    async ({ plan_money }) => {
+      try {
+        const opts: Record<string, unknown> = {};
+        if (plan_money !== undefined) opts.planMoney = plan_money;
+        const { body } = await new EarnApi(createClient()).listAutoInvestCoins(opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_auto_invest_config',
+    'Get auto invest configuration',
+    {},
+    async () => {
+      try {
+        const { body } = await new EarnApi(createClient()).listAutoInvestConfig();
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_get_auto_invest_min_amount',
+    'Get minimum investment amount for an auto invest plan',
+    {
+      body_json: z.string().describe('JSON string of AutoInvestMinInvestAmount: { money: string, items: [{ asset: string, ratio: string }] }'),
+    },
+    async ({ body_json }) => {
+      try {
+        const parsed = JSON.parse(body_json);
+        const { AutoInvestMinInvestAmount } = await import('gate-api');
+        const req = new AutoInvestMinInvestAmount();
+        if (parsed.money !== undefined) req.money = parsed.money;
+        if (parsed.items !== undefined) req.items = parsed.items;
+        const { body } = await new EarnApi(createClient()).getAutoInvestMinAmount(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_auto_invest_plans',
+    'List auto invest plans (requires authentication)',
+    {
+      status: z.string().describe('Plan status: active or history'),
+      page: z.number().int().optional(),
+      page_size: z.number().int().optional(),
+    },
+    async ({ status, page, page_size }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (page !== undefined) opts.page = page;
+        if (page_size !== undefined) opts.pageSize = page_size;
+        const { body } = await new EarnApi(createClient()).listAutoInvestPlans(status, opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_get_auto_invest_plan_detail',
+    'Get details of an auto invest plan (requires authentication)',
+    {
+      plan_id: z.number().int().describe('Plan ID'),
+    },
+    async ({ plan_id }) => {
+      try {
+        requireAuth();
+        const { body } = await new EarnApi(createClient()).getAutoInvestPlanDetail(plan_id);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_auto_invest_plan_records',
+    'List auto invest plan execution records (requires authentication)',
+    {
+      plan_id: z.number().int().describe('Plan ID'),
+      page: z.number().int().optional(),
+      page_size: z.number().int().optional(),
+    },
+    async ({ plan_id, page, page_size }) => {
+      try {
+        requireAuth();
+        const opts: Record<string, unknown> = {};
+        if (page !== undefined) opts.page = page;
+        if (page_size !== undefined) opts.pageSize = page_size;
+        const { body } = await new EarnApi(createClient()).listAutoInvestPlanRecords(plan_id, opts);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_list_auto_invest_orders',
+    'List auto invest orders for a plan record (requires authentication)',
+    {
+      plan_id: z.number().int().describe('Plan ID'),
+      record_id: z.number().int().describe('Record ID'),
+    },
+    async ({ plan_id, record_id }) => {
+      try {
+        requireAuth();
+        const { body } = await new EarnApi(createClient()).listAutoInvestOrders(plan_id, record_id);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_create_auto_invest_plan',
+    'Create an auto invest plan (requires authentication) — always confirm the details with the user before calling this tool',
+    {
+      plan_name: z.string().optional().describe('Plan name'),
+      plan_des: z.string().optional().describe('Plan description'),
+      plan_money: z.string().describe('Investment currency, e.g. USDT'),
+      plan_amount: z.string().describe('Investment amount per period'),
+      plan_period_type: z.string().describe('Period type, e.g. daily, weekly, monthly'),
+      plan_period_day: z.number().int().describe('Day of period (1-31 for monthly, 1-7 for weekly, 0 for daily)'),
+      plan_period_hour: z.number().int().describe('Hour of day to execute (0-23)'),
+      items: z.array(z.object({
+        asset: z.string().describe('Target asset, e.g. BTC'),
+        ratio: z.string().describe('Allocation ratio, e.g. 50'),
+      })).describe('Asset allocation list'),
+      fund_source: z.string().optional().describe('Fund source'),
+      fund_flow: z.string().optional().describe('Fund flow destination'),
+      type: z.number().int().optional().describe('Plan type'),
+    },
+    async ({ plan_name, plan_des, plan_money, plan_amount, plan_period_type, plan_period_day, plan_period_hour, items, fund_source, fund_flow, type }) => {
+      try {
+        requireAuth();
+        const { AutoInvestPlanCreate } = await import('gate-api');
+        const req = new AutoInvestPlanCreate();
+        if (plan_name !== undefined) req.planName = plan_name;
+        if (plan_des !== undefined) req.planDes = plan_des;
+        req.planMoney = plan_money;
+        req.planAmount = plan_amount;
+        req.planPeriodType = plan_period_type;
+        req.planPeriodDay = plan_period_day;
+        req.planPeriodHour = plan_period_hour;
+        req.items = items as never;
+        if (fund_source !== undefined) req.fundSource = fund_source;
+        if (fund_flow !== undefined) req.fundFlow = fund_flow;
+        if (type !== undefined) req.type = type;
+        const { body } = await new EarnApi(createClient()).createAutoInvestPlan(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_update_auto_invest_plan',
+    'Update an auto invest plan (requires authentication) — always confirm the changes with the user before calling this tool',
+    {
+      plan_id: z.number().int().describe('Plan ID to update'),
+      fund_source: z.string().optional().describe('New fund source'),
+      fund_flow: z.string().optional().describe('New fund flow destination'),
+    },
+    async ({ plan_id, fund_source, fund_flow }) => {
+      try {
+        requireAuth();
+        const { AutoInvestPlanUpdate } = await import('gate-api');
+        const req = new AutoInvestPlanUpdate();
+        req.planId = plan_id;
+        if (fund_source !== undefined) req.fundSource = fund_source;
+        if (fund_flow !== undefined) req.fundFlow = fund_flow;
+        const { body } = await new EarnApi(createClient()).updateAutoInvestPlan(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_stop_auto_invest_plan',
+    'Stop an auto invest plan (requires authentication) — always confirm with the user before calling this tool',
+    {
+      plan_id: z.number().int().describe('Plan ID to stop'),
+    },
+    async ({ plan_id }) => {
+      try {
+        requireAuth();
+        const { AutoInvestPlanStop } = await import('gate-api');
+        const req = new AutoInvestPlanStop();
+        req.planId = plan_id;
+        const { body } = await new EarnApi(createClient()).stopAutoInvestPlan(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_add_position_auto_invest_plan',
+    'Add position to an auto invest plan (requires authentication) — always confirm the details with the user before calling this tool',
+    {
+      plan_id: z.number().int().describe('Plan ID to add position to'),
+      amount: z.string().describe('Amount to add'),
+    },
+    async ({ plan_id, amount }) => {
+      try {
+        requireAuth();
+        const { AutoInvestPlanAddPosition } = await import('gate-api');
+        const req = new AutoInvestPlanAddPosition();
+        req.planId = plan_id;
+        req.amount = amount;
+        const { body } = await new EarnApi(createClient()).addPositionAutoInvestPlan(req);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

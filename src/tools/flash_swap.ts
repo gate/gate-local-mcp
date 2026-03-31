@@ -20,11 +20,15 @@ export function registerFlashSwapTools(server: McpServer): void {
     'List all supported flash swap currency pairs',
     {
       currency: z.string().optional().describe('Filter by currency symbol'),
+      page: z.number().int().optional().describe('Page number'),
+      limit: z.number().int().optional().describe('Results per page'),
     },
-    async ({ currency }) => {
+    async ({ currency, page, limit }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (currency) opts.currency = currency;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
         const { body } = await new FlashSwapApi(createClient()).listFlashSwapCurrencyPair(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -40,8 +44,9 @@ export function registerFlashSwapTools(server: McpServer): void {
       buy_currency: z.string().optional(),
       limit: z.number().int().optional(),
       page: z.number().int().optional(),
+      reverse: z.boolean().optional().describe('Reverse order of results'),
     },
-    async ({ status, sell_currency, buy_currency, limit, page }) => {
+    async ({ status, sell_currency, buy_currency, limit, page, reverse }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
@@ -50,6 +55,7 @@ export function registerFlashSwapTools(server: McpServer): void {
         if (buy_currency) opts.buyCurrency = buy_currency;
         if (limit !== undefined) opts.limit = limit;
         if (page !== undefined) opts.page = page;
+        if (reverse !== undefined) opts.reverse = reverse;
         const { body } = await new FlashSwapApi(createClient()).listFlashSwapOrders(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }

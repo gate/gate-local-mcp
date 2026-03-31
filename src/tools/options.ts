@@ -66,11 +66,15 @@ export function registerOptionsTools(server: McpServer): void {
     {
       contract: z.string().describe('Options contract name'),
       limit: z.number().int().optional(),
+      interval: z.string().optional().describe('Price grouping interval e.g. 0, 0.1, 0.01'),
+      with_id: z.boolean().optional().describe('Include order book ID'),
     },
-    async ({ contract, limit }) => {
+    async ({ contract, limit, interval, with_id }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (limit !== undefined) opts.limit = limit;
+        if (interval !== undefined) opts.interval = interval;
+        if (with_id !== undefined) opts.withId = with_id;
         const { body } = await new OptionsApi(createClient()).listOptionsOrderBook(contract, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -108,12 +112,16 @@ export function registerOptionsTools(server: McpServer): void {
       contract: z.string().describe('Options contract name'),
       interval: z.enum(['1m', '5m', '15m', '30m', '1h', '1d']).optional(),
       limit: z.number().int().optional(),
+      from: z.number().optional().describe('Start time (Unix seconds)'),
+      to: z.number().optional().describe('End time (Unix seconds)'),
     },
-    async ({ contract, interval, limit }) => {
+    async ({ contract, interval, limit, from, to }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (interval) opts.interval = interval;
         if (limit !== undefined) opts.limit = limit;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
         const { body } = await new OptionsApi(createClient()).listOptionsCandlesticks(contract, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -339,8 +347,10 @@ export function registerOptionsTools(server: McpServer): void {
       contract: z.string().optional(),
       limit: z.number().int().optional(),
       offset: z.number().int().optional(),
+      from: z.number().optional().describe('Start time (Unix seconds)'),
+      to: z.number().optional().describe('End time (Unix seconds)'),
     },
-    async ({ status, underlying, contract, limit, offset }) => {
+    async ({ status, underlying, contract, limit, offset, from, to }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
@@ -348,6 +358,8 @@ export function registerOptionsTools(server: McpServer): void {
         if (contract) opts.contract = contract;
         if (limit !== undefined) opts.limit = limit;
         if (offset !== undefined) opts.offset = offset;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
         const { body } = await new OptionsApi(createClient()).listOptionsOrders(status, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -434,13 +446,15 @@ export function registerOptionsTools(server: McpServer): void {
     {
       underlying: z.string().optional().describe('Filter by underlying'),
       contract: z.string().optional().describe('Filter by contract'),
+      side: z.enum(['bid', 'ask']).optional().describe('Cancel only bid or ask side'),
     },
-    async ({ underlying, contract }) => {
+    async ({ underlying, contract, side }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (underlying) opts.underlying = underlying;
         if (contract) opts.contract = contract;
+        if (side) opts.side = side;
         const { body } = await new OptionsApi(createClient()).cancelOptionsOrders(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -535,13 +549,19 @@ export function registerOptionsTools(server: McpServer): void {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),
       contract: z.string().optional(),
       limit: z.number().int().optional(),
+      offset: z.number().int().optional().describe('Pagination offset'),
+      from: z.number().optional().describe('Start time (Unix seconds)'),
+      to: z.number().optional().describe('End time (Unix seconds)'),
     },
-    async ({ underlying, contract, limit }) => {
+    async ({ underlying, contract, limit, offset, from, to }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (contract) opts.contract = contract;
         if (limit !== undefined) opts.limit = limit;
+        if (offset !== undefined) opts.offset = offset;
+        if (from !== undefined) opts.from = from;
+        if (to !== undefined) opts.to = to;
         const { body } = await new OptionsApi(createClient()).listMyOptionsTrades(underlying, opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
