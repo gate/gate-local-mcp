@@ -181,7 +181,7 @@ describe('User-Agent includes tool name', () => {
     await mock.close();
   });
 
-  test('User-Agent is gate-local-mcp/<version>/<tool_name>', async () => {
+  test('User-Agent is 6-segment format with tool + MCP clientInfo (split /, 6)', async () => {
     await client.callTool({
       name: 'cex_spot_get_spot_tickers',
       arguments: { currency_pair: 'BTC_USDT' },
@@ -189,8 +189,15 @@ describe('User-Agent includes tool name', () => {
 
     const ua = mock.getLastUserAgent();
     expect(ua).not.toBeNull();
-    // Format: gate-local-mcp/<version>/<tool_name>
-    expect(ua).toMatch(/^gate-local-mcp\/\d+\.\d+\.\d+\/cex_spot_get_spot_tickers$/);
+    // createTestClient uses Client({ name: 'test-client', version: '1.0' })
+    const parts = (ua as string).split('/', 6);
+    expect(parts).toHaveLength(6);
+    expect(parts[0]).toBe('gate-local-mcp');
+    expect(parts[1]).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(parts[2]).toBe('cex_spot_get_spot_tickers');
+    expect(parts[3]).toBe('test-client');
+    expect(parts[4]).toBe('1.0');
+    expect(typeof parts[5]).toBe('string');
   });
 
   test('different tools produce different User-Agent tool segments', async () => {

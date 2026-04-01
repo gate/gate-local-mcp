@@ -22,7 +22,7 @@ stdioShared.ReadBuffer.prototype.readMessage = function (this: { _buffer?: Buffe
 };
 import { sanitizeToolName, isWriteTool } from './utils.js';
 import { parseConfig, ModuleName } from './config.js';
-import { toolContext } from './client.js';
+import { bindClientInfoUpdater, toolContext } from './client.js';
 import { registerSpotTools } from './tools/spot.js';
 import { registerFuturesTools } from './tools/futures.js';
 import { registerDeliveryTools } from './tools/delivery.js';
@@ -52,6 +52,8 @@ const server = new McpServer({
   name: 'gate',
   version: '0.1.0',
 });
+
+bindClientInfoUpdater(server);
 
 // Monkey-patch server.tool: apply name sanitization, readonly filter, and tool-name UA injection
 const _registerTool = server.tool.bind(server);
