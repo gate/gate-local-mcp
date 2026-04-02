@@ -95,3 +95,86 @@ describe('User-Agent header', () => {
     expect(typeof mcp.server.oninitialized).toBe('function');
   });
 });
+
+describe('Custom X-Gate-* headers', () => {
+  beforeEach(() => {
+    clearMcpClientInfoForTests();
+  });
+
+  test('all 5 custom headers present with correct values (full context)', () => {
+    setMcpClientInfoForTests('cursor', '0.45.6');
+    let headers: Record<string, unknown> = {};
+    toolContext.run('cex_spot_list_currencies', () => {
+      const client = createClient();
+      headers = client.defaultHeaders;
+    });
+    expect(headers['X-Gate-Agent']).toBe('cursor');
+    expect(headers['X-Gate-Agent-Version']).toBe('0.45.6');
+    expect(headers['X-Gate-MCP-Tools-Name']).toBe('cex_spot_list_currencies');
+    expect(headers['X-Gate-MCP-Name']).toBe('gate-local-mcp');
+    expect(headers['X-Gate-MCP-Version']).toBe(pkgVersion);
+  });
+
+  test('empty client info produces empty string headers (not undefined)', () => {
+    const client = createClient();
+    const headers = client.defaultHeaders;
+    expect(headers['X-Gate-Agent']).toBe('');
+    expect(headers['X-Gate-Agent-Version']).toBe('');
+  });
+
+  test('empty tool context produces empty X-Gate-MCP-Tools-Name', () => {
+    setMcpClientInfoForTests('claude-desktop', '1.2.3');
+    const client = createClient();
+    const headers = client.defaultHeaders;
+    expect(headers['X-Gate-MCP-Tools-Name']).toBe('');
+    expect(headers['X-Gate-Agent']).toBe('claude-desktop');
+  });
+
+  test('X-Gate-MCP-Name and X-Gate-MCP-Version are always fixed', () => {
+    const client1 = createClient();
+    setMcpClientInfoForTests('windsurf', '3.0');
+    let headers2: Record<string, unknown> = {};
+    toolContext.run('cex_fx_list_fx_contracts', () => {
+      headers2 = createClient().defaultHeaders;
+    });
+    expect(client1.defaultHeaders['X-Gate-MCP-Name']).toBe('gate-local-mcp');
+    expect(client1.defaultHeaders['X-Gate-MCP-Version']).toBe(pkgVersion);
+    expect(headers2['X-Gate-MCP-Name']).toBe('gate-local-mcp');
+    expect(headers2['X-Gate-MCP-Version']).toBe(pkgVersion);
+  });
+
+  test('different tool calls produce different X-Gate-MCP-Tools-Name', () => {
+    setMcpClientInfoForTests('cursor', '0.45.6');
+    let h1: Record<string, unknown> = {};
+    let h2: Record<string, unknown> = {};
+    toolContext.run('cex_spot_list_currencies', () => {
+      h1 = createClient().defaultHeaders;
+    });
+    toolContext.run('cex_fx_list_fx_contracts', () => {
+      h2 = createClient().defaultHeaders;
+    });
+    expect(h1['X-Gate-MCP-Tools-Name']).toBe('cex_spot_list_currencies');
+    expect(h2['X-Gate-MCP-Tools-Name']).toBe('cex_fx_list_fx_contracts');
+    // agent headers stay the same across tool calls
+    expect(h1['X-Gate-Agent']).toBe('cursor');
+    expect(h2['X-Gate-Agent']).toBe('cursor');
+  });
+
+  test('User-Agent 6-segment format is preserved alongside custom headers', () => {
+    setMcpClientInfoForTests('cline', '2.0.0');
+    let headers: Record<string, unknown> = {};
+    toolContext.run('cex_spot_get_spot_tickers', () => {
+      headers = createClient().defaultHeaders;
+    });
+    const ua = headers['User-Agent'] as string;
+    const parts = splitUA(ua);
+    expect(parts).toHaveLength(6);
+    expect(parts[0]).toBe('gate-local-mcp');
+    expect(parts[2]).toBe('cex_spot_get_spot_tickers');
+    expect(parts[3]).toBe('cline');
+    expect(parts[4]).toBe('2.0.0');
+    // custom headers also correct
+    expect(headers['X-Gate-Agent']).toBe('cline');
+    expect(headers['X-Gate-MCP-Tools-Name']).toBe('cex_spot_get_spot_tickers');
+  });
+});

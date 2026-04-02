@@ -30,14 +30,23 @@ function startMockServer(getStub: (path: string) => string) {
     port: number;
     getLastPath: () => string | null;
     getLastUserAgent: () => string | null;
+    getLastHeaders: () => Record<string, string | undefined>;
     close: () => Promise<void>;
   }>((resolve) => {
     let lastPath: string | null = null;
     let lastUserAgent: string | null = null;
+    let lastHeaders: Record<string, string | undefined> = {};
 
     const server = createServer((req: IncomingMessage, res: ServerResponse) => {
       lastPath = req.url ?? null;
       lastUserAgent = (req.headers['user-agent'] as string) ?? null;
+      lastHeaders = {
+        'x-gate-agent': req.headers['x-gate-agent'] as string | undefined,
+        'x-gate-agent-version': req.headers['x-gate-agent-version'] as string | undefined,
+        'x-gate-mcp-tools-name': req.headers['x-gate-mcp-tools-name'] as string | undefined,
+        'x-gate-mcp-name': req.headers['x-gate-mcp-name'] as string | undefined,
+        'x-gate-mcp-version': req.headers['x-gate-mcp-version'] as string | undefined,
+      };
       const body = getStub(req.url ?? '');
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(body);
@@ -49,6 +58,7 @@ function startMockServer(getStub: (path: string) => string) {
         port,
         getLastPath: () => lastPath,
         getLastUserAgent: () => lastUserAgent,
+        getLastHeaders: () => lastHeaders,
         close: () => new Promise<void>((r) => server.close(() => r())),
       });
     });
@@ -210,5 +220,34 @@ describe('User-Agent includes tool name', () => {
     expect(ua1).toContain('cex_spot_list_currencies');
     expect(ua2).toContain('cex_spot_list_currency_pairs');
     expect(ua1).not.toEqual(ua2);
+  });
+
+  test('custom X-Gate-* headers are sent with correct values', async () => {
+    await client.callTool({
+      name: 'cex_spot_get_spot_tickers',
+      arguments: { currency_pair: 'BTC_USDT' },
+    });
+
+    const headers = mock.getLastHeaders();
+    // createTestClient uses Client({ name: 'test-client', version: '1.0' })
+    expect(headers['x-gate-agent']).toBe('test-client');
+    expect(headers['x-gate-agent-version']).toBe('1.0');
+    expect(headers['x-gate-mcp-tools-name']).toBe('cex_spot_get_spot_tickers');
+    expect(headers['x-gate-mcp-name']).toBe('gate-local-mcp');
+    expect(headers['x-gate-mcp-version']).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+
+  test('different tools produce different X-Gate-MCP-Tools-Name', async () => {
+    await client.callTool({ name: 'cex_spot_list_currencies', arguments: {} });
+    const h1 = mock.getLastHeaders();
+
+    await client.callTool({ name: 'cex_spot_list_currency_pairs', arguments: {} });
+    const h2 = mock.getLastHeaders();
+
+    expect(h1['x-gate-mcp-tools-name']).toBe('cex_spot_list_currencies');
+    expect(h2['x-gate-mcp-tools-name']).toBe('cex_spot_list_currency_pairs');
+    // agent headers stay consistent across calls
+    expect(h1['x-gate-agent']).toBe('test-client');
+    expect(h2['x-gate-agent']).toBe('test-client');
   });
 });

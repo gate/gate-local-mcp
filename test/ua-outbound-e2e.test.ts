@@ -12,12 +12,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, '..');
 
 describe('E2E outbound User-Agent', () => {
-  test('tools/call sends 6-segment UA with MCP clientInfo after initialized', async () => {
+  test('tools/call sends 6-segment UA and custom X-Gate-* headers after initialized', async () => {
     let capturedUa: string | undefined;
+    let capturedHeaders: Record<string, string | undefined> = {};
 
     const httpServer = createServer((req, res) => {
       if (req.method === 'GET' && req.url?.startsWith('/api/v4/spot/currencies')) {
         capturedUa = req.headers['user-agent'];
+        capturedHeaders = {
+          'x-gate-agent': req.headers['x-gate-agent'] as string | undefined,
+          'x-gate-agent-version': req.headers['x-gate-agent-version'] as string | undefined,
+          'x-gate-mcp-tools-name': req.headers['x-gate-mcp-tools-name'] as string | undefined,
+          'x-gate-mcp-name': req.headers['x-gate-mcp-name'] as string | undefined,
+          'x-gate-mcp-version': req.headers['x-gate-mcp-version'] as string | undefined,
+        };
         res.setHeader('Content-Type', 'application/json');
         res.end('[]');
         return;
@@ -61,6 +69,7 @@ describe('E2E outbound User-Agent', () => {
       httpServer.close();
     }
 
+    // User-Agent 6-segment format
     expect(capturedUa).toBeDefined();
     const ua = capturedUa as string;
     const parts = ua.split('/', 6);
@@ -71,5 +80,12 @@ describe('E2E outbound User-Agent', () => {
     expect(parts[3]).toBe('e2e-ua-client');
     expect(parts[4]).toBe('2.3.4');
     expect(typeof parts[5]).toBe('string');
+
+    // Custom X-Gate-* headers
+    expect(capturedHeaders['x-gate-agent']).toBe('e2e-ua-client');
+    expect(capturedHeaders['x-gate-agent-version']).toBe('2.3.4');
+    expect(capturedHeaders['x-gate-mcp-tools-name']).toBe('cex_spot_list_currencies');
+    expect(capturedHeaders['x-gate-mcp-name']).toBe('gate-local-mcp');
+    expect(capturedHeaders['x-gate-mcp-version']).toMatch(/^\d+\.\d+\.\d+$/);
   }, 30_000);
 });

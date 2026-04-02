@@ -6,7 +6,8 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 const DEFAULT_BASE_URL = 'https://api.gateio.ws';
 const _require = createRequire(import.meta.url);
 const { version } = _require('../package.json') as { version: string };
-const UA_BASE = `gate-local-mcp/${version}`;
+const MCP_NAME = 'gate-local-mcp';
+const UA_BASE = `${MCP_NAME}/${version}`;
 
 export const toolContext = new AsyncLocalStorage<string>();
 
@@ -47,7 +48,15 @@ export function createClient(): ApiClient {
 
   // 固定 6 段：gate-local-mcp/{版本}/{工具名}/{Agent}/{Agent版本}/{SDK原始UA}，空段保留
   const userAgent = `${UA_BASE}/${toolName}/${mcpClientName}/${mcpClientVersion}/${origUA}`;
-  client.defaultHeaders = { ...client.defaultHeaders, 'User-Agent': userAgent };
+  client.defaultHeaders = {
+    ...client.defaultHeaders,
+    'User-Agent': userAgent,
+    'X-Gate-Agent': mcpClientName,
+    'X-Gate-Agent-Version': mcpClientVersion,
+    'X-Gate-MCP-Tools-Name': toolName,
+    'X-Gate-MCP-Name': MCP_NAME,
+    'X-Gate-MCP-Version': version,
+  };
 
   const key = process.env.GATE_API_KEY;
   const secret = process.env.GATE_API_SECRET;
