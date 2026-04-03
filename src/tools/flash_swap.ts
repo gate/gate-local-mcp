@@ -37,7 +37,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_list_flash_swap_orders',
-    '[R] List flash swap order history. Requires auth.',
+    '[R] List flash swap order history.',
     {
       status: z.number().int().optional().describe('Order status: 1=success, 2=failed'),
       sell_currency: z.string().optional(),
@@ -64,7 +64,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_get_flash_swap_order',
-    '[R] Get details of a flash swap order. Requires auth.',
+    '[R] Get details of a flash swap order.',
     { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
@@ -91,7 +91,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_multi_currency_many_to_one_order',
-    '[W] Create a multi-currency many-to-one flash swap order. Requires auth. State-changing.',
+    '[W] Create a multi-currency many-to-one flash swap order State-changing.',
     { params: multiParamSchema },
     async ({ params }) => {
       try {
@@ -134,7 +134,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_multi_currency_one_to_many_order',
-    '[W] Create a multi-currency one-to-many flash swap order. Requires auth. State-changing.',
+    '[W] Create a multi-currency one-to-many flash swap order State-changing.',
     { params: multiParamSchema },
     async ({ params }) => {
       try {
@@ -177,7 +177,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_order',
-    '[W] Create a single-currency flash swap order. Requires auth. State-changing.',
+    '[W] Create a single-currency flash swap order State-changing.',
     {
       preview_id: z.string().describe('Preview result ID returned by preview endpoint'),
       sell_currency: z.string().describe('Currency to sell e.g. BTC'),
@@ -225,7 +225,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_order_v1',
-    '[W] Place a flash swap order. Requires auth. State-changing. New endpoint → create_flash_swap_order.',
+    '[W] Place a flash swap order State-changing. New endpoint → create_flash_swap_order.',
     {
       sell_asset: z.string().describe('Asset to sell e.g. BTC'),
       sell_amount: z.string().describe('Amount to sell'),

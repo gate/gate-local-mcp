@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerActivityTools(server: McpServer): void {
   server.tool(
     'cex_activity_get_my_activity_entry',
-    '[R] Get current user activity entry and participation status. Requires auth.',
+    '[R] Get current user activity entry and participation status.',
     {},
     async () => {
       try {

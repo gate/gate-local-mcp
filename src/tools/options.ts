@@ -220,7 +220,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_list_options_account',
-    '[R] Get options account balance. Requires auth.',
+    '[R] Get options account balance.',
     {},
     async () => {
       try {
@@ -233,7 +233,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_list_options_account_book',
-    '[R] List options account change history. Requires auth.',
+    '[R] List options account change history.',
     {
       underlying: z.string().optional().describe('Filter by underlying'),
       type: z.string().optional().describe('Change type filter'),
@@ -260,7 +260,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_list_my_options_settlements',
-    '[R] List personal options settlement history. Requires auth.',
+    '[R] List personal options settlement history.',
     {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),
       contract: z.string().optional(),
@@ -286,7 +286,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_list_options_positions',
-    '[R] List options positions. Requires auth.',
+    '[R] List options positions.',
     { underlying: z.string().optional().describe('Filter by underlying') },
     async ({ underlying }) => {
       try {
@@ -301,7 +301,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_get_options_position',
-    '[R] Get a single options position. Requires auth.',
+    '[R] Get a single options position.',
     { contract: z.string().describe('Options contract name') },
     async ({ contract }) => {
       try {
@@ -314,7 +314,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_list_options_position_close',
-    '[R] List options position close history. Requires auth.',
+    '[R] List options position close history.',
     {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),
       contract: z.string().optional(),
@@ -340,7 +340,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_list_options_orders',
-    '[R] List options orders. Requires auth.',
+    '[R] List options orders.',
     {
       status: z.enum(['open', 'finished']),
       underlying: z.string().optional(),
@@ -368,7 +368,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_create_options_order',
-    '[W] Create an options order. Requires auth. State-changing.',
+    '[W] Create an options order State-changing.',
     {
       contract: z.string().describe('Options contract name'),
       size: z.number().int().describe('Order size (negative = short)'),
@@ -394,7 +394,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_amend_options_order',
-    '[W] Amend an open options order. Requires auth. State-changing.',
+    '[W] Amend an open options order State-changing.',
     {
       order_id: z.string().describe('Order ID'),
       contract: z.string().describe('Options contract name'),
@@ -416,7 +416,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_cancel_options_order',
-    '[W] Cancel an options order. Requires auth. State-changing.',
+    '[W] Cancel an options order State-changing.',
     { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
@@ -429,7 +429,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_get_options_order',
-    '[R] Get a single options order. Requires auth.',
+    '[R] Get a single options order.',
     { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
@@ -442,7 +442,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_cancel_options_orders',
-    '[W] Cancel all open options orders matching filters. Requires auth. State-changing.',
+    '[W] Cancel all open options orders matching filters State-changing.',
     {
       underlying: z.string().optional().describe('Filter by underlying'),
       contract: z.string().optional().describe('Filter by contract'),
@@ -463,7 +463,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_countdown_cancel_all_options',
-    '[W] Countdown cancel all options orders — resets on each call; orders cancelled if timeout reached. Requires auth. State-changing.',
+    '[W] Countdown cancel all options orders — resets on each call; orders cancelled if timeout reached State-changing.',
     {
       timeout: z.number().int().describe('Countdown seconds; 0 = cancel the countdown'),
       contract: z.string().optional().describe('Restrict to a specific contract'),
@@ -485,7 +485,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_get_options_mmp',
-    '[R] Get options MMP (Market Maker Protection) settings. Requires auth.',
+    '[R] Get options MMP (Market Maker Protection) settings.',
     { underlying: z.string().optional().describe('Filter by underlying') },
     async ({ underlying }) => {
       try {
@@ -500,7 +500,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_set_options_mmp',
-    '[W] Set options MMP configuration. Requires auth. State-changing.',
+    '[W] Set options MMP configuration State-changing.',
     {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),
       window: z.number().int().optional().describe('MMP window in milliseconds'),
@@ -526,7 +526,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_reset_options_mmp',
-    '[W] Reset options MMP — unfreeze the market maker. Requires auth. State-changing.',
+    '[W] Reset options MMP — unfreeze the market maker State-changing.',
     {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),
     },
@@ -544,7 +544,7 @@ export function registerOptionsTools(server: McpServer): void {
 
   server.tool(
     'cex_options_list_my_options_trades',
-    '[R] List personal options trading history. Requires auth.',
+    '[R] List personal options trading history.',
     {
       underlying: z.string().describe('Underlying asset e.g. BTC_USDT'),
       contract: z.string().optional(),

@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerRebateTools(server: McpServer): void {
   server.tool(
     'cex_rebate_partner_transaction_history',
-    '[R] Get partner rebate transaction history. Requires auth.',
+    '[R] Get partner rebate transaction history.',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair e.g. BTC_USDT'),
       user_id: z.number().int().optional().describe('Filter by sub-user ID'),
@@ -34,7 +34,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_partner_commissions_history',
-    '[R] Get partner rebate commission history. Requires auth.',
+    '[R] Get partner rebate commission history.',
     {
       currency: z.string().optional().describe('Filter by currency symbol'),
       user_id: z.number().int().optional().describe('Filter by sub-user ID'),
@@ -61,7 +61,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_partner_sub_list',
-    '[R] Get list of partner sub-users. Requires auth.',
+    '[R] Get list of partner sub-users.',
     {
       user_id: z.number().int().optional().describe('Filter by sub-user ID'),
       limit: z.number().int().optional().describe('Max results per page (default 100, max 100)'),
@@ -82,7 +82,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_broker_commission_history',
-    '[R] Get broker rebate commission history. Requires auth.',
+    '[R] Get broker rebate commission history.',
     {
       user_id: z.number().int().optional().describe('Filter by sub-user ID'),
       from: z.number().optional().describe('Start time (Unix timestamp)'),
@@ -107,7 +107,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_broker_transaction_history',
-    '[R] Get broker rebate transaction history. Requires auth.',
+    '[R] Get broker rebate transaction history.',
     {
       user_id: z.number().int().optional().describe('Filter by sub-user ID'),
       from: z.number().optional().describe('Start time (Unix timestamp)'),
@@ -132,7 +132,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_user_info',
-    '[R] Get rebate user info. Requires auth.',
+    '[R] Get rebate user info.',
     {},
     async () => {
       try {
@@ -145,7 +145,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_get_partner_application_recent',
-    '[R] Get most recent partner application status. Requires auth.',
+    '[R] Get most recent partner application status.',
     {},
     async () => {
       try {
@@ -158,7 +158,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_get_partner_eligibility',
-    '[R] Check partner eligibility status. Requires auth.',
+    '[R] Check partner eligibility status.',
     {},
     async () => {
       try {
@@ -171,7 +171,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_user_sub_relation',
-    '[R] Query the relationship between users and their referrers. Requires auth.',
+    '[R] Query the relationship between users and their referrers.',
     {
       user_id_list: z.string().describe('Comma-separated list of user IDs to query'),
     },
@@ -186,7 +186,7 @@ export function registerRebateTools(server: McpServer): void {
 
   server.tool(
     'cex_rebate_get_partner_agent_data_aggregated',
-    '[R] Get aggregated partner agent data. Requires auth.',
+    '[R] Get aggregated partner agent data.',
     {
       start_date: z.string().optional().describe('Start date e.g. 2024-01-01'),
       end_date: z.string().optional().describe('End date e.g. 2024-01-31'),

@@ -9,7 +9,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_get_user_info',
-    '[R] Get P2P merchant account info for the authenticated user. Requires auth.',
+    '[R] Get P2P merchant account info for the authenticated user.',
     {},
     async () => {
       try {
@@ -22,7 +22,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_get_counterparty_user_info',
-    '[R] Get P2P merchant info for a counterparty by their user ID. Requires auth.',
+    '[R] Get P2P merchant info for a counterparty by their user ID.',
     {
       biz_uid: z.string().describe('Counterparty user ID'),
     },
@@ -40,7 +40,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_get_myself_payment',
-    '[R] Get available payment methods for the authenticated P2P merchant. Requires auth.',
+    '[R] Get available payment methods for the authenticated P2P merchant.',
     {
       fiat: z.string().optional().describe('Filter by fiat currency e.g. USD'),
     },
@@ -64,7 +64,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_get_pending_transaction_list',
-    '[R] List pending P2P transactions. Requires auth.',
+    '[R] List pending P2P transactions.',
     {
       crypto_currency: z.string().describe('Crypto currency e.g. USDT'),
       fiat_currency: z.string().describe('Fiat currency e.g. USD'),
@@ -96,7 +96,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_get_completed_transaction_list',
-    '[R] List completed P2P transactions. Requires auth.',
+    '[R] List completed P2P transactions.',
     {
       crypto_currency: z.string().describe('Crypto currency e.g. USDT'),
       fiat_currency: z.string().describe('Fiat currency e.g. USD'),
@@ -132,7 +132,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_get_transaction_details',
-    '[R] Get details of a specific P2P transaction. Requires auth.',
+    '[R] Get details of a specific P2P transaction.',
     {
       txid: z.number().int().describe('Transaction ID'),
       channel: z.string().optional().describe('Channel filter'),
@@ -152,7 +152,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_transaction_confirm_payment',
-    '[R] Confirm payment for a P2P transaction. Requires auth.',
+    '[R] Confirm payment for a P2P transaction.',
     {
       trade_id: z.string().describe('Trade ID'),
       payment_method: z.string().describe('Payment method used'),
@@ -172,7 +172,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_transaction_confirm_receipt',
-    '[R] Confirm receipt of payment for a P2P transaction. Requires auth.',
+    '[R] Confirm receipt of payment for a P2P transaction.',
     {
       trade_id: z.string().describe('Trade ID'),
     },
@@ -190,7 +190,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_transaction_cancel',
-    '[R] Cancel a P2P transaction. Requires auth.',
+    '[R] Cancel a P2P transaction.',
     {
       trade_id: z.string().describe('Trade ID'),
       reason_id: z.string().optional().describe('Cancellation reason ID'),
@@ -214,7 +214,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_place_biz_push_order',
-    '[R] Place a P2P advertisement order. Requires auth.',
+    '[R] Place a P2P advertisement order.',
     {
       currency_type: z.string().describe('Crypto currency e.g. USDT'),
       exchange_type: z.string().describe('Fiat currency e.g. USD'),
@@ -288,7 +288,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_ads_update_status',
-    '[R] Update the status of a P2P advertisement. Requires auth.',
+    '[R] Update the status of a P2P advertisement.',
     {
       adv_no: z.number().int().describe('Advertisement number'),
       adv_status: z.number().int().describe('New status: 1=online, 0=offline'),
@@ -311,7 +311,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_ads_detail',
-    '[R] Get details of a P2P advertisement. Requires auth.',
+    '[R] Get details of a P2P advertisement.',
     {
       adv_no: z.string().describe('Advertisement number'),
     },
@@ -329,7 +329,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_my_ads_list',
-    '[R] List my own P2P advertisements. Requires auth.',
+    '[R] List my own P2P advertisements.',
     {
       asset: z.string().optional().describe('Filter by crypto asset e.g. USDT'),
       fiat_unit: z.string().optional().describe('Filter by fiat currency e.g. USD'),
@@ -355,7 +355,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_ads_list',
-    '[R] List all available P2P advertisements for a given asset and fiat pair. Requires auth.',
+    '[R] List all available P2P advertisements for a given asset and fiat pair.',
     {
       asset: z.string().describe('Crypto asset e.g. USDT'),
       fiat_unit: z.string().describe('Fiat currency e.g. USD'),
@@ -379,7 +379,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_get_chats_list',
-    '[R] Get chat messages for a P2P transaction. Requires auth.',
+    '[R] Get chat messages for a P2P transaction.',
     {
       txid: z.number().int().describe('Transaction ID'),
       last_received: z.number().int().optional().describe('Last received message ID for pagination'),
@@ -401,7 +401,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_send_chat_message',
-    '[R] Send a chat message in a P2P transaction. Requires auth.',
+    '[R] Send a chat message in a P2P transaction.',
     {
       txid: z.number().int().describe('Transaction ID'),
       message: z.string().describe('Message text'),
@@ -423,7 +423,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_upload_chat_file',
-    '[R] Upload an image file for P2P chat. Requires auth.',
+    '[R] Upload an image file for P2P chat.',
     {
       image_content_type: z.string().describe('Image MIME type e.g. image/jpeg'),
       base64_img: z.string().describe('Base64-encoded image data'),

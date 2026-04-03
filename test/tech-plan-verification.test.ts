@@ -454,12 +454,12 @@ describe('Task 14: Unified mode fix', () => {
 describe('Task 15: Auth fixes', () => {
   test('cex_earn_list_uni_chart requires authentication (description)', () => {
     const tool = requireTool('cex_earn_list_uni_chart');
-    expect(tool.description).toContain('Requires auth');
+    expect(tool.description).toMatch(/^\[R\] /);
   });
 
   test('cex_earn_list_uni_rate requires authentication (description)', () => {
     const tool = requireTool('cex_earn_list_uni_rate');
-    expect(tool.description).toContain('Requires auth');
+    expect(tool.description).toMatch(/^\[R\] /);
   });
 
   test('cex_earn_list_uni_chart returns auth error without credentials', async () => {

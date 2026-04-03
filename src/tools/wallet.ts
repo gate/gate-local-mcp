@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerWalletTools(server: McpServer): void {
   server.tool(
     'cex_wallet_get_total_balance',
-    '[R] Get total account balance across all wallets. Requires auth.',
+    '[R] Get total account balance across all wallets.',
     {
       currency: z.string().optional().describe('Quote currency for conversion (default: USDT)'),
     },
@@ -24,7 +24,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_withdrawals',
-    '[R] List withdrawal history. Requires auth.',
+    '[R] List withdrawal history.',
     {
       currency: z.string().optional().describe('Filter by currency'),
       limit: z.number().int().optional(),
@@ -49,7 +49,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_deposits',
-    '[R] List deposit history. Requires auth.',
+    '[R] List deposit history.',
     {
       currency: z.string().optional().describe('Filter by currency'),
       limit: z.number().int().optional(),
@@ -74,7 +74,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_get_deposit_address',
-    '[R] Get deposit address for a currency. Requires auth.',
+    '[R] Get deposit address for a currency.',
     { currency: z.string().describe('Currency symbol e.g. USDT') },
     async ({ currency }) => {
       try {
@@ -87,7 +87,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_create_transfer',
-    '[R] Transfer funds between accounts. Requires auth.',
+    '[R] Transfer funds between accounts.',
     {
       currency: z.string().describe('Currency to transfer'),
       from: z.enum(['spot', 'margin', 'futures', 'delivery', 'options']).describe('Source account'),
@@ -110,7 +110,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_sub_account_balances',
-    '[R] List sub-account balances. Requires auth.',
+    '[R] List sub-account spot balances. See also `cex_wallet_list_sub_account_margin_balances` and `cex_wallet_list_sub_account_futures_balances` (and...',
     { sub_uid: z.string().optional().describe('Filter by sub-account UID') },
     async ({ sub_uid }) => {
       try {
@@ -125,7 +125,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_get_wallet_fee',
-    '[R] Get trading fee rates. Requires auth.',
+    '[R] Get trading fee rates.',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
       settle: z.enum(['BTC', 'USDT', 'USD']).optional().describe('Futures settlement currency'),
@@ -144,7 +144,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_create_sub_account_transfer',
-    '[R] Transfer between main account and sub-account. Requires auth.',
+    '[R] Transfer between main and sub-account. See also `cex_wallet_create_sub_account_to_sub_account_transfer` (sub-to-sub) and `cex_wallet_create_transfer`...',
     {
       sub_account: z.string().describe('Sub-account user ID'),
       currency: z.string().describe('Currency name e.g. USDT'),
@@ -171,7 +171,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_create_sub_account_to_sub_account_transfer',
-    '[R] Transfer between two sub-accounts under the same main account. Requires auth.',
+    '[R] Transfer between sub-accounts. See also `cex_wallet_create_sub_account_transfer` (main-to-sub / sub-to-main). State-changing.',
     {
       currency: z.string().describe('Currency name e.g. USDT'),
       sub_account_from: z.string().describe('Source sub-account user ID'),
@@ -198,7 +198,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_get_transfer_order_status',
-    '[R] Query main-sub account transfer status. Requires auth.',
+    '[R] Query main-sub account transfer status.',
     {
       client_order_id: z.string().optional().describe('Client specified custom ID'),
       tx_id: z.string().optional().describe('Transaction ID returned by the transfer API'),
@@ -229,7 +229,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_withdraw_status',
-    '[R] Get withdrawal status for all currencies. Requires auth.',
+    '[R] Get withdrawal status for all currencies.',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {
       try {
@@ -244,7 +244,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_sub_account_transfers',
-    '[R] List transfer records between main account and sub-accounts. Requires auth.',
+    '[R] List transfer records between main account and sub-accounts.',
     {
       sub_uid: z.string().optional().describe('Filter by sub-account UID'),
       from: z.number().optional().describe('Start time (Unix timestamp seconds)'),
@@ -269,7 +269,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_sub_account_margin_balances',
-    '[R] Query sub-account margin account balances. Requires auth.',
+    '[R] List sub-account margin balances. See also `cex_wallet_list_sub_account_balances` (spot) and `cex_wallet_list_sub_account_futures_balances` (futures).',
     { sub_uid: z.string().optional().describe('Filter by sub-account UID') },
     async ({ sub_uid }) => {
       try {
@@ -284,7 +284,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_sub_account_futures_balances',
-    '[R] Query sub-account futures account balances. Requires auth.',
+    '[R] List sub-account futures balances. See also `cex_wallet_list_sub_account_balances` (spot) and `cex_wallet_list_sub_account_margin_balances` (margin).',
     {
       sub_uid: z.string().optional().describe('Filter by sub-account UID'),
       settle: z.string().optional().describe('Settlement currency filter e.g. usdt, btc'),
@@ -303,7 +303,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_sub_account_cross_margin_balances',
-    '[R] Query sub-account cross-margin account balances. Requires auth.',
+    '[R] List sub-account cross-margin balances. See also `cex_wallet_list_sub_account_margin_balances` (margin) and `cex_wallet_list_sub_account_balances` (spot).',
     { sub_uid: z.string().optional().describe('Filter by sub-account UID') },
     async ({ sub_uid }) => {
       try {
@@ -318,7 +318,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_saved_address',
-    '[R] List saved withdrawal addresses for a currency. Requires auth.',
+    '[R] List saved withdrawal addresses for a currency.',
     {
       currency: z.string().describe('Currency symbol e.g. USDT'),
       chain: z.string().optional().describe('Chain name filter'),
@@ -340,7 +340,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_small_balance',
-    '[R] List currencies with small (dust) balances eligible for conversion. Requires auth.',
+    '[R] List small balances eligible for conversion. See also `cex_wallet_convert_small_balance` (convert) and `cex_wallet_list_small_balance_history` (history).',
     {},
     async () => {
       try {
@@ -353,7 +353,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_convert_small_balance',
-    '[W] Convert small balances (dust) to GT. Requires auth. State-changing.',
+    '[W] Convert small balances. See also `cex_wallet_list_small_balance` (eligible balances) and `cex_wallet_list_small_balance_history` (history). State-changing.',
     {
       currencies: z.array(z.string()).optional().describe('List of currencies to convert; omit or leave empty to convert all small balances'),
       is_all: z.boolean().optional().describe('Convert all small balances (overrides currencies list)'),
@@ -372,7 +372,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_small_balance_history',
-    '[R] List small balance conversion history. Requires auth.',
+    '[R] Get small-balance conversion history. See also `cex_wallet_list_small_balance` (eligible balances) and `cex_wallet_convert_small_balance` (convert).',
     {
       currency: z.string().optional().describe('Filter by currency'),
       page: z.number().int().min(1).optional(),
@@ -393,7 +393,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_list_push_orders',
-    '[R] List UID transfer (push) orders. Requires auth.',
+    '[R] List UID transfer (push) orders.',
     {
       id: z.number().int().optional().describe('Filter by push order ID'),
       from: z.number().optional().describe('Start time (Unix timestamp seconds)'),
@@ -420,7 +420,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_get_low_cap_exchange_list',
-    '[R] Get list of low market cap currencies available for exchange. Requires auth.',
+    '[R] Get list of low market cap currencies available for exchange.',
     {},
     async () => {
       try {

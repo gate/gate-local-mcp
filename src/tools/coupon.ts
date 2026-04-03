@@ -14,7 +14,7 @@ const couponTypeSchema = z.enum([
 export function registerCouponTools(server: McpServer): void {
   server.tool(
     'cex_coupon_list_user_coupons',
-    '[R] List user coupons with optional filters. Requires auth.',
+    '[R] List user coupons with optional filters.',
     {
       expired: z.union([z.literal(0), z.literal(1)]).optional().describe('0 = active, 1 = expired'),
       limit: z.number().int().optional().describe('Max number of results'),
@@ -43,7 +43,7 @@ export function registerCouponTools(server: McpServer): void {
 
   server.tool(
     'cex_coupon_get_user_coupon_detail',
-    '[R] Get detail of a specific user coupon. Requires auth.',
+    '[R] Get detail of a specific user coupon.',
     {
       coupon_type: couponTypeSchema.describe('Coupon type'),
       detail_id: z.number().int().describe('Coupon detail ID'),
