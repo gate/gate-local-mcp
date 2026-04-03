@@ -9,7 +9,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_categories',
-    '[R] List all TradFi instrument categories.',
+    'List all TradFi instrument categories',
     {},
     async () => {
       try {
@@ -21,7 +21,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_symbols',
-    '[R] List all available TradFi trading symbols.',
+    'List all available TradFi trading symbols',
     {},
     async () => {
       try {
@@ -33,7 +33,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_symbol_detail',
-    '[R] Get contract/instrument details for a TradFi symbol.',
+    'Get contract/instrument details for a TradFi symbol.',
     {
       symbols: z.string().describe('Symbol name e.g. AAPL'),
     },
@@ -48,7 +48,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_symbol_kline',
-    '[R] Get kline/OHLCV data for a TradFi symbol.',
+    'Get kline/OHLCV data for a TradFi symbol',
     {
       symbol: z.string().describe('Symbol name e.g. AAPL'),
       kline_type: z.enum(['1m', '15m', '1h', '4h', '1d', '7d', '30d']).describe('Kline interval'),
@@ -70,7 +70,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_symbol_ticker',
-    '[R] Get latest ticker for a TradFi symbol.',
+    'Get latest ticker for a TradFi symbol',
     {
       symbol: z.string().describe('Symbol name e.g. AAPL'),
     },
@@ -86,7 +86,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_mt5_account_info',
-    '[R] Get MT5 account information.',
+    'Get MT5 account information.',
     {},
     async () => {
       try {
@@ -99,7 +99,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_user_assets',
-    '[R] Get TradFi account asset balances.',
+    'Get TradFi account asset balances.',
     {},
     async () => {
       try {
@@ -114,7 +114,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_transaction',
-    '[R] List TradFi account transaction history.',
+    'List TradFi account transaction history.',
     {
       begin_time: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       end_time: z.number().optional().describe('End time (Unix timestamp in seconds)'),
@@ -139,7 +139,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_create_transaction',
-    '[W] Create a TradFi deposit or withdrawal transaction State-changing.',
+    'Create a TradFi deposit or withdrawal transaction State-changing',
     {
       asset: z.string().describe('Asset symbol e.g. USDT'),
       change: z.string().describe('Amount to transfer'),
@@ -163,7 +163,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_order_list',
-    '[R] List open TradFi orders.',
+    'List open TradFi orders.',
     {},
     async () => {
       try {
@@ -176,7 +176,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_create_tradfi_order',
-    '[W] Create a TradFi order State-changing.',
+    'Create a TradFi order State-changing',
     {
       symbol: z.string().describe('Symbol name e.g. AAPL'),
       side: z.number().int().min(1).max(2).describe('Order side: 1=sell, 2=buy'),
@@ -206,7 +206,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_update_order',
-    '[W] Update an open TradFi order State-changing.',
+    'Update an open TradFi order State-changing',
     {
       order_id: z.string().describe('Order ID'),
       price: z.string().describe('New order price'),
@@ -229,7 +229,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_delete_order',
-    '[W] Cancel/delete an open TradFi order State-changing.',
+    'Cancel/delete an open TradFi order State-changing',
     {
       order_id: z.string().describe('Order ID'),
     },
@@ -244,7 +244,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_order_history_list',
-    '[R] List TradFi order history.',
+    'List TradFi order history.',
     {
       begin_time: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       end_time: z.number().optional().describe('End time (Unix timestamp in seconds)'),
@@ -269,7 +269,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_position_list',
-    '[R] List open TradFi positions.',
+    'List open TradFi positions.',
     {},
     async () => {
       try {
@@ -282,7 +282,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_update_position',
-    '[W] Update take-profit or stop-loss for a TradFi position State-changing.',
+    'Update take-profit or stop-loss for a TradFi position State-changing',
     {
       position_id: z.number().int().describe('Position ID'),
       price_tp: z.string().nullable().optional().describe('New take-profit price (null to remove)'),
@@ -303,7 +303,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_close_position',
-    '[W] Close a TradFi position State-changing.',
+    'Close a TradFi position State-changing',
     {
       position_id: z.number().int().describe('Position ID'),
       close_type: z.number().int().min(1).max(2).describe('Close type: 1=partial close, 2=full close'),
@@ -324,7 +324,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_position_history_list',
-    '[R] List TradFi position history.',
+    'List TradFi position history.',
     {
       begin_time: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       end_time: z.number().optional().describe('End time (Unix timestamp in seconds)'),

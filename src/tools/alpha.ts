@@ -9,7 +9,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_list_alpha_currencies',
-    '[R] List currencies available on the Alpha trading platform.',
+    'List currencies available on the Alpha trading platform',
     {
       currency: z.string().optional().describe('Filter by currency symbol'),
       limit: z.number().int().optional().describe('Max results per page'),
@@ -29,7 +29,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_list_alpha_tickers',
-    '[R] List tickers for Alpha trading pairs.',
+    'List tickers for Alpha trading pairs',
     {
       currency: z.string().optional().describe('Filter by currency symbol'),
       limit: z.number().int().optional().describe('Max results per page'),
@@ -49,7 +49,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_list_alpha_tokens',
-    '[R] List tokens available on the Alpha platform.',
+    'List tokens available on the Alpha platform',
     {
       chain: z.string().optional().describe('Filter by blockchain network'),
       launch_platform: z.string().optional().describe('Filter by launch platform'),
@@ -73,7 +73,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_list_alpha_accounts',
-    '[R] List Alpha account balances.',
+    'List Alpha account balances.',
     {},
     async () => {
       try {
@@ -86,7 +86,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_list_alpha_account_book',
-    '[R] List Alpha account transaction history.',
+    'List Alpha account transaction history.',
     {
       from: z.number().describe('Start time (Unix timestamp)'),
       to: z.number().optional().describe('End time (Unix timestamp)'),
@@ -108,7 +108,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_list_alpha_orders',
-    '[R] List Alpha orders.',
+    'List Alpha orders.',
     {
       currency: z.string().optional().describe('Filter by currency symbol'),
       side: z.string().optional().describe('Filter by order side: buy or sell'),
@@ -137,7 +137,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_get_alpha_order',
-    '[R] Get details of an Alpha order by ID.',
+    'Get details of an Alpha order by ID.',
     {
       order_id: z.string().describe('Order ID'),
     },
@@ -152,7 +152,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_quote_alpha_order',
-    '[W] Get a price quote for an Alpha order State-changing.',
+    'Get a price quote for an Alpha order State-changing',
     {
       currency: z.string().describe('Currency symbol to trade'),
       side: z.string().describe('Order side: buy or sell'),
@@ -178,7 +178,7 @@ export function registerAlphaTools(server: McpServer): void {
 
   server.tool(
     'cex_alpha_place_alpha_order',
-    '[W] Place an Alpha order State-changing.',
+    'Place an Alpha order State-changing',
     {
       currency: z.string().describe('Currency symbol to trade'),
       side: z.string().describe('Order side: buy or sell'),

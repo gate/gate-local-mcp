@@ -6,7 +6,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerWelfareTools(server: McpServer): void {
   server.tool(
     'cex_welfare_get_user_identity',
-    '[R] Get user identity and welfare eligibility status.',
+    'Get user identity and welfare eligibility status.',
     {},
     async () => {
       try {
@@ -19,7 +19,7 @@ export function registerWelfareTools(server: McpServer): void {
 
   server.tool(
     'cex_welfare_get_beginner_task_list',
-    '[R] Get beginner task list and completion status.',
+    'Get beginner task list and completion status.',
     {},
     async () => {
       try {

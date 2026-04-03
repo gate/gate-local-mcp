@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerLaunchTools(server: McpServer): void {
   server.tool(
     'cex_launch_list_launch_pool_projects',
-    '[R] List launch pool projects with optional filters.',
+    'List launch pool projects with optional filters',
     {
       status: z.number().int().optional().describe('Project status filter'),
       mortgage_coin: z.string().optional().describe('Filter by mortgage coin symbol'),
@@ -35,7 +35,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_create_launch_pool_order',
-    '[W] Create a launch pool pledge order State-changing.',
+    'Create a launch pool pledge order State-changing',
     {
       pid: z.number().int().describe('Project ID'),
       rid: z.number().int().describe('Rule ID'),
@@ -56,7 +56,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_redeem_launch_pool',
-    '[W] Redeem a launch pool pledge State-changing.',
+    'Redeem a launch pool pledge State-changing',
     {
       pid: z.number().int().describe('Project ID'),
       rid: z.number().int().describe('Rule ID'),
@@ -77,7 +77,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_list_launch_pool_pledge_records',
-    '[R] List launch pool pledge records.',
+    'List launch pool pledge records.',
     {
       page: z.number().int().optional().describe('Page number'),
       page_size: z.number().int().optional().describe('Results per page'),
@@ -104,7 +104,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_list_launch_pool_reward_records',
-    '[R] List launch pool reward records.',
+    'List launch pool reward records.',
     {
       page: z.number().int().optional().describe('Page number'),
       page_size: z.number().int().optional().describe('Results per page'),

@@ -8,7 +8,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_list_sub_accounts',
-    '[R] List all sub-accounts.',
+    'List all sub-accounts.',
     { type: z.string().optional().describe('Filter by type: 0=normal, 1=pool') },
     async ({ type }) => {
       try {
@@ -23,7 +23,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_create_sub_account',
-    '[W] Create a new sub-account State-changing.',
+    'Create a new sub-account State-changing',
     {
       login_name: z.string().describe('Sub-account login name'),
       password: z.string().optional().describe('Sub-account password'),
@@ -45,7 +45,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_get_sub_account',
-    '[R] Get details of a sub-account.',
+    'Get details of a sub-account.',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
       try {
@@ -58,7 +58,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_lock_sub_account',
-    '[W] Lock a sub-account to disable login and trading State-changing.',
+    'Lock a sub-account to disable login and trading State-changing',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
       try {
@@ -71,7 +71,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_unlock_sub_account',
-    '[W] Unlock a previously locked sub-account State-changing.',
+    'Unlock a previously locked sub-account State-changing',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
       try {
@@ -84,7 +84,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_list_sub_account_keys',
-    '[R] List API keys for a sub-account.',
+    'List API keys for a sub-account.',
     { user_id: z.number().int().describe('Sub-account user ID') },
     async ({ user_id }) => {
       try {
@@ -97,7 +97,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_get_sub_account_key',
-    '[R] Get details of a specific API key for a sub-account.',
+    'Get details of a specific API key for a sub-account.',
     {
       user_id: z.number().int().describe('Sub-account user ID'),
       key: z.string().describe('API key'),
@@ -113,7 +113,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_create_sub_account_key',
-    '[W] Create API keys for a sub-account State-changing.',
+    'Create API keys for a sub-account State-changing',
     {
       user_id: z.number().int().describe('Sub-account user ID'),
       name: z.string().optional().describe('API key name/label'),
@@ -137,7 +137,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_update_sub_account_key',
-    '[W] Update an API key for a sub-account State-changing.',
+    'Update an API key for a sub-account State-changing',
     {
       user_id: z.number().int().describe('Sub-account user ID'),
       key: z.string().describe('API key to update'),
@@ -164,7 +164,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_get_sub_account_unified_mode',
-    '[R] Get the unified account mode for all sub-accounts.',
+    'Get the unified account mode for all sub-accounts.',
     {},
     async () => {
       try {
@@ -177,7 +177,7 @@ export function registerSubAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_sub_account_delete_sub_account_key',
-    '[W] Delete an API key from a sub-account State-changing.',
+    'Delete an API key from a sub-account State-changing',
     {
       user_id: z.number().int().describe('Sub-account user ID'),
       key: z.string().describe('API key to delete'),

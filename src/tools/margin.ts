@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerMarginTools(server: McpServer): void {
   server.tool(
     'cex_margin_list_margin_accounts',
-    '[R] List margin accounts.',
+    'List margin accounts.',
     { currency_pair: z.string().optional().describe('Filter by currency pair') },
     async ({ currency_pair }) => {
       try {
@@ -22,7 +22,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_margin_account_book',
-    '[R] List margin account balance change history.',
+    'List margin account balance change history.',
     {
       currency: z.string().optional(),
       currency_pair: z.string().optional(),
@@ -47,7 +47,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_auto_repay_status',
-    '[R] Get auto-repay status for margin loans.',
+    'Get auto-repay status for margin loans.',
     {},
     async () => {
       try {
@@ -60,7 +60,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_set_auto_repay',
-    '[W] Enable or disable auto-repay for margin loans State-changing.',
+    'Enable or disable auto-repay for margin loans State-changing',
     {
       status: z.enum(['on', 'off']).describe('Auto-repay status'),
     },
@@ -75,7 +75,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_margin_transferable',
-    '[R] Get the maximum amount transferable for a margin currency.',
+    'Get the maximum amount transferable for a margin currency.',
     {
       currency: z.string().describe('Currency symbol'),
       currency_pair: z.string().optional().describe('Filter by currency pair'),
@@ -93,7 +93,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_funding_accounts',
-    '[R] List margin funding accounts.',
+    'List margin funding accounts.',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {
       try {
@@ -108,7 +108,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_user_margin_tier',
-    '[R] Get user margin tier details for a currency pair.',
+    'Get user margin tier details for a currency pair.',
     { currency_pair: z.string().describe('Currency pair e.g. BTC_USDT') },
     async ({ currency_pair }) => {
       try {
@@ -121,7 +121,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_set_user_market_leverage',
-    '[W] Set leverage for a margin currency pair State-changing.',
+    'Set leverage for a margin currency pair State-changing',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       leverage: z.string().describe('Leverage value'),
@@ -140,7 +140,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_margin_user_account',
-    '[R] Get user margin account info.',
+    'Get user margin account info.',
     { currency_pair: z.string().optional().describe('Filter by currency pair') },
     async ({ currency_pair }) => {
       try {
@@ -155,7 +155,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_cross_margin_loans',
-    '[R] List cross-margin borrow history.',
+    'List cross-margin borrow history.',
     {
       status: z.number().int().describe('Loan status: 1=failed, 2=borrowed, 3=repaid'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -179,7 +179,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_cross_margin_repayments',
-    '[R] List cross-margin repayment history.',
+    'List cross-margin repayment history.',
     {
       currency: z.string().optional().describe('Filter by currency'),
       loan_id: z.string().optional().describe('Filter by loan ID'),
@@ -204,7 +204,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_loans',
-    '[R] List uni margin borrow/repay records.',
+    'List uni margin borrow/repay records.',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -227,7 +227,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_create_uni_loan',
-    '[W] Borrow or repay in uni margin State-changing.',
+    'Borrow or repay in uni margin State-changing',
     {
       currency: z.string().describe('Currency to borrow/repay'),
       type: z.enum(['borrow', 'repay']).describe('Operation type'),
@@ -252,7 +252,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_loan_records',
-    '[R] List uni margin borrow/repay history.',
+    'List uni margin borrow/repay history.',
     {
       type: z.string().optional().describe('Filter by type: borrow or repay'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -277,7 +277,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_loan_interest_records',
-    '[R] List uni margin interest charge records.',
+    'List uni margin interest charge records.',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -304,7 +304,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_uni_borrowable',
-    '[R] Get maximum borrowable amount for a currency in uni margin.',
+    'Get maximum borrowable amount for a currency in uni margin.',
     {
       currency: z.string().describe('Currency symbol e.g. USDT'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
@@ -320,7 +320,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_margin_uni_estimate_rate',
-    '[R] Get estimated borrow rates for currencies in uni margin.',
+    'Get estimated borrow rates for currencies in uni margin.',
     { currencies: z.array(z.string()).describe('List of currencies e.g. ["BTC","USDT"]') },
     async ({ currencies }) => {
       try {
@@ -333,7 +333,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_market_margin_tier',
-    '[R] Get margin leverage tiers for a currency pair.',
+    'Get margin leverage tiers for a currency pair',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
     },
@@ -347,7 +347,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_currency_pairs',
-    '[R] List all currency pairs supported for unified margin lending.',
+    'List all currency pairs supported for unified margin lending',
     {},
     async () => {
       try {
@@ -359,7 +359,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_uni_currency_pair',
-    '[R] Get details of a specific unified margin currency pair.',
+    'Get details of a specific unified margin currency pair',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
     },

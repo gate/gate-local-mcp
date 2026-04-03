@@ -7,7 +7,7 @@ import { textContent, errorContent, ORDER_SOURCE_TEXT } from '../utils.js';
 export function registerSpotTools(server: McpServer): void {
   // ── Public tools ──────────────────────────────────────────────────────────
 
-  server.tool('cex_spot_list_currencies', '[R] List all currencies supported.', {}, async () => {
+  server.tool('cex_spot_list_currencies', 'List all currencies supported', {}, async () => {
     try {
       const { body } = await new SpotApi(createClient()).listCurrencies();
       return textContent(body);
@@ -16,7 +16,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_currency',
-    '[R] Get details of a single currency.',
+    'Get details of a single currency',
     { currency: z.string().describe('Currency symbol e.g. BTC') },
     async ({ currency }) => {
       try {
@@ -26,7 +26,7 @@ export function registerSpotTools(server: McpServer): void {
     }
   );
 
-  server.tool('cex_spot_list_currency_pairs', '[R] List all available spot trading pairs.', {}, async () => {
+  server.tool('cex_spot_list_currency_pairs', 'List all available spot trading pairs', {}, async () => {
     try {
       const { body } = await new SpotApi(createClient()).listCurrencyPairs();
       return textContent(body);
@@ -35,7 +35,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_currency_pair',
-    '[R] Get details of a single currency pair.',
+    'Get details of a single currency pair',
     { currency_pair: z.string().describe('Currency pair e.g. BTC_USDT') },
     async ({ currency_pair }) => {
       try {
@@ -47,7 +47,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_tickers',
-    '[R] Get ticker information for one or all currency pairs.',
+    'Get ticker information for one or all currency pairs',
     {
       currency_pair: z.string().optional().describe('Limit to this pair e.g. BTC_USDT; omit for all'),
       timezone: z.enum(['utc0', 'utc8', 'all']).optional(),
@@ -65,7 +65,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_order_book',
-    '[R] Get the order book for a currency pair.',
+    'Get the order book for a currency pair',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       interval: z.string().optional().describe('Price precision (0, 0.1, 0.01, …); default 0 means no grouping'),
@@ -86,7 +86,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_trades',
-    '[R] Get recent trades for a currency pair.',
+    'Get recent trades for a currency pair',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       limit: z.number().int().min(1).max(1000).optional(),
@@ -113,7 +113,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_candlesticks',
-    '[R] Get candlestick/OHLCV data for a currency pair.',
+    'Get candlestick/OHLCV data for a currency pair',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       interval: z.enum(['1s', '10s', '1m', '5m', '15m', '30m', '1h', '4h', '8h', '1d', '7d', '30d']).optional().describe('Candlestick interval (default 30m)'),
@@ -136,7 +136,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_insurance_history',
-    '[R] Get spot insurance fund history for a currency.',
+    'Get spot insurance fund history for a currency',
     {
       business: z.string().describe('Business type (e.g. spot)'),
       currency: z.string().describe('Currency symbol e.g. USDT'),
@@ -158,7 +158,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_fee',
-    '[R] Query user trading fee rates Single pair. Batch (<=50) → get_spot_batch_fee.',
+    'Query user trading fee rates Single pair. Batch (<=50) → get_spot_batch_fee',
     { currency_pair: z.string().optional().describe('Currency pair to query fee for') },
     async ({ currency_pair }) => {
       try {
@@ -175,7 +175,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_accounts',
-    '[R] List spot account balances.',
+    'List spot account balances.',
     { currency: z.string().optional().describe('Filter by currency symbol') },
     async ({ currency }) => {
       try {
@@ -190,7 +190,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_list_spot_orders',
-    '[R] List spot orders.',
+    'List spot orders.',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       status: z.enum(['open', 'finished']).optional().describe('Order status (default: open)'),
@@ -219,7 +219,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_create_spot_order',
-    '[W] Create a spot order State-changing.',
+    'Create a spot order State-changing',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       side: z.enum(['buy', 'sell']),
@@ -259,7 +259,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_order',
-    '[R] Get details of a spot order.',
+    'Get details of a spot order.',
     {
       order_id: z.string().describe('Order ID'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
@@ -278,7 +278,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_cancel_spot_order',
-    '[W] Cancel a single spot order. See also `cex_spot_cancel_spot_batch_orders` (batch) and `cex_spot_cancel_all_spot_orders` (cancel all open). State-changing.',
+    'Cancel a single spot order. See also `cex_spot_cancel_spot_batch_orders` (batch) and `cex_spot_cancel_all_spot_orders` (cancel all open). State-changing.',
     {
       order_id: z.string().describe('Order ID'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
@@ -299,7 +299,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_amend_spot_order',
-    '[W] Amend (modify) an open spot order State-changing.',
+    'Amend (modify) an open spot order State-changing',
     {
       order_id: z.string().describe('Order ID'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
@@ -327,7 +327,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_cancel_all_spot_orders',
-    '[W] Cancel all open spot orders for a market. See also `cex_spot_cancel_spot_order` (single) and `cex_spot_cancel_spot_batch_orders` (batch). State-changing.',
+    'Cancel all open spot orders for a market. See also `cex_spot_cancel_spot_order` (single) and `cex_spot_cancel_spot_batch_orders` (batch). State-changing.',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       side: z.enum(['buy', 'sell']).optional().describe('Cancel only buy or sell orders'),
@@ -349,7 +349,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_list_spot_my_trades',
-    '[R] List personal trading history.',
+    'List personal trading history.',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
       order_id: z.string().optional().describe('Filter by order ID'),
@@ -378,7 +378,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_list_all_open_orders',
-    '[R] List all open orders across all pairs.',
+    'List all open orders across all pairs.',
     {
       account: z.enum(['spot', 'margin', 'unified', 'cross_margin']).optional(),
       page: z.number().int().min(1).optional(),
@@ -399,7 +399,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_list_spot_price_triggered_orders',
-    '[R] List price-triggered (stop) orders.',
+    'List price-triggered (stop) orders.',
     {
       status: z.enum(['open', 'finished']).describe('Order status'),
       currency_pair: z.string().optional(),
@@ -423,7 +423,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_list_spot_account_book',
-    '[R] Query spot account transaction history.',
+    'Query spot account transaction history.',
     {
       currency: z.string().optional().describe('Filter by currency'),
       from: z.number().optional().describe('Start time (Unix timestamp)'),
@@ -452,7 +452,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_batch_fee',
-    '[R] Get fee rates for multiple currency pairs at once Batch (<=50 pairs). Single → get_spot_fee.',
+    'Get fee rates for multiple currency pairs at once Batch (<=50 pairs). Single → get_spot_fee',
     { currency_pairs: z.string().describe('Comma-separated currency pairs e.g. BTC_USDT,ETH_USDT') },
     async ({ currency_pairs }) => {
       try {
@@ -465,7 +465,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_create_spot_batch_orders',
-    '[W] Create multiple spot orders in a single request State-changing. Single → create_spot_order.',
+    'Create multiple spot orders in a single request State-changing. Single → create_spot_order',
     {
       orders: z.array(z.object({
         currency_pair: z.string(),
@@ -496,7 +496,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_amend_spot_batch_orders',
-    '[W] Amend multiple spot orders in a single request State-changing. Single → amend_spot_order.',
+    'Amend multiple spot orders in a single request State-changing. Single → amend_spot_order',
     {
       orders: z.array(z.object({
         order_id: z.string().describe('Order ID to amend'),
@@ -531,7 +531,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_cancel_spot_batch_orders',
-    '[W] Cancel multiple spot orders (batch). See also `cex_spot_cancel_spot_order` (single) and `cex_spot_cancel_all_spot_orders` (cancel all open). State-changing.',
+    'Cancel multiple spot orders (batch). See also `cex_spot_cancel_spot_order` (single) and `cex_spot_cancel_all_spot_orders` (cancel all open). State-changing.',
     {
       orders: z.array(z.object({
         currency_pair: z.string(),
@@ -555,7 +555,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_create_cross_liquidate_order',
-    '[W] Create a cross-margin liquidation order State-changing.',
+    'Create a cross-margin liquidation order State-changing',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       amount: z.string().describe('Order amount'),
@@ -581,7 +581,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_create_spot_price_triggered_order',
-    '[W] Create a price-triggered (stop) spot order State-changing.',
+    'Create a price-triggered (stop) spot order State-changing',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       trigger_price: z.string().describe('Price that activates the order'),
@@ -614,7 +614,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_price_triggered_order',
-    '[R] Get details of a price-triggered spot order.',
+    'Get details of a price-triggered spot order.',
     { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
@@ -627,7 +627,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_cancel_spot_price_triggered_order',
-    '[W] Cancel a single price-triggered spot order State-changing.',
+    'Cancel a single price-triggered spot order State-changing',
     { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
@@ -640,7 +640,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_cancel_spot_price_triggered_order_list',
-    '[W] Cancel all price-triggered spot orders State-changing.',
+    'Cancel all price-triggered spot orders State-changing',
     {
       currency_pair: z.string().optional().describe('Only cancel orders for this pair'),
       account: z.enum(['normal', 'margin', 'unified']).optional(),
@@ -659,7 +659,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_countdown_cancel_all_spot',
-    '[W] Set a countdown timer to cancel all spot orders (safety kill-switch，). State-changing.',
+    'Set a countdown timer to cancel all spot orders (safety kill-switch，). State-changing',
     {
       timeout: z.number().int().describe('Countdown in seconds; 0 disables the timer'),
       currency_pair: z.string().optional().describe('Limit cancellation to this pair'),
