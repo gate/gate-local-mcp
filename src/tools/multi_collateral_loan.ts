@@ -12,7 +12,7 @@ const collateralCurrencySchema = z.object({
 export function registerMultiCollateralLoanTools(server: McpServer): void {
   server.tool(
     'cex_multi_collateral_loan_list_multi_collateral_orders',
-    'List multi-collateral loan orders (requires authentication)',
+    'List multi-collateral loan orders.',
     {
       page: z.number().int().min(1).optional(),
       limit: z.number().int().min(1).max(100).optional(),
@@ -35,7 +35,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
 
   server.tool(
     'cex_multi_collateral_loan_create_multi_collateral',
-    'Create a new multi-collateral loan order (requires authentication) — always confirm details with the user before calling this tool',
+    'Create a new multi-collateral loan order State-changing',
     {
       borrow_currency: z.string().describe('Currency to borrow e.g. USDT'),
       borrow_amount: z.string().describe('Amount to borrow'),
@@ -76,7 +76,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
 
   server.tool(
     'cex_multi_collateral_loan_get_multi_collateral_order_detail',
-    'Get details of a multi-collateral loan order (requires authentication)',
+    'Get details of a multi-collateral loan order.',
     { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
@@ -89,7 +89,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
 
   server.tool(
     'cex_multi_collateral_loan_list_multi_repay_records',
-    'List multi-collateral loan repayment records (requires authentication)',
+    'List multi-collateral loan repayment records.',
     {
       type: z.string().describe('Repayment type'),
       borrow_currency: z.string().optional().describe('Filter by borrow currency'),
@@ -115,7 +115,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
 
   server.tool(
     'cex_multi_collateral_loan_repay_multi_collateral_loan',
-    'Repay a multi-collateral loan (requires authentication) — always confirm repayment details with the user before calling this tool',
+    'Repay a multi-collateral loan State-changing',
     {
       order_id: z.string().describe('Order ID to repay'),
       repay_items: z.array(z.object({
@@ -145,7 +145,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
 
   server.tool(
     'cex_multi_collateral_loan_list_multi_collateral_records',
-    'List collateral adjustment records for multi-collateral loans (requires authentication)',
+    'List collateral adjustment records for multi-collateral loans.',
     {
       page: z.number().int().min(1).optional(),
       limit: z.number().int().min(1).max(100).optional(),
@@ -170,7 +170,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
 
   server.tool(
     'cex_multi_collateral_loan_operate_multi_collateral',
-    'Adjust collateral for a multi-collateral loan (requires authentication) — always confirm with the user before calling this tool',
+    'Adjust collateral for a multi-collateral loan State-changing',
     {
       order_id: z.string().describe('Order ID'),
       type: z.string().describe('Operation type: append or redeem'),
@@ -199,7 +199,7 @@ export function registerMultiCollateralLoanTools(server: McpServer): void {
 
   server.tool(
     'cex_multi_collateral_loan_list_user_currency_quota',
-    'Get user quota for a specific currency in multi-collateral loans (requires authentication)',
+    'Get user quota for a specific currency in multi-collateral loans.',
     {
       type: z.string().describe('Quota type: borrow or collateral'),
       currency: z.string().describe('Currency symbol e.g. USDT'),

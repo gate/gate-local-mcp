@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerSquareTools(server: McpServer): void {
   server.tool(
     'cex_square_list_square_ai_search',
-    'Search Gate Square content using AI (posts, analysis, signals)',
+    'Search Gate Square content using AI (posts， analysis， signals)',
     {
       keyword: z.string().optional().describe('Search keyword'),
       currency: z.string().optional().describe('Filter by currency symbol e.g. BTC'),

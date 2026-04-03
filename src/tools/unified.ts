@@ -8,7 +8,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_accounts',
-    'Get unified account balances and info (requires authentication)',
+    'Get unified account balances and info.',
     {
       currency: z.string().optional().describe('Filter by currency'),
       sub_uid: z.string().optional().describe('Sub-account UID'),
@@ -27,7 +27,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_list_unified_currencies',
-    'List currencies supported in unified account (requires authentication)',
+    'List currencies supported in unified account.',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {
       try {
@@ -42,7 +42,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_mode',
-    'Get current unified account mode (requires authentication)',
+    'Get current unified account mode.',
     {},
     async () => {
       try {
@@ -55,7 +55,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_set_unified_mode',
-    'Switch unified account mode (requires authentication) — always confirm with the user before calling this tool',
+    'Switch unified account mode State-changing',
     {
       mode: z.string().describe('Mode: classic, multi_currency, portfolio, or single_currency'),
       usdt_futures: z.boolean().optional().describe('Enable USDT futures in unified account'),
@@ -81,7 +81,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_risk_units',
-    'Get risk unit details for portfolio margin mode (requires authentication)',
+    'Get risk unit details for portfolio margin mode.',
     {},
     async () => {
       try {
@@ -94,7 +94,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_borrowable',
-    'Get maximum borrowable amount for a currency in unified account (requires authentication)',
+    'Get maximum borrowable amount for a currency in unified account.',
     { currency: z.string().describe('Currency symbol e.g. USDT') },
     async ({ currency }) => {
       try {
@@ -107,7 +107,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_transferable',
-    'Get maximum transferable amount for a currency in unified account (requires authentication)',
+    'Get maximum transferable amount for a currency in unified account.',
     { currency: z.string().describe('Currency symbol e.g. USDT') },
     async ({ currency }) => {
       try {
@@ -120,7 +120,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_estimate_rate',
-    'Get estimated borrow interest rates for currencies (requires authentication)',
+    'Get estimated borrow interest rates for currencies.',
     { currencies: z.array(z.string()).describe('List of currency symbols e.g. ["BTC","USDT"]') },
     async ({ currencies }) => {
       try {
@@ -133,7 +133,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_list_unified_loans',
-    'List active loans in unified account (requires authentication)',
+    'List active loans in unified account.',
     {
       currency: z.string().optional().describe('Filter by currency'),
       type: z.string().optional().describe('Loan type: platform or margin'),
@@ -156,7 +156,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_create_unified_loan',
-    'Borrow or repay in unified account (requires authentication) — always confirm the details with the user before calling this tool',
+    'Borrow or repay in unified account State-changing',
     {
       currency: z.string().describe('Currency to borrow/repay'),
       type: z.enum(['borrow', 'repay']),
@@ -178,7 +178,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_list_unified_loan_records',
-    'Get borrow/repay history in unified account (requires authentication)',
+    'Get borrow/repay history in unified account.',
     {
       currency: z.string().optional(),
       type: z.string().optional().describe('borrow or repay'),
@@ -201,7 +201,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_list_unified_loan_interest_records',
-    'Get interest charge history in unified account (requires authentication)',
+    'Get interest charge history in unified account.',
     {
       currency: z.string().optional(),
       type: z.string().optional().describe('Loan type'),
@@ -240,7 +240,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_user_leverage_currency_setting',
-    'Get leverage settings for currencies in unified account (requires authentication)',
+    'Get leverage settings for currencies in unified account.',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {
       try {
@@ -255,7 +255,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_set_user_leverage_currency_setting',
-    'Set leverage for a currency in unified account (requires authentication) — always confirm with the user before calling this tool',
+    'Set leverage for a currency in unified account State-changing',
     {
       currency: z.string().describe('Currency symbol e.g. BTC'),
       leverage: z.string().describe('Leverage value'),
@@ -271,7 +271,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_set_unified_collateral',
-    'Set collateral currencies for unified account (requires authentication) — always confirm with the user before calling this tool',
+    'Set collateral currencies for unified account State-changing',
     {
       collateral_type: z.union([z.literal(0), z.literal(1)]).describe('0 = all currencies as collateral; 1 = custom currencies (use enable_list/disable_list)'),
       enable_list: z.array(z.string()).optional().describe('Currencies to enable as collateral (only valid when collateral_type=1)'),
@@ -291,7 +291,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_transferables',
-    'Get transferable amounts for specified currencies in unified account (requires authentication)',
+    'Get transferable amounts for specified currencies in unified account.',
     {
       currencies: z.string().describe('Comma-separated currency symbols e.g. BTC,USDT'),
     },
@@ -306,7 +306,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_borrowable_list',
-    'Get borrowable amounts for a list of currencies in unified account (requires authentication)',
+    'Get borrowable amounts for a list of currencies in unified account.',
     {
       currencies: z.array(z.string()).describe('List of currency symbols e.g. ["BTC","USDT"]'),
     },
@@ -333,7 +333,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_user_leverage_currency_config',
-    'Get leverage configuration for a specific currency (requires authentication)',
+    'Get leverage configuration for a specific currency.',
     {
       currency: z.string().describe('Currency symbol e.g. BTC'),
     },
@@ -348,7 +348,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_history_loan_rate',
-    'Get historical loan rates for a currency (requires authentication)',
+    'Get historical loan rates for a currency.',
     {
       currency: z.string().describe('Currency symbol e.g. USDT'),
       tier: z.string().optional().describe('Tier filter'),
@@ -370,7 +370,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_calculate_portfolio_margin',
-    'Calculate portfolio margin for hypothetical positions (requires authentication)',
+    'Calculate portfolio margin for hypothetical positions State-changing',
     {
       spot_balances: z.array(z.object({
         currency: z.string(),

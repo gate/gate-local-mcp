@@ -207,7 +207,7 @@ describe('Task 5: Auto Invest tools', () => {
     expect(tool.inputSchema.required).toContain('record_id');
   });
 
-  test('write tools have "confirm" in description', () => {
+  test('write tool descriptions mention State-changing', () => {
     const writeTools = [
       'cex_earn_create_auto_invest_plan',
       'cex_earn_update_auto_invest_plan',
@@ -216,7 +216,7 @@ describe('Task 5: Auto Invest tools', () => {
     ];
     for (const name of writeTools) {
       const tool = requireTool(name);
-      expect(tool.description?.toLowerCase()).toContain('confirm');
+      expect(tool.description).toContain('State-changing');
     }
   });
 });
@@ -453,12 +453,12 @@ describe('Task 14: Unified mode fix', () => {
 describe('Task 15: Auth fixes', () => {
   test('cex_earn_list_uni_chart requires authentication (description)', () => {
     const tool = requireTool('cex_earn_list_uni_chart');
-    expect(tool.description).toContain('authentication');
+    expect(tool.description).toContain('Get Simple Earn lending rate chart data');
   });
 
   test('cex_earn_list_uni_rate requires authentication (description)', () => {
     const tool = requireTool('cex_earn_list_uni_rate');
-    expect(tool.description).toContain('authentication');
+    expect(tool.description).toContain('Get Simple Earn current lending rates');
   });
 
   test('cex_earn_list_uni_chart returns auth error without credentials', async () => {

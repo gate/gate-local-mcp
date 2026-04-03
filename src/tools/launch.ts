@@ -35,7 +35,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_create_launch_pool_order',
-    'Create a launch pool pledge order (requires authentication)',
+    'Create a launch pool pledge order State-changing',
     {
       pid: z.number().int().describe('Project ID'),
       rid: z.number().int().describe('Rule ID'),
@@ -56,7 +56,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_redeem_launch_pool',
-    'Redeem a launch pool pledge (requires authentication)',
+    'Redeem a launch pool pledge State-changing',
     {
       pid: z.number().int().describe('Project ID'),
       rid: z.number().int().describe('Rule ID'),
@@ -77,7 +77,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_list_launch_pool_pledge_records',
-    'List launch pool pledge records (requires authentication)',
+    'List launch pool pledge records.',
     {
       page: z.number().int().optional().describe('Page number'),
       page_size: z.number().int().optional().describe('Results per page'),
@@ -104,7 +104,7 @@ export function registerLaunchTools(server: McpServer): void {
 
   server.tool(
     'cex_launch_list_launch_pool_reward_records',
-    'List launch pool reward records (requires authentication)',
+    'List launch pool reward records.',
     {
       page: z.number().int().optional().describe('Page number'),
       page_size: z.number().int().optional().describe('Results per page'),

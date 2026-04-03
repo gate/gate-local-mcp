@@ -170,7 +170,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_contract_stats',
-    'Get contract statistics (open interest, long/short ratio, etc.)',
+    'Get contract statistics (open interest， long/short ratio， etc.)',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -290,7 +290,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_accounts',
-    'Get futures account balances (requires authentication)',
+    'Get futures account balances.',
     { settle: settleSchema },
     async ({ settle }) => {
       try {
@@ -303,7 +303,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_futures_account_book',
-    'Get futures account transaction/ledger history (requires authentication)',
+    'Get futures account transaction/ledger history.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -331,7 +331,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_futures_positions',
-    'List all open futures positions (requires authentication)',
+    'List all open futures positions.',
     {
       settle: settleSchema,
       holding: z.boolean().optional().describe('Only return positions with non-zero size'),
@@ -353,7 +353,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_positions_timerange',
-    'Get position history for a contract filtered by time range (requires authentication)',
+    'Get position history for a contract filtered by time range.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -378,7 +378,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_position',
-    'Get a single futures position (requires authentication)',
+    'Get a single futures position.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -394,7 +394,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_leverage',
-    'Get current leverage for a futures position (requires authentication)',
+    'Get current leverage for a futures position.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -412,7 +412,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_fee',
-    'Get futures trading fee rates (requires authentication)',
+    'Get futures trading fee rates.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -451,7 +451,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_risk_limit_table',
-    'Get a specific risk limit tier table by table ID (requires authentication)',
+    'Get a specific risk limit tier table by table ID.',
     {
       settle: settleSchema,
       table_id: z.string().describe('Risk limit table ID'),
@@ -467,7 +467,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_futures_orders',
-    'List futures orders (requires authentication)',
+    'List futures orders.',
     {
       settle: settleSchema,
       status: z.enum(['open', 'finished']).describe('Order status'),
@@ -492,7 +492,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_create_futures_order',
-    'Create a futures order (requires authentication) — always confirm the details with the user before calling this tool',
+    'Create a futures order State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -528,7 +528,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_create_futures_bbo_order',
-    'Create a Best-Bid/Offer futures order (requires authentication) — always confirm details with the user before calling this tool',
+    'Create a BBO futures order State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -559,7 +559,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_order',
-    'Get a futures order by ID (requires authentication)',
+    'Get a futures order by ID.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -575,7 +575,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_amend_futures_order',
-    'Amend an open futures order (requires authentication) — always confirm the new values with the user before calling this tool',
+    'Amend an open futures order State-changing',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -598,7 +598,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_cancel_futures_order',
-    'Cancel a futures order (requires authentication) — always confirm with the user before calling this tool',
+    'Cancel a single futures order. See also `cex_futures_cancel_futures_batch_orders` (batch) and `cex_futures_cancel_all_futures_orders` (cancel all open). State-changing.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -614,7 +614,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_cancel_all_futures_orders',
-    'Cancel all open futures orders (requires authentication) — always confirm with the user before calling this tool',
+    'Cancel all open futures orders for a market. See also `cex_futures_cancel_futures_order` (single) and `cex_futures_cancel_futures_batch_orders` (batch). State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract to cancel orders for'),
@@ -638,7 +638,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_create_futures_batch_orders',
-    'Create multiple futures orders in a single request (requires authentication) — always confirm the details with the user before calling this tool',
+    'Create multiple futures orders in a single request State-changing. Single → create_futures_order',
     {
       settle: settleSchema,
       orders: z.array(z.object({
@@ -669,7 +669,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_cancel_futures_batch_orders',
-    'Cancel multiple futures orders by ID in a single request (requires authentication) — always confirm with the user before calling this tool',
+    'Cancel multiple futures orders (batch). See also `cex_futures_cancel_futures_order` (single) and `cex_futures_cancel_all_futures_orders` (cancel all open). State-changing.',
     {
       settle: settleSchema,
       order_ids: z.array(z.string()).describe('Array of order IDs to cancel'),
@@ -685,7 +685,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_amend_futures_batch_orders',
-    'Amend multiple futures orders in a single request (requires authentication) — always confirm the new values with the user before calling this tool',
+    'Amend multiple futures orders in a single request State-changing. Single → amend_futures_order',
     {
       settle: settleSchema,
       orders: z.array(z.object({
@@ -716,7 +716,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_orders_with_time_range',
-    'Get futures orders filtered by time range (requires authentication)',
+    'Get futures orders filtered by time range.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -742,7 +742,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_futures_my_trades',
-    'Get personal futures trading history (requires authentication)',
+    'Get personal futures trading history.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -768,7 +768,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_my_trades_timerange',
-    'Get personal futures trade history filtered by time range (requires authentication)',
+    'Get personal futures trade history filtered by time range.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -796,7 +796,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_position_close',
-    'List position close history (requires authentication)',
+    'List position close history.',
     {
       settle: settleSchema,
       contract: z.string().optional(),
@@ -826,7 +826,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_futures_liq_orders',
-    'Get personal futures liquidation history (requires authentication)',
+    'Get personal futures liquidation history.',
     {
       settle: settleSchema,
       contract: z.string().optional(),
@@ -854,7 +854,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_auto_deleverages',
-    'Get personal auto-deleverage history (requires authentication)',
+    'Get personal auto-deleverage history.',
     {
       settle: settleSchema,
       contract: z.string().optional(),
@@ -882,7 +882,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_position_leverage',
-    'Update leverage for a futures position (requires authentication) — always confirm the new leverage with the user before calling this tool',
+    'Update futures position leverage. See also `cex_futures_update_futures_position_margin` (margin) and `cex_futures_update_futures_position_risk_limit` (risk limit). State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -902,7 +902,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_contract_position_leverage',
-    'Update position leverage with explicit margin mode (requires authentication) — always confirm with the user before calling this tool',
+    'Update position leverage with explicit margin mode State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -923,7 +923,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_position_margin',
-    'Add or reduce margin for a futures position (requires authentication) — always confirm the amount with the user before calling this tool',
+    'Update futures position margin. See also `cex_futures_update_futures_position_leverage` (leverage) and `cex_futures_update_futures_position_risk_limit` (risk limit). State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -940,7 +940,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_position_risk_limit',
-    'Update the risk limit for a futures position (requires authentication)',
+    'Update futures position risk limit. See also `cex_futures_update_futures_position_leverage` (leverage) and `cex_futures_update_futures_position_margin` (margin). State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -957,7 +957,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_position_cross_mode',
-    'Switch a single-mode position between isolated and cross margin (requires authentication)',
+    'Switch a single-mode position between isolated and cross margin State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -977,7 +977,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_dual_comp_position_cross_mode',
-    'Switch a dual-mode position between isolated and cross margin (requires authentication)',
+    'Switch a dual-mode position between isolated and cross margin State-changing. Single-mode → update_futures_position_cross_mode',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -997,7 +997,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_set_futures_dual_mode',
-    'Enable or disable dual-mode (hedge mode) for a futures account (requires authentication)',
+    'Enable or disable dual-mode (hedge mode) for a futures account State-changing',
     {
       settle: settleSchema,
       dual_mode: z.boolean().describe('true to enable dual/hedge mode, false to disable'),
@@ -1013,7 +1013,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_set_position_mode',
-    'Set account-level position mode (requires authentication)',
+    'Set account-level position mode State-changing',
     {
       settle: settleSchema,
       position_mode: z.string().describe('Position mode e.g. single_mode or dual_long_short_mode'),
@@ -1029,7 +1029,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_dual_mode_position',
-    'Get dual-mode positions for a contract (requires authentication)',
+    'Get dual-mode positions for a contract.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -1045,7 +1045,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_dual_mode_position_margin',
-    'Add or reduce margin for a dual-mode position (requires authentication) — always confirm the amount with the user before calling this tool',
+    'Add or reduce margin for a dual-mode position State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -1063,7 +1063,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_dual_mode_position_leverage',
-    'Update leverage for a dual-mode position (requires authentication) — always confirm the new leverage with the user before calling this tool',
+    'Update leverage for a dual-mode position State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -1083,7 +1083,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_dual_mode_position_risk_limit',
-    'Update the risk limit for a dual-mode position (requires authentication)',
+    'Update the risk limit for a dual-mode position State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -1100,7 +1100,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_countdown_cancel_all_futures',
-    'Set a countdown timer to cancel all futures orders (safety kill-switch, requires authentication)',
+    'Set a countdown timer to cancel all futures orders (safety kill-switch，). State-changing',
     {
       settle: settleSchema,
       timeout: z.number().int().describe('Countdown in seconds; 0 disables the timer'),
@@ -1121,7 +1121,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_create_trail_order',
-    'Create a trailing stop order (requires authentication) — always confirm details with the user before calling this tool',
+    'Create a trailing stop order State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -1153,7 +1153,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_trail_orders',
-    'List trail orders (requires authentication)',
+    'List trail orders.',
     {
       settle: settleSchema,
       contract: z.string().optional(),
@@ -1181,7 +1181,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_trail_order_detail',
-    'Get details of a single trail order (requires authentication)',
+    'Get details of a single trail order.',
     {
       settle: settleSchema,
       id: z.number().int().describe('Trail order ID'),
@@ -1197,7 +1197,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_trail_order',
-    'Update an existing trail order (requires authentication) — always confirm changes with the user before calling this tool',
+    'Update an existing trail order State-changing',
     {
       settle: settleSchema,
       id: z.number().describe('Trail order ID'),
@@ -1223,7 +1223,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_stop_trail_order',
-    'Stop a specific trail order (requires authentication) — always confirm with the user before calling this tool',
+    'Stop a specific trail order State-changing',
     {
       settle: settleSchema,
       id: z.number().describe('Trail order ID'),
@@ -1243,7 +1243,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_stop_all_trail_orders',
-    'Stop all trail orders (requires authentication) — always confirm with the user before calling this tool',
+    'Stop all trail orders State-changing',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Only stop trail orders for this contract'),
@@ -1263,7 +1263,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_trail_order_change_log',
-    'Get change log for a trail order (requires authentication)',
+    'Get change log for a trail order.',
     {
       settle: settleSchema,
       id: z.number().int().describe('Trail order ID'),
@@ -1286,7 +1286,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_list_price_triggered_orders',
-    'List futures price-triggered orders (requires authentication)',
+    'List futures price-triggered orders.',
     {
       settle: settleSchema,
       status: z.enum(['open', 'finished']),
@@ -1309,7 +1309,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_create_futures_price_triggered_order',
-    'Create a futures price-triggered order (requires authentication) — always confirm the details with the user before calling this tool',
+    'Create a futures price-triggered order State-changing',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name e.g. BTC_USDT'),
@@ -1345,7 +1345,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_get_futures_price_triggered_order',
-    'Get details of a futures price-triggered order (requires authentication)',
+    'Get details of a futures price-triggered order.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -1361,7 +1361,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_update_futures_price_triggered_order',
-    'Update an existing futures price-triggered order (requires authentication) — always confirm the new values with the user before calling this tool',
+    'Update an existing futures price-triggered order State-changing',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -1391,7 +1391,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_cancel_futures_price_triggered_order',
-    'Cancel a single futures price-triggered order (requires authentication) — always confirm with the user before calling this tool',
+    'Cancel a single futures price-triggered order State-changing',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -1407,7 +1407,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_cancel_futures_price_triggered_order_list',
-    'Cancel all futures price-triggered orders (requires authentication) — always confirm with the user before calling this tool',
+    'Cancel all futures price-triggered orders State-changing',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Only cancel orders for this contract'),

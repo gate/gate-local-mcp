@@ -25,7 +25,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_dual_orders',
-    'List dual investment orders (requires authentication)',
+    'List dual investment orders.',
     {
       from: z.number().optional().describe('Start time (Unix timestamp)'),
       to: z.number().optional().describe('End time (Unix timestamp)'),
@@ -48,7 +48,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_dual_balance',
-    'Get dual investment balance (requires authentication)',
+    'Get dual investment balance.',
     {},
     async () => {
       try {
@@ -79,7 +79,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_order_list',
-    'List staking orders (requires authentication)',
+    'List staking orders.',
     {
       pid: z.number().int().optional().describe('Product ID'),
       coin: z.string().optional().describe('Coin name'),
@@ -102,7 +102,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_award_list',
-    'List staking awards (requires authentication)',
+    'List staking awards.',
     {
       pid: z.number().int().optional().describe('Product ID'),
       coin: z.string().optional().describe('Coin name'),
@@ -123,7 +123,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_asset_list',
-    'List staking assets (requires authentication)',
+    'List staking assets.',
     {
       coin: z.string().optional().describe('Coin name filter'),
     },
@@ -168,7 +168,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_user_uni_lends',
-    'List user Simple Earn lending records (requires authentication)',
+    'List user Simple Earn lending records.',
     {
       currency: z.string().optional(),
       page: z.number().int().optional(),
@@ -189,7 +189,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_create_uni_lend',
-    'Create a Simple Earn lending order (requires authentication)',
+    'Create a Simple Earn lending order State-changing',
     {
       currency: z.string().describe('Currency to lend'),
       amount: z.string().describe('Amount to lend'),
@@ -213,7 +213,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_change_uni_lend',
-    'Modify a Simple Earn lending order (requires authentication)',
+    'Modify a Simple Earn lending order State-changing',
     {
       currency: z.string().optional().describe('Currency'),
       min_rate: z.string().optional().describe('New minimum lending rate'),
@@ -233,7 +233,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_uni_lend_records',
-    'List Simple Earn lending history (requires authentication)',
+    'List Simple Earn lending history.',
     {
       currency: z.string().optional(),
       page: z.number().int().optional(),
@@ -260,7 +260,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_get_uni_interest',
-    'Get Simple Earn interest for a currency (requires authentication)',
+    'Get Simple Earn interest for a currency.',
     {
       currency: z.string().describe('Currency name'),
     },
@@ -275,7 +275,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_uni_interest_records',
-    'List Simple Earn interest history (requires authentication)',
+    'List Simple Earn interest history.',
     {
       currency: z.string().optional(),
       page: z.number().int().optional(),
@@ -300,7 +300,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_get_uni_interest_status',
-    'Get Simple Earn interest reinvestment status for a currency (requires authentication)',
+    'Get Simple Earn interest reinvestment status for a currency.',
     {
       currency: z.string().describe('Currency name'),
     },
@@ -315,7 +315,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_uni_chart',
-    'Get Simple Earn lending rate chart data (requires authentication)',
+    'Get Simple Earn lending rate chart data.',
     {
       from: z.number().describe('Start time (Unix timestamp)'),
       to: z.number().describe('End time (Unix timestamp)'),
@@ -332,7 +332,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_uni_rate',
-    'Get Simple Earn current lending rates for all currencies (requires authentication)',
+    'Get Simple Earn current lending rates for all currencies.',
     {},
     async () => {
       try {
@@ -345,7 +345,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_place_dual_order',
-    'Place a dual investment order (requires authentication)',
+    'Place a dual investment order State-changing',
     {
       plan_id: z.string().describe('Plan ID'),
       amount: z.string().describe('Investment amount'),
@@ -367,7 +367,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_swap_staking_coin',
-    'Swap staking coins (requires authentication)',
+    'Swap staking coins State-changing',
     {
       coin: z.string().describe('Coin name'),
       side: z.number().int().describe('0 = Stake, 1 = Redeem'),
@@ -430,7 +430,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_earn_fixed_term_lends',
-    'List fixed-term earn lend orders (requires authentication)',
+    'List fixed-term earn lend orders.',
     {
       order_type: z.string().describe('Order type filter'),
       page: z.number().int().describe('Page number'),
@@ -458,7 +458,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_create_earn_fixed_term_lend',
-    'Create a fixed-term earn lend order (requires authentication)',
+    'Create a fixed-term earn lend order State-changing',
     {
       product_id: z.number().int().describe('Product ID to lend into'),
       amount: z.string().describe('Lend amount'),
@@ -487,7 +487,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_create_earn_fixed_term_pre_redeem',
-    'Pre-redeem a fixed-term earn order (requires authentication)',
+    'Pre-redeem a fixed-term earn order State-changing',
     {
       order_id: z.string().describe('Order ID to pre-redeem'),
     },
@@ -504,7 +504,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_earn_fixed_term_history',
-    'List fixed-term earn order history (requires authentication)',
+    'List fixed-term earn order history.',
     {
       type: z.string().describe('History type filter'),
       page: z.number().int().describe('Page number'),
@@ -585,7 +585,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_auto_invest_plans',
-    'List auto invest plans (requires authentication)',
+    'List auto invest plans.',
     {
       status: z.string().describe('Plan status: active or history'),
       page: z.number().int().optional(),
@@ -605,7 +605,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_get_auto_invest_plan_detail',
-    'Get details of an auto invest plan (requires authentication)',
+    'Get details of an auto invest plan.',
     {
       plan_id: z.number().int().describe('Plan ID'),
     },
@@ -620,7 +620,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_auto_invest_plan_records',
-    'List auto invest plan execution records (requires authentication)',
+    'List auto invest plan execution records.',
     {
       plan_id: z.number().int().describe('Plan ID'),
       page: z.number().int().optional(),
@@ -640,7 +640,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_list_auto_invest_orders',
-    'List auto invest orders for a plan record (requires authentication)',
+    'List auto invest orders for a plan record.',
     {
       plan_id: z.number().int().describe('Plan ID'),
       record_id: z.number().int().describe('Record ID'),
@@ -656,7 +656,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_create_auto_invest_plan',
-    'Create an auto invest plan (requires authentication) — always confirm the details with the user before calling this tool',
+    'Create an auto invest plan State-changing',
     {
       plan_name: z.string().optional().describe('Plan name'),
       plan_des: z.string().optional().describe('Plan description'),
@@ -697,7 +697,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_update_auto_invest_plan',
-    'Update an auto invest plan (requires authentication) — always confirm the changes with the user before calling this tool',
+    'Update an auto invest plan State-changing',
     {
       plan_id: z.number().int().describe('Plan ID to update'),
       fund_source: z.string().optional().describe('New fund source'),
@@ -719,7 +719,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_stop_auto_invest_plan',
-    'Stop an auto invest plan (requires authentication) — always confirm with the user before calling this tool',
+    'Stop an auto invest plan State-changing',
     {
       plan_id: z.number().int().describe('Plan ID to stop'),
     },
@@ -737,7 +737,7 @@ export function registerEarnTools(server: McpServer): void {
 
   server.tool(
     'cex_earn_add_position_auto_invest_plan',
-    'Add position to an auto invest plan (requires authentication) — always confirm the details with the user before calling this tool',
+    'Add position to an auto invest plan State-changing',
     {
       plan_id: z.number().int().describe('Plan ID to add position to'),
       amount: z.string().describe('Amount to add'),

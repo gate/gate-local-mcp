@@ -33,7 +33,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_symbol_detail',
-    'Get contract/instrument details for a TradFi symbol (requires authentication)',
+    'Get contract/instrument details for a TradFi symbol.',
     {
       symbols: z.string().describe('Symbol name e.g. AAPL'),
     },
@@ -86,7 +86,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_mt5_account_info',
-    'Get MT5 account information (requires authentication)',
+    'Get MT5 account information.',
     {},
     async () => {
       try {
@@ -99,7 +99,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_user_assets',
-    'Get TradFi account asset balances (requires authentication)',
+    'Get TradFi account asset balances.',
     {},
     async () => {
       try {
@@ -114,7 +114,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_transaction',
-    'List TradFi account transaction history (requires authentication)',
+    'List TradFi account transaction history.',
     {
       begin_time: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       end_time: z.number().optional().describe('End time (Unix timestamp in seconds)'),
@@ -139,7 +139,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_create_transaction',
-    'Create a TradFi deposit or withdrawal transaction (requires authentication) — always confirm with the user before calling this tool',
+    'Create a TradFi deposit or withdrawal transaction State-changing',
     {
       asset: z.string().describe('Asset symbol e.g. USDT'),
       change: z.string().describe('Amount to transfer'),
@@ -163,7 +163,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_order_list',
-    'List open TradFi orders (requires authentication)',
+    'List open TradFi orders.',
     {},
     async () => {
       try {
@@ -176,7 +176,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_create_tradfi_order',
-    'Create a TradFi order (requires authentication) — always confirm the details with the user before calling this tool',
+    'Create a TradFi order State-changing',
     {
       symbol: z.string().describe('Symbol name e.g. AAPL'),
       side: z.number().int().min(1).max(2).describe('Order side: 1=sell, 2=buy'),
@@ -206,7 +206,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_update_order',
-    'Update an open TradFi order (requires authentication) — always confirm the new values with the user before calling this tool',
+    'Update an open TradFi order State-changing',
     {
       order_id: z.string().describe('Order ID'),
       price: z.string().describe('New order price'),
@@ -229,7 +229,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_delete_order',
-    'Cancel/delete an open TradFi order (requires authentication) — always confirm with the user before calling this tool',
+    'Cancel/delete an open TradFi order State-changing',
     {
       order_id: z.string().describe('Order ID'),
     },
@@ -244,7 +244,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_order_history_list',
-    'List TradFi order history (requires authentication)',
+    'List TradFi order history.',
     {
       begin_time: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       end_time: z.number().optional().describe('End time (Unix timestamp in seconds)'),
@@ -269,7 +269,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_position_list',
-    'List open TradFi positions (requires authentication)',
+    'List open TradFi positions.',
     {},
     async () => {
       try {
@@ -282,7 +282,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_update_position',
-    'Update take-profit or stop-loss for a TradFi position (requires authentication) — always confirm with the user before calling this tool',
+    'Update take-profit or stop-loss for a TradFi position State-changing',
     {
       position_id: z.number().int().describe('Position ID'),
       price_tp: z.string().nullable().optional().describe('New take-profit price (null to remove)'),
@@ -303,7 +303,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_close_position',
-    'Close a TradFi position (requires authentication) — always confirm with the user before calling this tool',
+    'Close a TradFi position State-changing',
     {
       position_id: z.number().int().describe('Position ID'),
       close_type: z.number().int().min(1).max(2).describe('Close type: 1=partial close, 2=full close'),
@@ -324,7 +324,7 @@ export function registerTradFiTools(server: McpServer): void {
 
   server.tool(
     'cex_trad_fi_query_position_history_list',
-    'List TradFi position history (requires authentication)',
+    'List TradFi position history.',
     {
       begin_time: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
       end_time: z.number().optional().describe('End time (Unix timestamp in seconds)'),
