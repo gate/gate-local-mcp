@@ -123,13 +123,13 @@ cex_earn_update_auto_invest_plan,Update an auto invest plan (requires authentica
 cex_flash_swap_create_flash_swap_multi_currency_many_to_one_order,Create a multi-currency many-to-one flash swap order (requires authentication),,[W] Create a multi-currency many-to-one flash swap order. Requires auth. State-changing.
 cex_flash_swap_create_flash_swap_multi_currency_one_to_many_order,Create a multi-currency one-to-many flash swap order (requires authentication),,[W] Create a multi-currency one-to-many flash swap order. Requires auth. State-changing.
 cex_flash_swap_create_flash_swap_order,Create a single-currency flash swap order (requires authentication),,[W] Create a single-currency flash swap order. Requires auth. State-changing.
-cex_flash_swap_create_flash_swap_order_v1,"Create a flash swap order (V1 endpoint, requires authentication)",,"[W] Create a flash swap order ( , Requires auth). State-changing."
+cex_flash_swap_create_flash_swap_order_v1,"Create a flash swap order (V1 endpoint, requires authentication)",,[W] Place a flash swap order. Requires auth. State-changing. New endpoint → create_flash_swap_order.
 cex_flash_swap_get_flash_swap_order,Get details of a flash swap order (requires authentication),,[R] Get details of a flash swap order. Requires auth.
 cex_flash_swap_list_flash_swap_currency_pairs,List all supported flash swap currency pairs,,[R] List all supported flash swap currency pairs.
 cex_flash_swap_list_flash_swap_orders,List flash swap order history (requires authentication),,[R] List flash swap order history. Requires auth.
 cex_flash_swap_preview_flash_swap_multi_currency_many_to_one_order,Preview a multi-currency many-to-one flash swap order,,[R] Preview a multi-currency many-to-one flash swap order.
 cex_flash_swap_preview_flash_swap_multi_currency_one_to_many_order,Preview a multi-currency one-to-many flash swap order,,[R] Preview a multi-currency one-to-many flash swap order.
-cex_flash_swap_preview_flash_swap_order_v1,Preview a flash swap order (V1 endpoint),,[R] Preview a flash swap order ( ).
+cex_flash_swap_preview_flash_swap_order_v1,Preview a flash swap order (V1 endpoint),,[R] Preview flash swap order quote. New endpoint → preview_flash_swap_order.
 cex_futures_amend_futures_batch_orders,Amend multiple futures orders in a single request (requires authentication) — always confirm the new values with the user before calling this tool,,[W] Amend multiple futures orders in a single request. Requires auth. State-changing. Single → amend_futures_order.
 cex_futures_amend_futures_order,Amend an open futures order (requires authentication) — always confirm the new values with the user before calling this tool,,[W] Amend an open futures order. Requires auth. State-changing.
 cex_futures_cancel_all_futures_orders,Cancel all open futures orders (requires authentication) — always confirm with the user before calling this tool,,[W] Cancel all open futures orders. Requires auth. State-changing.
