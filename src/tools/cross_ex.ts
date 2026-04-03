@@ -9,7 +9,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_rule_symbols',
-    'List CrossEx rule symbols (public)',
+    '[R] List CrossEx rule symbols (public).',
     {
       symbols: z.string().optional().describe('Filter by symbol(s), comma-separated'),
     },
@@ -25,7 +25,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_rule_risk_limits',
-    'List CrossEx rule risk limits for a symbol (public)',
+    '[R] List CrossEx rule risk limits for a symbol (public).',
     {
       symbols: z.string().describe('Symbol name'),
     },
@@ -39,7 +39,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_transfer_coins',
-    'List coins available for CrossEx transfer (public)',
+    '[R] List coins available for CrossEx transfer (public).',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
     },
@@ -55,7 +55,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_fee',
-    'Get CrossEx trading fee information (public)',
+    '[R] Get CrossEx trading fee information (public).',
     {},
     async () => {
       try {
@@ -67,7 +67,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_interest_rate',
-    'Get CrossEx interest rates (public)',
+    '[R] Get CrossEx interest rates (public).',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -85,7 +85,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_coin_discount_rate',
-    'List CrossEx coin discount rates (public)',
+    '[R] List CrossEx coin discount rates (public).',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -105,7 +105,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_transfers',
-    'List CrossEx transfer history (requires authentication)',
+    '[R] List CrossEx transfer history. Requires auth.',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       order_id: z.string().optional().describe('Filter by order ID'),
@@ -132,7 +132,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_create_crossex_transfer',
-    'Create a CrossEx transfer (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Create a CrossEx transfer. Requires auth. State-changing.',
     {
       coin: z.string().describe('Coin symbol e.g. USDT'),
       amount: z.string().describe('Transfer amount'),
@@ -160,7 +160,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_open_orders',
-    'List open CrossEx orders (requires authentication)',
+    '[R] List open CrossEx orders. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -181,7 +181,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_create_crossex_order',
-    'Create a CrossEx order (requires authentication) — always confirm the details with the user before calling this tool',
+    '[W] Create a CrossEx order. Requires auth. State-changing.',
     {
       symbol: z.string().describe('Symbol e.g. BTC_USDT'),
       side: z.enum(['BUY', 'SELL']).describe('Order side'),
@@ -217,7 +217,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_order',
-    'Get details of a CrossEx order (requires authentication)',
+    '[R] Get details of a CrossEx order. Requires auth.',
     {
       order_id: z.string().describe('Order ID'),
     },
@@ -232,7 +232,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_update_crossex_order',
-    'Update an open CrossEx order (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Update an open CrossEx order. Requires auth. State-changing.',
     {
       order_id: z.string().describe('Order ID'),
       qty: z.string().optional().describe('New quantity'),
@@ -253,7 +253,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_cancel_crossex_order',
-    'Cancel a CrossEx order (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Cancel a CrossEx order. Requires auth. State-changing.',
     {
       order_id: z.string().describe('Order ID'),
     },
@@ -268,7 +268,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_history_orders',
-    'List CrossEx order history (requires authentication)',
+    '[R] List CrossEx order history. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
@@ -293,7 +293,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_history_trades',
-    'List CrossEx trade history (requires authentication)',
+    '[R] List CrossEx trade history. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
@@ -320,7 +320,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_create_crossex_convert_quote',
-    'Get a conversion quote for CrossEx (requires authentication)',
+    '[W] Get a conversion quote for CrossEx. Requires auth. State-changing.',
     {
       exchange_type: z.string().describe('Exchange type'),
       from_coin: z.string().describe('Source coin e.g. BTC'),
@@ -344,7 +344,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_create_crossex_convert_order',
-    'Execute a CrossEx conversion order using a quote (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Execute a CrossEx conversion order using a quote. Requires auth. State-changing.',
     {
       quote_id: z.string().describe('Quote ID from create_crossex_convert_quote'),
     },
@@ -364,7 +364,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_account',
-    'Get CrossEx account information (requires authentication)',
+    '[R] Get CrossEx account information. Requires auth.',
     {
       exchange_type: z.string().optional().describe('Exchange type filter'),
     },
@@ -381,7 +381,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_update_crossex_account',
-    'Update CrossEx account settings (requires authentication)',
+    '[W] Update CrossEx account settings. Requires auth. State-changing.',
     {
       position_mode: z.string().optional().describe('Position mode e.g. hedge or one-way'),
       account_mode: z.string().optional().describe('Account mode'),
@@ -403,7 +403,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_account_book',
-    'List CrossEx account ledger/book entries (requires authentication)',
+    '[R] List CrossEx account ledger/book entries. Requires auth.',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
@@ -430,7 +430,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_positions',
-    'List open CrossEx positions (requires authentication)',
+    '[R] List open CrossEx positions. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -449,7 +449,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_margin_positions',
-    'List open CrossEx margin positions (requires authentication)',
+    '[R] List open CrossEx margin positions. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -468,7 +468,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_adl_rank',
-    'List CrossEx auto-deleverage ranks for a symbol (requires authentication)',
+    '[R] List CrossEx auto-deleverage ranks for a symbol. Requires auth.',
     {
       symbol: z.string().describe('Symbol name'),
     },
@@ -483,7 +483,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_positions_leverage',
-    'Get leverage settings for CrossEx positions (requires authentication)',
+    '[R] Get leverage settings for CrossEx positions. Requires auth.',
     {
       symbols: z.string().optional().describe('Filter by symbol(s), comma-separated'),
     },
@@ -500,7 +500,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_update_crossex_positions_leverage',
-    'Update leverage for CrossEx positions (requires authentication)',
+    '[W] Update leverage for CrossEx positions. Requires auth. State-changing.',
     {
       symbol: z.string().describe('Symbol name'),
       leverage: z.string().describe('Leverage value e.g. "10"'),
@@ -520,7 +520,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_margin_positions_leverage',
-    'Get leverage settings for CrossEx margin positions (requires authentication)',
+    '[R] Get leverage settings for CrossEx margin positions. Requires auth.',
     {
       symbols: z.string().optional().describe('Filter by symbol(s), comma-separated'),
     },
@@ -537,7 +537,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_update_crossex_margin_positions_leverage',
-    'Update leverage for CrossEx margin positions (requires authentication)',
+    '[W] Update leverage for CrossEx margin positions. Requires auth. State-changing.',
     {
       symbol: z.string().describe('Symbol name'),
       leverage: z.string().describe('Leverage value e.g. "10"'),
@@ -557,7 +557,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_close_crossex_position',
-    'Close a CrossEx position (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Close a CrossEx position. Requires auth. State-changing.',
     {
       symbol: z.string().describe('Symbol name'),
       position_side: z.string().optional().describe('Position side: LONG, SHORT, or NONE'),
@@ -577,7 +577,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_history_positions',
-    'List CrossEx position history (requires authentication)',
+    '[R] List CrossEx position history. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
@@ -602,7 +602,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_history_margin_positions',
-    'List CrossEx margin position history (requires authentication)',
+    '[R] List CrossEx margin position history. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
@@ -627,7 +627,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_history_margin_interests',
-    'List CrossEx margin interest history (requires authentication)',
+    '[R] List CrossEx margin interest history. Requires auth.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),

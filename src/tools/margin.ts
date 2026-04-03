@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerMarginTools(server: McpServer): void {
   server.tool(
     'cex_margin_list_margin_accounts',
-    'List margin accounts (requires authentication)',
+    '[R] List margin accounts. Requires auth.',
     { currency_pair: z.string().optional().describe('Filter by currency pair') },
     async ({ currency_pair }) => {
       try {
@@ -22,7 +22,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_margin_account_book',
-    'List margin account balance change history (requires authentication)',
+    '[R] List margin account balance change history. Requires auth.',
     {
       currency: z.string().optional(),
       currency_pair: z.string().optional(),
@@ -47,7 +47,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_auto_repay_status',
-    'Get auto-repay status for margin loans (requires authentication)',
+    '[R] Get auto-repay status for margin loans. Requires auth.',
     {},
     async () => {
       try {
@@ -60,7 +60,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_set_auto_repay',
-    'Enable or disable auto-repay for margin loans (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Enable or disable auto-repay for margin loans. Requires auth. State-changing.',
     {
       status: z.enum(['on', 'off']).describe('Auto-repay status'),
     },
@@ -75,7 +75,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_margin_transferable',
-    'Get the maximum amount transferable for a margin currency (requires authentication)',
+    '[R] Get the maximum amount transferable for a margin currency. Requires auth.',
     {
       currency: z.string().describe('Currency symbol'),
       currency_pair: z.string().optional().describe('Filter by currency pair'),
@@ -93,7 +93,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_funding_accounts',
-    'List margin funding accounts (requires authentication)',
+    '[R] List margin funding accounts. Requires auth.',
     { currency: z.string().optional().describe('Filter by currency') },
     async ({ currency }) => {
       try {
@@ -108,7 +108,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_user_margin_tier',
-    'Get user margin tier details for a currency pair (requires authentication)',
+    '[R] Get user margin tier details for a currency pair. Requires auth.',
     { currency_pair: z.string().describe('Currency pair e.g. BTC_USDT') },
     async ({ currency_pair }) => {
       try {
@@ -121,7 +121,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_set_user_market_leverage',
-    'Set leverage for a margin currency pair (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Set leverage for a margin currency pair. Requires auth. State-changing.',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
       leverage: z.string().describe('Leverage value'),
@@ -140,7 +140,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_margin_user_account',
-    'Get user margin account info (requires authentication)',
+    '[R] Get user margin account info. Requires auth.',
     { currency_pair: z.string().optional().describe('Filter by currency pair') },
     async ({ currency_pair }) => {
       try {
@@ -155,7 +155,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_cross_margin_loans',
-    'List cross-margin borrow history (requires authentication)',
+    '[R] List cross-margin borrow history. Requires auth.',
     {
       status: z.number().int().describe('Loan status: 1=failed, 2=borrowed, 3=repaid'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -179,7 +179,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_cross_margin_repayments',
-    'List cross-margin repayment history (requires authentication)',
+    '[R] List cross-margin repayment history. Requires auth.',
     {
       currency: z.string().optional().describe('Filter by currency'),
       loan_id: z.string().optional().describe('Filter by loan ID'),
@@ -204,7 +204,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_loans',
-    'List uni margin borrow/repay records (requires authentication)',
+    '[R] List uni margin borrow/repay records. Requires auth.',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -227,7 +227,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_create_uni_loan',
-    'Borrow or repay in uni margin (requires authentication) — always confirm the details with the user before calling this tool',
+    '[W] Borrow or repay in uni margin. Requires auth. State-changing.',
     {
       currency: z.string().describe('Currency to borrow/repay'),
       type: z.enum(['borrow', 'repay']).describe('Operation type'),
@@ -252,7 +252,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_loan_records',
-    'List uni margin borrow/repay history (requires authentication)',
+    '[R] List uni margin borrow/repay history. Requires auth.',
     {
       type: z.string().optional().describe('Filter by type: borrow or repay'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -277,7 +277,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_loan_interest_records',
-    'List uni margin interest charge records (requires authentication)',
+    '[R] List uni margin interest charge records. Requires auth.',
     {
       currency_pair: z.string().optional().describe('Filter by currency pair'),
       currency: z.string().optional().describe('Filter by currency'),
@@ -304,7 +304,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_uni_borrowable',
-    'Get maximum borrowable amount for a currency in uni margin (requires authentication)',
+    '[R] Get maximum borrowable amount for a currency in uni margin. Requires auth.',
     {
       currency: z.string().describe('Currency symbol e.g. USDT'),
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
@@ -320,7 +320,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_margin_uni_estimate_rate',
-    'Get estimated borrow rates for currencies in uni margin (requires authentication)',
+    '[R] Get estimated borrow rates for currencies in uni margin. Requires auth.',
     { currencies: z.array(z.string()).describe('List of currencies e.g. ["BTC","USDT"]') },
     async ({ currencies }) => {
       try {
@@ -333,7 +333,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_market_margin_tier',
-    'Get margin leverage tiers for a currency pair',
+    '[R] Get margin leverage tiers for a currency pair.',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
     },
@@ -347,7 +347,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_list_uni_currency_pairs',
-    'List all currency pairs supported for unified margin lending',
+    '[R] List all currency pairs supported for unified margin lending.',
     {},
     async () => {
       try {
@@ -359,7 +359,7 @@ export function registerMarginTools(server: McpServer): void {
 
   server.tool(
     'cex_margin_get_uni_currency_pair',
-    'Get details of a specific unified margin currency pair',
+    '[R] Get details of a specific unified margin currency pair.',
     {
       currency_pair: z.string().describe('Currency pair e.g. BTC_USDT'),
     },

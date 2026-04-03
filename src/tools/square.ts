@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerSquareTools(server: McpServer): void {
   server.tool(
     'cex_square_list_square_ai_search',
-    'Search Gate Square content using AI (posts, analysis, signals)',
+    '[R] Search Gate Square content using AI (posts, analysis, signals).',
     {
       keyword: z.string().optional().describe('Search keyword'),
       currency: z.string().optional().describe('Filter by currency symbol e.g. BTC'),
@@ -33,7 +33,7 @@ export function registerSquareTools(server: McpServer): void {
 
   server.tool(
     'cex_square_list_live_replay',
-    'List live stream replays from Gate Square',
+    '[R] List live stream replays from Gate Square.',
     {
       tag: z.string().optional().describe('Filter by tag'),
       coin: z.string().optional().describe('Filter by coin symbol'),

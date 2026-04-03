@@ -12,7 +12,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_contracts',
-    'List all delivery (expiring futures) contracts',
+    '[R] List all delivery (expiring futures) contracts.',
     { settle: settleSchema },
     async ({ settle }) => {
       try {
@@ -24,7 +24,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_delivery_contract',
-    'Get a single delivery contract',
+    '[R] Get a single delivery contract.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -39,7 +39,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_order_book',
-    'Get delivery contract order book',
+    '[R] Get delivery contract order book.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -61,7 +61,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_candlesticks',
-    'Get delivery contract candlestick data',
+    '[R] Get delivery contract candlestick data.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -85,7 +85,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_tickers',
-    'Get delivery contract tickers',
+    '[R] Get delivery contract tickers.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -104,7 +104,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_accounts',
-    'Get delivery account balance (requires authentication)',
+    '[R] Get delivery account balance. Requires auth.',
     { settle: settleSchema },
     async ({ settle }) => {
       try {
@@ -117,7 +117,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_positions',
-    'List delivery positions (requires authentication)',
+    '[R] List delivery positions. Requires auth.',
     { settle: settleSchema },
     async ({ settle }) => {
       try {
@@ -130,7 +130,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_orders',
-    'List delivery orders (requires authentication)',
+    '[R] List delivery orders. Requires auth.',
     {
       settle: settleSchema,
       status: z.enum(['open', 'finished']),
@@ -155,7 +155,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_create_delivery_order',
-    'Create a delivery order (requires authentication) — always confirm the details with the user before calling this tool',
+    '[W] Create a delivery order. Requires auth. State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -181,7 +181,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_cancel_delivery_order',
-    'Cancel a delivery order (requires authentication) — always confirm with the user before calling this tool',
+    '[W] Cancel a delivery order. Requires auth. State-changing.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -197,7 +197,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_my_delivery_trades',
-    'Get personal delivery trading history (requires authentication)',
+    '[R] Get personal delivery trading history. Requires auth.',
     {
       settle: settleSchema,
       contract: z.string().optional(),
@@ -223,7 +223,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_trades',
-    'List delivery contract public trade history',
+    '[R] List delivery contract public trade history.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -247,7 +247,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_insurance_ledger',
-    'Get delivery insurance fund history',
+    '[R] Get delivery insurance fund history.',
     {
       settle: settleSchema,
       limit: z.number().int().optional().describe('Max results'),
@@ -264,7 +264,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_risk_limit_tiers',
-    'List delivery contract risk limit tiers',
+    '[R] List delivery contract risk limit tiers.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Contract name'),
@@ -285,7 +285,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_account_book',
-    'Get delivery account book / fund flow records (requires authentication)',
+    '[R] Get delivery account book / fund flow records. Requires auth.',
     {
       settle: settleSchema,
       limit: z.number().int().optional().describe('Max results'),
@@ -309,7 +309,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_delivery_position',
-    'Get a single delivery position (requires authentication)',
+    '[R] Get a single delivery position. Requires auth.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -325,7 +325,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_update_delivery_position_margin',
-    'Update delivery position margin (requires authentication)',
+    '[W] Update delivery position margin. Requires auth. State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -342,7 +342,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_update_delivery_position_leverage',
-    'Update delivery position leverage (requires authentication)',
+    '[W] Update delivery position leverage. Requires auth. State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -359,7 +359,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_update_delivery_position_risk_limit',
-    'Update delivery position risk limit (requires authentication)',
+    '[W] Update delivery position risk limit. Requires auth. State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -376,7 +376,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_cancel_delivery_orders',
-    'Cancel all open delivery orders for a contract (requires authentication)',
+    '[W] Cancel all open delivery orders for a contract. Requires auth. State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -395,7 +395,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_delivery_order',
-    'Get a single delivery order (requires authentication)',
+    '[R] Get a single delivery order. Requires auth.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -411,7 +411,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_position_close',
-    'List delivery position close history (requires authentication)',
+    '[R] List delivery position close history. Requires auth.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -431,7 +431,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_liquidates',
-    'List delivery liquidation history (requires authentication)',
+    '[R] List delivery liquidation history. Requires auth.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -453,7 +453,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_settlements',
-    'List delivery settlement history (requires authentication)',
+    '[R] List delivery settlement history. Requires auth.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -475,7 +475,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_price_triggered_delivery_orders',
-    'List delivery price-triggered orders (requires authentication)',
+    '[R] List delivery price-triggered orders. Requires auth.',
     {
       settle: settleSchema,
       status: z.enum(['open', 'finished']).describe('Order status filter'),
@@ -498,7 +498,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_create_price_triggered_delivery_order',
-    'Create a delivery price-triggered order (requires authentication) — always confirm details with the user before calling',
+    '[W] Create a delivery price-triggered order. Requires auth. State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -529,7 +529,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_cancel_price_triggered_delivery_order_list',
-    'Cancel all delivery price-triggered orders for a contract (requires authentication)',
+    '[W] Cancel all delivery price-triggered orders for a contract. Requires auth. State-changing.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -545,7 +545,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_price_triggered_delivery_order',
-    'Get a single delivery price-triggered order (requires authentication)',
+    '[R] Get a single delivery price-triggered order. Requires auth.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -561,7 +561,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_cancel_price_triggered_delivery_order',
-    'Cancel a single delivery price-triggered order (requires authentication)',
+    '[W] Cancel a single delivery price-triggered order. Requires auth. State-changing.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),

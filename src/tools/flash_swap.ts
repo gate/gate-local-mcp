@@ -17,7 +17,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerFlashSwapTools(server: McpServer): void {
   server.tool(
     'cex_flash_swap_list_flash_swap_currency_pairs',
-    'List all supported flash swap currency pairs',
+    '[R] List all supported flash swap currency pairs.',
     {
       currency: z.string().optional().describe('Filter by currency symbol'),
       page: z.number().int().optional().describe('Page number'),
@@ -37,7 +37,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_list_flash_swap_orders',
-    'List flash swap order history (requires authentication)',
+    '[R] List flash swap order history. Requires auth.',
     {
       status: z.number().int().optional().describe('Order status: 1=success, 2=failed'),
       sell_currency: z.string().optional(),
@@ -64,7 +64,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_get_flash_swap_order',
-    'Get details of a flash swap order (requires authentication)',
+    '[R] Get details of a flash swap order. Requires auth.',
     { order_id: z.string().describe('Order ID') },
     async ({ order_id }) => {
       try {
@@ -91,7 +91,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_multi_currency_many_to_one_order',
-    'Create a multi-currency many-to-one flash swap order (requires authentication)',
+    '[W] Create a multi-currency many-to-one flash swap order. Requires auth. State-changing.',
     { params: multiParamSchema },
     async ({ params }) => {
       try {
@@ -113,7 +113,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_preview_flash_swap_multi_currency_many_to_one_order',
-    'Preview a multi-currency many-to-one flash swap order',
+    '[R] Preview a multi-currency many-to-one flash swap order.',
     { params: multiPreviewParamSchema },
     async ({ params }) => {
       try {
@@ -134,7 +134,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_multi_currency_one_to_many_order',
-    'Create a multi-currency one-to-many flash swap order (requires authentication)',
+    '[W] Create a multi-currency one-to-many flash swap order. Requires auth. State-changing.',
     { params: multiParamSchema },
     async ({ params }) => {
       try {
@@ -156,7 +156,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_preview_flash_swap_multi_currency_one_to_many_order',
-    'Preview a multi-currency one-to-many flash swap order',
+    '[R] Preview a multi-currency one-to-many flash swap order.',
     { params: multiPreviewParamSchema },
     async ({ params }) => {
       try {
@@ -177,7 +177,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_order',
-    'Create a single-currency flash swap order (requires authentication)',
+    '[W] Create a single-currency flash swap order. Requires auth. State-changing.',
     {
       preview_id: z.string().describe('Preview result ID returned by preview endpoint'),
       sell_currency: z.string().describe('Currency to sell e.g. BTC'),
@@ -202,7 +202,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_preview_flash_swap_order_v1',
-    'Preview a flash swap order (V1 endpoint)',
+    '[R] Preview flash swap order quote. New endpoint → preview_flash_swap_order.',
     {
       sell_asset: z.string().describe('Asset to sell e.g. BTC'),
       buy_asset: z.string().describe('Asset to buy e.g. USDT'),
@@ -225,7 +225,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_order_v1',
-    'Create a flash swap order (V1 endpoint, requires authentication)',
+    '[W] Place a flash swap order. Requires auth. State-changing. New endpoint → create_flash_swap_order.',
     {
       sell_asset: z.string().describe('Asset to sell e.g. BTC'),
       sell_amount: z.string().describe('Amount to sell'),

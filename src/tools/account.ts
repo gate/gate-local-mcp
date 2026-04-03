@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerAccountTools(server: McpServer): void {
   server.tool(
     'cex_account_get_account_detail',
-    'Get account profile and configuration (requires authentication)',
+    '[R] Get account profile and configuration. Requires auth.',
     {},
     async () => {
       try {
@@ -20,7 +20,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_get_account_rate_limit',
-    'Get account API rate limit information (requires authentication)',
+    '[R] Get account API rate limit information. Requires auth.',
     {},
     async () => {
       try {
@@ -33,7 +33,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_get_debit_fee',
-    'Get debit fee configuration (requires authentication)',
+    '[R] Get debit fee configuration. Requires auth.',
     {},
     async () => {
       try {
@@ -46,7 +46,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_set_debit_fee',
-    'Enable or disable GT debit fee (requires authentication)',
+    '[W] Enable or disable GT debit fee. Requires auth. State-changing.',
     { enabled: z.boolean().describe('true to pay fees with GT, false to disable') },
     async ({ enabled }) => {
       try {
@@ -59,7 +59,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_get_account_main_keys',
-    'Get main account API key info (requires authentication)',
+    '[R] Get main account API key info. Requires auth.',
     {},
     async () => {
       try {
@@ -72,7 +72,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_list_stp_groups',
-    'List Self-Trade Prevention (STP) groups (requires authentication)',
+    '[R] List Self-Trade Prevention (STP) groups. Requires auth.',
     { name: z.string().optional().describe('Filter by group name') },
     async ({ name }) => {
       try {
@@ -87,7 +87,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_create_stp_group',
-    'Create a Self-Trade Prevention (STP) group (requires authentication)',
+    '[W] Create a Self-Trade Prevention (STP) group. Requires auth. State-changing.',
     { name: z.string().describe('STP group name') },
     async ({ name }) => {
       try {
@@ -100,7 +100,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_list_stp_groups_users',
-    'List users in an STP group (requires authentication)',
+    '[R] List users in an STP group. Requires auth.',
     { stp_id: z.number().int().describe('STP group ID') },
     async ({ stp_id }) => {
       try {
@@ -113,7 +113,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_add_stp_group_users',
-    'Add users to an STP group (requires authentication)',
+    '[W] Add users to an STP group. Requires auth. State-changing.',
     {
       stp_id: z.number().int().describe('STP group ID'),
       user_ids: z.array(z.number().int()).describe('List of user IDs to add'),
@@ -129,7 +129,7 @@ export function registerAccountTools(server: McpServer): void {
 
   server.tool(
     'cex_account_delete_stp_group_users',
-    'Remove a user from an STP group (requires authentication)',
+    '[W] Remove a user from an STP group. Requires auth. State-changing.',
     {
       stp_id: z.number().int().describe('STP group ID'),
       user_id: z.number().int().describe('User ID to remove'),
