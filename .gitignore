@@ -1,0 +1,20 @@
+node_modules/
+dist/
+*.js.map
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+.claude/projects/
+.worktrees/
+
+# macOS
+.DS_Store
+
+# MCP registry auth tokens
+.mcpregistry_github_token
+.mcpregistry_registry_token
+
+# Internal planning/superpowers working files
+docs/superpowers/
+doc/

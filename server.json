@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.gateio-dev/gate-mcp",
+  "description": "Gate API v4 MCP server — spot, futures, options, wallet, and more.",
+  "repository": {
+    "url": "https://github.com/gate/gate-local-mcp",
+    "source": "github"
+  },
+  "version": "0.18.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "gate-mcp",
+      "version": "0.18.2",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "GATE_API_KEY",
+          "description": "Gate API key. Required for authenticated endpoints (trading, wallet, account).",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": true
+        },
+        {
+          "name": "GATE_API_SECRET",
+          "description": "Gate API secret. Required for authenticated endpoints (trading, wallet, account).",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": true
+        },
+        {
+          "name": "GATE_BASE_URL",
+          "description": "Override the Gate API base URL. Defaults to https://api.gateio.ws. Set to https://api-testnet.gateapi.io for testnet.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}
