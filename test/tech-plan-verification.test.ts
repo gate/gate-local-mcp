@@ -453,12 +453,12 @@ describe('Task 14: Unified mode fix', () => {
 describe('Task 15: Auth fixes', () => {
   test('cex_earn_list_uni_chart requires authentication (description)', () => {
     const tool = requireTool('cex_earn_list_uni_chart');
-    expect(tool.description).toContain('Get Simple Earn lending rate chart data');
+    expect(tool.description).toContain('Get Simple Earn rate chart.');
   });
 
   test('cex_earn_list_uni_rate requires authentication (description)', () => {
     const tool = requireTool('cex_earn_list_uni_rate');
-    expect(tool.description).toContain('Get Simple Earn current lending rates');
+    expect(tool.description).toContain('List Simple Earn rates.');
   });
 
   test('cex_earn_list_uni_chart returns auth error without credentials', async () => {
@@ -502,17 +502,17 @@ describe('Task 15: Auth fixes', () => {
 // Task 17: Version bump
 // ============================================================================
 describe('Task 17: Version', () => {
-  test('package.json version is 0.18.1', async () => {
+  test('package.json version is 0.18.2', async () => {
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
     const pkg = require('../package.json');
-    expect(pkg.version).toBe('0.18.1');
+    expect(pkg.version).toBe('0.18.2');
   });
 
-  test('server.json version is 0.18.1', async () => {
+  test('server.json version is 0.18.2', async () => {
     const { readFileSync } = await import('fs');
     const serverJson = JSON.parse(readFileSync('server.json', 'utf-8'));
-    expect(serverJson.version).toBe('0.18.1');
+    expect(serverJson.version).toBe('0.18.2');
   });
 });
 
