@@ -461,6 +461,21 @@ describe('Task 15: Auth fixes', () => {
     expect(tool.description).toContain('List Simple Earn rates.');
   });
 
+  test('cex_fc_create_fc_order_v1 mentions auth requirement (description)', () => {
+    const tool = requireTool('cex_fc_create_fc_order_v1');
+    expect(tool.description).toContain('Requires authentication');
+  });
+
+  test('cex_fx_countdown_cancel_all_fx mentions auth requirement (description)', () => {
+    const tool = requireTool('cex_fx_countdown_cancel_all_fx');
+    expect(tool.description).toContain('Requires authentication');
+  });
+
+  test('cex_spot_countdown_cancel_all_spot mentions auth requirement (description)', () => {
+    const tool = requireTool('cex_spot_countdown_cancel_all_spot');
+    expect(tool.description).toContain('Requires authentication');
+  });
+
   test('cex_earn_list_uni_chart returns auth error without credentials', async () => {
     const noAuthClient = await createTestClient({
       GATE_API_KEY: undefined,

@@ -659,7 +659,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_countdown_cancel_all_spot',
-    'Set a countdown timer to cancel all spot orders (safety kill-switch，). State-changing',
+    'Set a countdown timer to cancel all spot orders (safety kill-switch，). Requires authentication. State-changing',
     {
       timeout: z.number().int().describe('Countdown in seconds; 0 disables the timer'),
       currency_pair: z.string().optional().describe('Limit cancellation to this pair'),

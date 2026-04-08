@@ -225,7 +225,7 @@ export function registerFlashSwapTools(server: McpServer): void {
 
   server.tool(
     'cex_flash_swap_create_flash_swap_order_v1',
-    'Place a flash swap order State-changing. New endpoint → create_flash_swap_order',
+    'Place a flash swap order State-changing. Requires authentication. New endpoint → create_flash_swap_order',
     {
       sell_asset: z.string().describe('Asset to sell e.g. BTC'),
       sell_amount: z.string().describe('Amount to sell'),

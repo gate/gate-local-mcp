@@ -1100,7 +1100,7 @@ export function registerFuturesTools(server: McpServer): void {
 
   server.tool(
     'cex_futures_countdown_cancel_all_futures',
-    'Set a countdown timer to cancel all futures orders (safety kill-switch，). State-changing',
+    'Set a countdown timer to cancel all futures orders (safety kill-switch，). Requires authentication. State-changing',
     {
       settle: settleSchema,
       timeout: z.number().int().describe('Countdown in seconds; 0 disables the timer'),
