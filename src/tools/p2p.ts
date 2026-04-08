@@ -190,7 +190,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_transaction_cancel',
-    'Cancel a P2P transaction. State-changing',
+    'Cancel a P2P transaction.',
     {
       trade_id: z.string().describe('Trade ID'),
       reason_id: z.string().optional().describe('Cancellation reason ID'),
@@ -214,7 +214,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_place_biz_push_order',
-    'Place a P2P advertisement order. State-changing',
+    'Place a P2P advertisement order.',
     {
       currency_type: z.string().describe('Crypto currency e.g. USDT'),
       exchange_type: z.string().describe('Fiat currency e.g. USD'),
@@ -288,7 +288,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_ads_update_status',
-    'Update the status of a P2P advertisement. State-changing',
+    'Update the status of a P2P advertisement.',
     {
       adv_no: z.number().int().describe('Advertisement number'),
       adv_status: z.number().int().describe('New status: 1=online, 0=offline'),
@@ -401,7 +401,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_send_chat_message',
-    'Send a chat message in a P2P transaction. State-changing',
+    'Send a chat message in a P2P transaction.',
     {
       txid: z.number().int().describe('Transaction ID'),
       message: z.string().describe('Message text'),
@@ -423,7 +423,7 @@ export function registerP2PTools(server: McpServer): void {
 
   server.tool(
     'cex_p2p_upload_chat_file',
-    'Upload an image file for P2P chat. State-changing',
+    'Upload an image file for P2P chat.',
     {
       image_content_type: z.string().describe('Image MIME type e.g. image/jpeg'),
       base64_img: z.string().describe('Base64-encoded image data'),
