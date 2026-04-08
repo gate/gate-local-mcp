@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerWalletTools(server: McpServer): void {
   server.tool(
     'cex_wallet_get_total_balance',
-    'Get total account balance across all wallets.',
+    'Get total account balance across all wallets. See also `cex_spot_get_spot_accounts` (spot only) and `cex_unified_get_unified_accounts` (unified account).',
     {
       currency: z.string().optional().describe('Quote currency for conversion (default: USDT)'),
     },
@@ -87,7 +87,7 @@ export function registerWalletTools(server: McpServer): void {
 
   server.tool(
     'cex_wallet_create_transfer',
-    'Transfer funds between accounts.',
+    'Transfer funds between accounts. See also `cex_wallet_create_sub_account_transfer` (main-to-sub / sub-to-main) and `cex_wallet_create_sub_account_to_sub_account_transfer` (sub-to-sub). State-changing',
     {
       currency: z.string().describe('Currency to transfer'),
       from: z.enum(['spot', 'margin', 'futures', 'delivery', 'options']).describe('Source account'),

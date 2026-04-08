@@ -12,7 +12,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_contracts',
-    'List all delivery (expiring futures) contracts',
+    'List delivery contracts.',
     { settle: settleSchema },
     async ({ settle }) => {
       try {
@@ -24,7 +24,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_delivery_contract',
-    'Get a single delivery contract',
+    'Get delivery contract.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -39,7 +39,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_order_book',
-    'Get delivery contract order book',
+    'Get delivery order book.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -61,7 +61,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_candlesticks',
-    'Get delivery contract candlestick data',
+    'List delivery candlesticks.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -85,7 +85,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_tickers',
-    'Get delivery contract tickers',
+    'List delivery tickers.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -104,7 +104,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_accounts',
-    'Get delivery account balance.',
+    'List delivery accounts.',
     { settle: settleSchema },
     async ({ settle }) => {
       try {
@@ -197,7 +197,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_my_delivery_trades',
-    'Get personal delivery trading history.',
+    'List my delivery trades.',
     {
       settle: settleSchema,
       contract: z.string().optional(),
@@ -223,7 +223,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_trades',
-    'List delivery contract public trade history',
+    'List delivery trades.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -247,7 +247,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_insurance_ledger',
-    'Get delivery insurance fund history',
+    'List delivery insurance ledger.',
     {
       settle: settleSchema,
       limit: z.number().int().optional().describe('Max results'),
@@ -264,7 +264,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_risk_limit_tiers',
-    'List delivery contract risk limit tiers',
+    'List delivery risk limit tiers.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Contract name'),
@@ -285,7 +285,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_account_book',
-    'Get delivery account book / fund flow records.',
+    'List delivery account book.',
     {
       settle: settleSchema,
       limit: z.number().int().optional().describe('Max results'),
@@ -309,7 +309,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_delivery_position',
-    'Get a single delivery position.',
+    'Get delivery position.',
     {
       settle: settleSchema,
       contract: z.string().describe('Contract name'),
@@ -395,7 +395,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_delivery_order',
-    'Get a single delivery order.',
+    'Get delivery order.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),
@@ -411,7 +411,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_position_close',
-    'List delivery position close history.',
+    'List delivery position closes.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -431,7 +431,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_liquidates',
-    'List delivery liquidation history.',
+    'List delivery liquidations.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -453,7 +453,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_delivery_settlements',
-    'List delivery settlement history.',
+    'List delivery settlements.',
     {
       settle: settleSchema,
       contract: z.string().optional().describe('Filter by contract'),
@@ -475,7 +475,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_list_price_triggered_delivery_orders',
-    'List delivery price-triggered orders.',
+    'List delivery conditional orders.',
     {
       settle: settleSchema,
       status: z.enum(['open', 'finished']).describe('Order status filter'),
@@ -545,7 +545,7 @@ export function registerDeliveryTools(server: McpServer): void {
 
   server.tool(
     'cex_delivery_get_price_triggered_delivery_order',
-    'Get a single delivery price-triggered order.',
+    'Get delivery conditional order.',
     {
       settle: settleSchema,
       order_id: z.string().describe('Order ID'),

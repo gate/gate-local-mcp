@@ -175,7 +175,7 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_accounts',
-    'List spot account balances.',
+    'List spot account balances. See also `cex_wallet_get_total_balance` (total across wallets) and `cex_unified_get_unified_accounts` (unified account).',
     { currency: z.string().optional().describe('Filter by currency symbol') },
     async ({ currency }) => {
       try {

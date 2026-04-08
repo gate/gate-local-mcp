@@ -8,7 +8,7 @@ export function registerUnifiedTools(server: McpServer): void {
 
   server.tool(
     'cex_unified_get_unified_accounts',
-    'Get unified account balances and info.',
+    'Get unified account balances and info. See also `cex_spot_get_spot_accounts` (spot only) and `cex_wallet_get_total_balance` (total across wallets).',
     {
       currency: z.string().optional().describe('Filter by currency'),
       sub_uid: z.string().optional().describe('Sub-account UID'),

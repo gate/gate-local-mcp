@@ -9,7 +9,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_rule_symbols',
-    'List CrossEx rule symbols (public)',
+    'List CrossEx symbols.',
     {
       symbols: z.string().optional().describe('Filter by symbol(s), comma-separated'),
     },
@@ -25,7 +25,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_rule_risk_limits',
-    'List CrossEx rule risk limits for a symbol (public)',
+    'Get CrossEx risk limits.',
     {
       symbols: z.string().describe('Symbol name'),
     },
@@ -39,7 +39,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_transfer_coins',
-    'List coins available for CrossEx transfer (public)',
+    'List CrossEx transfer coins.',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
     },
@@ -55,7 +55,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_fee',
-    'Get CrossEx trading fee information (public)',
+    'Get CrossEx fees.',
     {},
     async () => {
       try {
@@ -67,7 +67,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_interest_rate',
-    'Get CrossEx interest rates (public)',
+    'Get CrossEx interest rates.',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -85,7 +85,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_coin_discount_rate',
-    'List CrossEx coin discount rates (public)',
+    'List CrossEx discount rates.',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -105,7 +105,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_transfers',
-    'List CrossEx transfer history.',
+    'List CrossEx transfers.',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       order_id: z.string().optional().describe('Filter by order ID'),
@@ -160,7 +160,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_open_orders',
-    'List open CrossEx orders.',
+    'List CrossEx open orders.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -217,7 +217,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_order',
-    'Get details of a CrossEx order.',
+    'Get CrossEx order.',
     {
       order_id: z.string().describe('Order ID'),
     },
@@ -364,7 +364,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_account',
-    'Get CrossEx account information.',
+    'Get CrossEx account.',
     {
       exchange_type: z.string().optional().describe('Exchange type filter'),
     },
@@ -403,7 +403,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_account_book',
-    'List CrossEx account ledger/book entries.',
+    'List CrossEx ledger entries.',
     {
       coin: z.string().optional().describe('Filter by coin symbol'),
       from: z.number().optional().describe('Start time (Unix timestamp in seconds)'),
@@ -430,7 +430,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_positions',
-    'List open CrossEx positions.',
+    'List CrossEx positions.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -449,7 +449,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_margin_positions',
-    'List open CrossEx margin positions.',
+    'List CrossEx margin positions.',
     {
       symbol: z.string().optional().describe('Filter by symbol'),
       exchange_type: z.string().optional().describe('Exchange type filter'),
@@ -468,7 +468,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_list_crossex_adl_rank',
-    'List CrossEx auto-deleverage ranks for a symbol.',
+    'Get CrossEx ADL rank.',
     {
       symbol: z.string().describe('Symbol name'),
     },
@@ -483,7 +483,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_positions_leverage',
-    'Get leverage settings for CrossEx positions.',
+    'Get CrossEx position leverage settings.',
     {
       symbols: z.string().optional().describe('Filter by symbol(s), comma-separated'),
     },
@@ -520,7 +520,7 @@ export function registerCrossExTools(server: McpServer): void {
 
   server.tool(
     'cex_cross_ex_get_crossex_margin_positions_leverage',
-    'Get leverage settings for CrossEx margin positions.',
+    'Get CrossEx margin leverage settings.',
     {
       symbols: z.string().optional().describe('Filter by symbol(s), comma-separated'),
     },

@@ -7,7 +7,7 @@ import { textContent, errorContent } from '../utils.js';
 export function registerActivityTools(server: McpServer): void {
   server.tool(
     'cex_activity_get_my_activity_entry',
-    'Get current user activity entry and participation status.',
+    'Get Activity Center entry.',
     {},
     async () => {
       try {
@@ -20,7 +20,7 @@ export function registerActivityTools(server: McpServer): void {
 
   server.tool(
     'cex_activity_list_activities',
-    'List available activities with optional filters',
+    'List activities.',
     {
       recommend_type: z.string().optional().describe('Filter by recommendation type'),
       type_ids: z.string().optional().describe('Comma-separated activity type IDs to filter by'),
@@ -46,7 +46,7 @@ export function registerActivityTools(server: McpServer): void {
 
   server.tool(
     'cex_activity_list_activity_types',
-    'List all available activity types',
+    'List activity types.',
     {},
     async () => {
       try {
