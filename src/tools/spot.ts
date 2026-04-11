@@ -1,8 +1,28 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { SpotApi } from 'gate-api';
+import { SpotApi, SpotAccount } from 'gate-api';
 import { createClient, requireAuth } from '../client.js';
 import { textContent, errorContent, ORDER_SOURCE_TEXT } from '../utils.js';
+
+/** Paginate accounts and build the response object. */
+export function paginateAccounts(
+  accounts: SpotAccount[],
+  page: number,
+  limit: number,
+): { accounts: SpotAccount[]; pagination: { page: number; limit: number; total: number; total_pages: number } } {
+  const safePage = Math.max(1, page);
+  const safeLimit = Math.min(1000, Math.max(1, limit));
+
+  const total = accounts.length;
+  const totalPages = Math.ceil(total / safeLimit);
+  const start = Math.min((safePage - 1) * safeLimit, total);
+  const end = Math.min(start + safeLimit, total);
+
+  return {
+    accounts: accounts.slice(start, end),
+    pagination: { page: safePage, limit: safeLimit, total, total_pages: totalPages },
+  };
+}
 
 export function registerSpotTools(server: McpServer): void {
   // ── Public tools ──────────────────────────────────────────────────────────
@@ -175,15 +195,25 @@ export function registerSpotTools(server: McpServer): void {
 
   server.tool(
     'cex_spot_get_spot_accounts',
-    'List spot account balances.',
-    { currency: z.string().optional().describe('Filter by currency symbol') },
-    async ({ currency }) => {
+    'List spot account balances with pagination. When `currency` is specified, pagination is disabled and the specified currency account is returned directly. See also `cex_wallet_get_total_balance` (total across wallets) and `cex_unified_get_unified_accounts` (unified account).',
+    {
+      currency: z.string().optional().describe('Retrieve data of the specified currency. When set, page and limit are ignored.'),
+      page: z.number().int().min(1).optional().describe('Page number, starting from 1. Default: 1. Only effective when currency is not specified.'),
+      limit: z.number().int().min(1).optional().describe('Number of records per page. Default: 10, max: 1000. Exceeding 1000 will be capped silently. Only effective when currency is not specified.'),
+    },
+    async ({ currency, page, limit }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (currency) opts.currency = currency;
         const { body } = await new SpotApi(createClient()).listSpotAccounts(opts);
-        return textContent(body);
+
+        // When currency is specified, return directly without pagination
+        if (currency) {
+          return textContent({ accounts: body });
+        }
+
+        return textContent(paginateAccounts(body, page ?? 1, limit ?? 10));
       } catch (e) { return errorContent(e); }
     }
   );
