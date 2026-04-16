@@ -70,6 +70,15 @@ const WRITE_VERBS = new Set([
   'delete', 'lock', 'unlock', 'add', 'countdown',
   'swap', 'place', 'change', 'stop', 'repay', 'operate',
   'confirm', 'send', 'upload', 'close', 'reset', 'quote', 'convert', 'redeem', 'calculate',
+  'post', 'register', 'modify',
+]);
+
+// Tools whose names don't follow the cex_{module}_{verb}_{rest} pattern
+// but are still write operations. Checked by exact sanitized name.
+const WRITE_TOOL_OVERRIDES = new Set([
+  'cex_launch_hodler_airdrop_order',
+  'cex_withdrawal_withdraw',
+  'cex_withdrawal_withdraw_push_order',
 ]);
 
 /**
@@ -81,6 +90,7 @@ const WRITE_VERBS = new Set([
 export const ORDER_SOURCE_TEXT = 'local_mcp';
 
 export function isWriteTool(name: string): boolean {
+  if (WRITE_TOOL_OVERRIDES.has(name)) return true;
   const parts = name.split('_');
   // Verb is at index 2 for most tools (cex_{module}_{verb}_...).
   // Some SDK-based names place a category word at index 2 with the verb at index 3

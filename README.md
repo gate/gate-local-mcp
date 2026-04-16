@@ -95,7 +95,7 @@ npx gate-mcp --modules=futures --readonly
 }
 ```
 
-**Available modules:** `spot`, `futures`, `delivery`, `margin`, `wallet`, `account`, `options`, `earn`, `flash_swap`, `unified`, `sub_account`, `multi_collateral_loan`, `p2p`, `tradfi`, `crossex`, `alpha`, `rebate`, `activity`, `coupon`, `launch`, `square`, `welfare`
+**Available modules:** `spot`, `futures`, `delivery`, `margin`, `wallet`, `account`, `options`, `earn`, `flash_swap`, `unified`, `sub_account`, `multi_collateral_loan`, `p2p`, `tradfi`, `crossex`, `alpha`, `rebate`, `activity`, `coupon`, `launch`, `square`, `assetswap`, `bot`, `withdrawal`
 
 | Module | Total | Read-only |
 |---|---|---|
@@ -106,7 +106,7 @@ npx gate-mcp --modules=futures --readonly
 | wallet | 22 | 18 |
 | account | 10 | 6 |
 | options | 29 | 22 |
-| earn | 29 | 22 |
+| earn | 41 | 26 |
 | flash_swap | 7 | 5 |
 | unified | 22 | 17 |
 | sub_account | 11 | 5 |
@@ -118,9 +118,11 @@ npx gate-mcp --modules=futures --readonly
 | rebate | 9 | 9 |
 | activity | 3 | 3 |
 | coupon | 2 | 2 |
-| launch | 5 | 3 |
+| launch | 15 | 12 |
 | square | 2 | 2 |
-| welfare | 2 | 2 |
+| assetswap | 7 | 2 |
+| bot | 10 | 3 |
+| withdrawal | 3 | 0 |
 
 ## Environment Variables
 
@@ -193,14 +195,20 @@ Tools marked `*` require authentication (`GATE_API_KEY` + `GATE_API_SECRET`).
 ### Coupon (2 tools)
 `cex_coupon_list_user_coupons`\*, `cex_coupon_get_user_coupon_detail`\*
 
-### Launch (5 tools)
-`cex_launch_list_launch_pool_projects`, `cex_launch_create_launch_pool_order`\*, `cex_launch_redeem_launch_pool`\*, `cex_launch_list_launch_pool_pledge_records`\*, `cex_launch_list_launch_pool_reward_records`\*
+### Launch (15 tools)
+`cex_launch_list_launch_pool_projects`, `cex_launch_create_launch_pool_order`\*, `cex_launch_redeem_launch_pool`\*, `cex_launch_list_launch_pool_pledge_records`\*, `cex_launch_list_launch_pool_reward_records`\*, `cex_launch_get_hodler_airdrop_project_list`, `cex_launch_hodler_airdrop_order`\*, `cex_launch_get_hodler_airdrop_user_order_records`\*, `cex_launch_get_hodler_airdrop_user_airdrop_records`\*, `cex_launch_get_candy_drop_activity_list_v4`, `cex_launch_register_candy_drop_v4`\*, `cex_launch_get_candy_drop_activity_rules_v4`, `cex_launch_get_candy_drop_task_progress_v4`\*, `cex_launch_get_candy_drop_participation_records_v4`\*, `cex_launch_get_candy_drop_airdrop_records_v4`\*
 
 ### Square (2 tools)
 `cex_square_list_square_ai_search`, `cex_square_list_live_replay`
 
-### Welfare (2 tools)
-`cex_welfare_get_user_identity`\*, `cex_welfare_get_beginner_task_list`\*
+### Assetswap (7 tools)
+`cex_assetswap_list_asset_swap_assets`, `cex_assetswap_get_asset_swap_config`, `cex_assetswap_evaluate_asset_swap`\*, `cex_assetswap_create_asset_swap_order_v1`\*, `cex_assetswap_list_asset_swap_orders_v1`\*, `cex_assetswap_preview_asset_swap_order_v1`\*, `cex_assetswap_get_asset_swap_order_v1`\*
+
+### Bot (10 tools)
+`cex_bot_get_ai_hub_strategy_recommend`, `cex_bot_post_ai_hub_spot_grid_create`\*, `cex_bot_post_ai_hub_margin_grid_create`\*, `cex_bot_post_ai_hub_infinite_grid_create`\*, `cex_bot_post_ai_hub_fx_grid_create`\*, `cex_bot_post_ai_hub_spot_martingale_create`\*, `cex_bot_post_ai_hub_contract_martingale_create`\*, `cex_bot_get_ai_hub_portfolio_running`\*, `cex_bot_get_ai_hub_portfolio_detail`\*, `cex_bot_post_ai_hub_portfolio_stop`\*
+
+### Withdrawal (3 tools)
+`cex_withdrawal_withdraw`\*, `cex_withdrawal_withdraw_push_order`\*, `cex_withdrawal_cancel_withdrawal`\*
 
 *\* Requires authentication (`GATE_API_KEY` + `GATE_API_SECRET`)*
 

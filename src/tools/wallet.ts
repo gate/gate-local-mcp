@@ -9,7 +9,7 @@ export function registerWalletTools(server: McpServer): void {
     'cex_wallet_get_total_balance',
     'Get total account balance across all wallets.',
     {
-      currency: z.string().optional().describe('Quote currency for conversion (default: USDT)'),
+      currency: z.string().optional().describe('Currency unit for balance calculation. BTC, CNY, USD, USDT are allowed. Default USDT'),
     },
     async ({ currency }) => {
       try {
@@ -26,11 +26,11 @@ export function registerWalletTools(server: McpServer): void {
     'cex_wallet_list_withdrawals',
     'List withdrawal history.',
     {
-      currency: z.string().optional().describe('Filter by currency'),
-      limit: z.number().int().optional(),
-      offset: z.number().int().optional(),
-      from: z.number().optional().describe('Start time (Unix timestamp)'),
-      to: z.number().optional().describe('End time (Unix timestamp)'),
+      currency: z.string().optional().describe('Currency name, e.g. BTC. Returns all currencies if not specified'),
+      limit: z.number().int().optional().describe('Maximum number of records to return, default 100'),
+      offset: z.number().int().optional().describe('List offset, starting from 0'),
+      from: z.number().optional().describe('Start timestamp in seconds'),
+      to: z.number().optional().describe('End timestamp in seconds'),
     },
     async ({ currency, limit, offset, from, to }) => {
       try {
@@ -51,11 +51,11 @@ export function registerWalletTools(server: McpServer): void {
     'cex_wallet_list_deposits',
     'List deposit history.',
     {
-      currency: z.string().optional().describe('Filter by currency'),
-      limit: z.number().int().optional(),
-      offset: z.number().int().optional(),
-      from: z.number().optional().describe('Start time (Unix timestamp)'),
-      to: z.number().optional().describe('End time (Unix timestamp)'),
+      currency: z.string().optional().describe('Currency name, e.g. BTC. Returns all currencies if not specified'),
+      limit: z.number().int().optional().describe('Maximum number of records to return, default 100'),
+      offset: z.number().int().optional().describe('List offset, starting from 0'),
+      from: z.number().optional().describe('Start timestamp in seconds'),
+      to: z.number().optional().describe('End timestamp in seconds'),
     },
     async ({ currency, limit, offset, from, to }) => {
       try {
@@ -111,12 +111,18 @@ export function registerWalletTools(server: McpServer): void {
   server.tool(
     'cex_wallet_list_sub_account_balances',
     'List sub-account spot balances. See also `cex_wallet_list_sub_account_margin_balances` and `cex_wallet_list_sub_account_futures_balances` (and `cex_wallet_list_sub_account_cross_margin_balances` for cross-margin).',
-    { sub_uid: z.string().optional().describe('Filter by sub-account UID') },
-    async ({ sub_uid }) => {
+    {
+      sub_uid: z.string().optional().describe('Sub-account user ID, query multiple separated by comma. If not specified, returns all sub-accounts'),
+      page: z.number().int().optional().describe('Page number'),
+      limit: z.number().int().optional().describe('Results per page'),
+    },
+    async ({ sub_uid, page, limit }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (sub_uid) opts.subUid = sub_uid;
+        if (page !== undefined) opts.page = page;
+        if (limit !== undefined) opts.limit = limit;
         const { body } = await new WalletApi(createClient()).listSubAccountBalances(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -396,10 +402,10 @@ export function registerWalletTools(server: McpServer): void {
     'List UID transfer (push) orders.',
     {
       id: z.number().int().optional().describe('Filter by push order ID'),
-      from: z.number().optional().describe('Start time (Unix timestamp seconds)'),
-      to: z.number().optional().describe('End time (Unix timestamp seconds)'),
-      limit: z.number().int().min(1).max(100).optional(),
-      offset: z.number().int().min(0).optional(),
+      from: z.number().optional().describe('Start time for querying records. Unix timestamp in seconds. Defaults to 7 days before current time'),
+      to: z.number().optional().describe('End time for querying records. Unix timestamp in seconds. Defaults to current time'),
+      limit: z.number().int().min(1).max(100).optional().describe('Maximum number of records to return'),
+      offset: z.number().int().min(0).optional().describe('List offset, starting from 0'),
       transaction_type: z.string().optional().describe('Transaction type filter'),
     },
     async ({ id, from, to, limit, offset, transaction_type }) => {

@@ -1,7 +1,8 @@
 export const VALID_MODULES = [
   'spot', 'futures', 'delivery', 'margin', 'wallet',
   'account', 'options', 'earn', 'flash_swap', 'unified', 'sub_account',
-  'p2p', 'tradfi', 'crossex', 'alpha', 'rebate', 'multi_collateral_loan', 'activity', 'coupon', 'launch', 'square', 'welfare',
+  'p2p', 'tradfi', 'crossex', 'alpha', 'rebate', 'multi_collateral_loan', 'activity', 'coupon', 'launch', 'square',
+  'assetswap', 'bot', 'withdrawal',
 ] as const;
 
 export type ModuleName = typeof VALID_MODULES[number];

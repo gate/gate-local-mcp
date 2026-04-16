@@ -11,12 +11,24 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_dual_investment_plans',
     'List dual investment plans',
     {
-      plan_id: z.number().int().optional().describe('Filter by plan ID'),
+      plan_id: z.number().int().optional().describe('Financial project ID'),
+      coin: z.string().optional().describe('Filter by coin name'),
+      type: z.string().optional().describe('Filter by plan type'),
+      quote_currency: z.string().optional().describe('Filter by quote currency'),
+      sort: z.string().optional().describe('Sort field'),
+      page: z.number().int().optional().describe('Page number'),
+      page_size: z.number().int().optional().describe('Results per page'),
     },
-    async ({ plan_id }) => {
+    async ({ plan_id, coin, type, quote_currency, sort, page, page_size }) => {
       try {
         const opts: Record<string, unknown> = {};
         if (plan_id !== undefined) opts.planId = plan_id;
+        if (coin !== undefined) opts.coin = coin;
+        if (type !== undefined) opts.type = type;
+        if (quote_currency !== undefined) opts.quoteCurrency = quote_currency;
+        if (sort !== undefined) opts.sort = sort;
+        if (page !== undefined) opts.page = page;
+        if (page_size !== undefined) opts.pageSize = page_size;
         const { body } = await new EarnApi(createClient()).listDualInvestmentPlans(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
@@ -27,17 +39,23 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_dual_orders',
     'List dual investment orders.',
     {
-      from: z.number().optional().describe('Start time (Unix timestamp)'),
-      to: z.number().optional().describe('End time (Unix timestamp)'),
-      page: z.number().int().optional(),
-      limit: z.number().int().optional(),
+      from: z.number().optional().describe('Start settlement time in seconds'),
+      to: z.number().optional().describe('End settlement time in seconds'),
+      type: z.string().optional().describe('Filter by order type'),
+      status: z.string().optional().describe('Filter by order status'),
+      coin: z.string().optional().describe('Filter by coin name'),
+      page: z.number().int().optional().describe('Page number'),
+      limit: z.number().int().optional().describe('Maximum number of records returned in a single list'),
     },
-    async ({ from, to, page, limit }) => {
+    async ({ from, to, type, status, coin, page, limit }) => {
       try {
         requireAuth();
         const opts: Record<string, unknown> = {};
         if (from !== undefined) opts.from = from;
         if (to !== undefined) opts.to = to;
+        if (type !== undefined) opts.type = type;
+        if (status !== undefined) opts.status = status;
+        if (coin !== undefined) opts.coin = coin;
         if (page !== undefined) opts.page = page;
         if (limit !== undefined) opts.limit = limit;
         const { body } = await new EarnApi(createClient()).listDualOrders(opts);
@@ -83,7 +101,7 @@ export function registerEarnTools(server: McpServer): void {
     {
       pid: z.number().int().optional().describe('Product ID'),
       coin: z.string().optional().describe('Coin name'),
-      type: z.number().int().optional().describe('Order type'),
+      type: z.number().int().optional().describe('Type: 0=staking, 1=redemption'),
       page: z.number().int().optional(),
     },
     async ({ pid, coin, type, page }) => {
@@ -317,9 +335,9 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_uni_chart',
     'Get Simple Earn lending rate chart data.',
     {
-      from: z.number().describe('Start time (Unix timestamp)'),
-      to: z.number().describe('End time (Unix timestamp)'),
-      asset: z.string().describe('Asset name'),
+      from: z.number().describe('Start timestamp in seconds, maximum span 30 days'),
+      to: z.number().describe('End timestamp in seconds, maximum span 30 days'),
+      asset: z.string().describe('Currency name'),
     },
     async ({ from, to, asset }) => {
       try {
@@ -396,9 +414,9 @@ export function registerEarnTools(server: McpServer): void {
     'List fixed-term earn products',
     {
       page: z.number().int().describe('Page number'),
-      limit: z.number().int().describe('Results per page'),
-      asset: z.string().optional().describe('Filter by asset symbol e.g. USDT'),
-      type: z.number().int().optional().describe('Product type filter'),
+      limit: z.number().int().describe('Page size'),
+      asset: z.string().optional().describe('Currency name, e.g. USDT'),
+      type: z.number().int().optional().describe('Product type: 1=normal, 2=vip'),
     },
     async ({ page, limit, asset, type }) => {
       try {
@@ -415,8 +433,8 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_earn_fixed_term_products_by_asset',
     'List fixed-term earn products for a specific asset',
     {
-      asset: z.string().describe('Asset symbol e.g. USDT'),
-      type: z.string().optional().describe('Product type filter'),
+      asset: z.string().describe('Currency name, e.g. USDT, BTC'),
+      type: z.string().optional().describe('Product type: empty or 1=normal, 2=vip, 0=all'),
     },
     async ({ asset, type }) => {
       try {
@@ -432,9 +450,9 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_earn_fixed_term_lends',
     'List fixed-term earn lend orders.',
     {
-      order_type: z.string().describe('Order type filter'),
+      order_type: z.string().describe('Order type: 1=current orders, 2=history orders'),
       page: z.number().int().describe('Page number'),
-      limit: z.number().int().describe('Results per page'),
+      limit: z.number().int().describe('Page size'),
       product_id: z.number().int().optional().describe('Filter by product ID'),
       order_id: z.number().int().optional().describe('Filter by order ID'),
       asset: z.string().optional().describe('Filter by asset symbol'),
@@ -506,9 +524,9 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_earn_fixed_term_history',
     'List fixed-term earn order history.',
     {
-      type: z.string().describe('History type filter'),
+      type: z.string().describe('Record type: 1=subscribe, 2=redeem, 3=interest, 4=extra bonus'),
       page: z.number().int().describe('Page number'),
-      limit: z.number().int().describe('Results per page'),
+      limit: z.number().int().describe('Page size'),
       product_id: z.number().int().optional().describe('Filter by product ID'),
       order_id: z.string().optional().describe('Filter by order ID'),
       asset: z.string().optional().describe('Filter by asset symbol'),
@@ -540,7 +558,7 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_auto_invest_coins',
     'List coins available for auto invest plans',
     {
-      plan_money: z.string().optional().describe('Plan money currency, e.g. USDT or BTC'),
+      plan_money: z.string().optional().describe('Pricing currency, optional USDT or BTC, default USDT'),
     },
     async ({ plan_money }) => {
       try {
@@ -587,7 +605,7 @@ export function registerEarnTools(server: McpServer): void {
     'cex_earn_list_auto_invest_plans',
     'List auto invest plans.',
     {
-      status: z.string().describe('Plan status: active or history'),
+      status: z.string().describe('Plan status: history - historical, active - in progress'),
       page: z.number().int().optional(),
       page_size: z.number().int().optional(),
     },
@@ -750,6 +768,87 @@ export function registerEarnTools(server: McpServer): void {
         req.planId = plan_id;
         req.amount = amount;
         const { body } = await new EarnApi(createClient()).addPositionAutoInvestPlan(req);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  // ── Dual Investment Enhancements ────────────────────────────────────────
+
+  server.tool(
+    'cex_earn_get_dual_order_refund_preview',
+    'Preview refund for a dual investment order.',
+    {
+      order_id: z.string().describe('Dual investment order ID'),
+    },
+    async ({ order_id }) => {
+      try {
+        requireAuth();
+        const { body } = await new EarnApi(createClient()).getDualOrderRefundPreview(order_id);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_place_dual_order_refund',
+    'Execute refund for a dual investment order. State-changing',
+    {
+      order_id: z.string().describe('Dual investment order ID'),
+      req_id: z.string().describe('Unique request ID for idempotency'),
+    },
+    async ({ order_id, req_id }) => {
+      try {
+        requireAuth();
+        const { DualOrderRefundParams } = await import('gate-api');
+        const params = new DualOrderRefundParams();
+        params.orderId = order_id;
+        params.reqId = req_id;
+        const { body } = await new EarnApi(createClient()).placeDualOrderRefund(params);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_modify_dual_order_reinvest',
+    'Modify reinvestment settings for a dual investment order. State-changing',
+    {
+      order_id: z.number().int().optional().describe('Dual investment order ID'),
+      status: z.number().int().optional().describe('Reinvestment status (0: disable, 1: enable)'),
+      effective_time_duration: z.number().int().optional().describe('Effective time duration in seconds'),
+    },
+    async ({ order_id, status, effective_time_duration }) => {
+      try {
+        requireAuth();
+        const { DualModifyOrderReinvestParams } = await import('gate-api');
+        const params = new DualModifyOrderReinvestParams();
+        if (order_id !== undefined) params.orderId = order_id;
+        if (status !== undefined) params.status = status;
+        if (effective_time_duration !== undefined) params.effectiveTimeDuration = effective_time_duration;
+        const { body } = await new EarnApi(createClient()).modifyDualOrderReinvest(params);
+        return textContent(body);
+      } catch (e) { return errorContent(e); }
+    }
+  );
+
+  server.tool(
+    'cex_earn_get_dual_project_recommend',
+    'Get recommended dual investment projects.',
+    {
+      mode: z.string().optional().describe('Recommendation mode'),
+      coin: z.string().optional().describe('Filter by coin name'),
+      type: z.string().optional().describe('Filter by project type'),
+      history_pids: z.string().optional().describe('Comma-separated list of historical plan IDs to exclude'),
+    },
+    async ({ mode, coin, type, history_pids }) => {
+      try {
+        const opts: Record<string, unknown> = {};
+        if (mode !== undefined) opts.mode = mode;
+        if (coin !== undefined) opts.coin = coin;
+        if (type !== undefined) opts.type = type;
+        if (history_pids !== undefined) opts.historyPids = history_pids;
+        const { body } = await new EarnApi(createClient()).getDualProjectRecommend(opts);
         return textContent(body);
       } catch (e) { return errorContent(e); }
     }

@@ -120,9 +120,11 @@ const MODULE_COUNTS = {
   multi_collateral_loan: { total: 12, readonly:  9, write:  3 },
   activity:              { total:  3, readonly:  3, write:  0 },
   coupon:                { total:  2, readonly:  2, write:  0 },
-  launch:                { total:  5, readonly:  3, write:  2 },
+  launch:                { total: 15, readonly: 12, write:  3 },
   square:                { total:  2, readonly:  2, write:  0 },
-  welfare:               { total:  2, readonly:  2, write:  0 },
+  assetswap:             { total:  7, readonly:  2, write:  5 },
+  bot:                   { total: 10, readonly:  3, write:  7 },
+  withdrawal:            { total:  3, readonly:  0, write:  3 },
 };
 
 // Abbreviation map (mirrors src/utils.ts NAME_ABBREVIATIONS)

@@ -56,7 +56,7 @@ describe('Task 1: SDK version', () => {
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
     const pkg = require('gate-api/package.json');
-    expect(pkg.version).toBe('7.2.57');
+    expect(pkg.version).toBe('7.2.67');
   });
 });
 
@@ -506,13 +506,13 @@ describe('Task 17: Version', () => {
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
     const pkg = require('../package.json');
-    expect(pkg.version).toBe('0.18.1');
+    expect(pkg.version).toBe('0.19.0');
   });
 
-  test('server.json version is 0.18.1', async () => {
+  test('server.json version is 0.19.0', async () => {
     const { readFileSync } = await import('fs');
     const serverJson = JSON.parse(readFileSync('server.json', 'utf-8'));
-    expect(serverJson.version).toBe('0.18.1');
+    expect(serverJson.version).toBe('0.19.0');
   });
 });
 
@@ -525,7 +525,7 @@ describe('Structural integrity', () => {
     expect(findTool('cex_fx_update_fx_dual_position_cross_mode')).toBeDefined();
   });
 
-  test('total tool count is 396', () => {
-    expect(tools.length).toBe(396);
+  test('total tool count is 428', () => {
+    expect(tools.length).toBe(428);
   });
 });

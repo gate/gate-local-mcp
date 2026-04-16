@@ -44,7 +44,9 @@ import { registerActivityTools } from './tools/activity.js';
 import { registerCouponTools } from './tools/coupon.js';
 import { registerLaunchTools } from './tools/launch.js';
 import { registerSquareTools } from './tools/square.js';
-import { registerWelfareTools } from './tools/welfare.js';
+import { registerAssetswapTools } from './tools/assetswap.js';
+import { registerBotTools } from './tools/bot.js';
+import { registerWithdrawalTools } from './tools/withdrawal.js';
 
 const config = parseConfig();
 
@@ -88,7 +90,9 @@ const MODULE_REGISTRY: Record<ModuleName, (server: McpServer) => void> = {
   coupon:                registerCouponTools,
   launch:                registerLaunchTools,
   square:                registerSquareTools,
-  welfare:               registerWelfareTools,
+  assetswap:             registerAssetswapTools,
+  bot:                   registerBotTools,
+  withdrawal:            registerWithdrawalTools,
 };
 
 const modulesToLoad = config.modules ?? new Set(Object.keys(MODULE_REGISTRY) as ModuleName[]);
